@@ -8,6 +8,7 @@ const { analyzeDocument } = require("./src/ai/analyzer.js");
 const { evaluateStartups } = require("./src/ai/evaluator.js");
 const { analyzePilot } = require("./src/ai/pilot.js");
 const { summarizeEvidence } = require("./src/ai/evidence.js");
+const { generateDecisionBrief } = require("./src/ai/copilot.js");
 
 const app = express();
 const PORT = 5000;
@@ -24,100 +25,91 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 
-app.get("/api/health", (req, res) => {
-  res.json({ message: "SIH-26136 Backend is running!" });
-});
+app.get("/api/health", (req, res) => res.json({ message: "SIH-26136 Backend is running!" }));
 
 app.post("/api/ai/structure-challenge", async (req, res) => {
   try {
     const { problem } = req.body;
-    if (!problem) return res.status(400).json({ error: "Please provide a 'problem' in the request body." });
+    if (!problem) return res.status(400).json({ error: "Please provide a 'problem'." });
     console.log("📥 Received problem:", problem);
-    const result = await structureChallenge(problem);
-    console.log("✅ AI generated structured challenge.");
-    res.json(result);
+    res.json(await structureChallenge(problem));
   } catch (error) {
-    console.error("❌ Error in AI route:", error);
-    res.status(500).json({ error: "Internal server error while structuring challenge." });
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
 app.post("/api/ai/match-startups", async (req, res) => {
   try {
     const { challenge } = req.body;
-    if (!challenge) return res.status(400).json({ error: "Please provide a 'challenge' object." });
-    console.log("📥 Matching startups for:", challenge.title || "(untitled challenge)");
-    const result = await matchStartups(challenge);
-    console.log("✅ Startup matching done.");
-    res.json(result);
+    if (!challenge) return res.status(400).json({ error: "Please provide a 'challenge'." });
+    console.log("📥 Matching startups...");
+    res.json(await matchStartups(challenge));
   } catch (error) {
-    console.error("❌ Error in match route:", error);
-    res.status(500).json({ error: "Internal server error while matching startups." });
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
 app.post("/api/ai/analyze-document", async (req, res) => {
   try {
     const { text } = req.body;
-    if (!text) return res.status(400).json({ error: "Please provide 'text' in the request body." });
-    console.log("📥 Analyzing document (" + text.length + " chars)");
-    const result = await analyzeDocument(text);
-    console.log("✅ Document analysis done.");
-    res.json(result);
+    if (!text) return res.status(400).json({ error: "Please provide 'text'." });
+    console.log(" Analyzing document...");
+    res.json(await analyzeDocument(text));
   } catch (error) {
-    console.error("❌ Error in analyze route:", error);
-    res.status(500).json({ error: "Internal server error while analyzing document." });
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
 app.post("/api/ai/evaluate-startups", async (req, res) => {
   try {
     const { challenge, candidates } = req.body;
-    if (!Array.isArray(candidates) || !candidates.length) {
-      return res.status(400).json({ error: "Please provide a 'candidates' array." });
-    }
-    console.log("📥 Evaluating " + candidates.length + " candidates");
-    const result = await evaluateStartups(challenge, candidates);
-    console.log("✅ Evaluation done.");
-    res.json(result);
+    if (!Array.isArray(candidates) || !candidates.length) return res.status(400).json({ error: "Please provide 'candidates'." });
+    console.log("📥 Evaluating startups...");
+    res.json(await evaluateStartups(challenge, candidates));
   } catch (error) {
-    console.error("❌ Error in evaluate route:", error);
-    res.status(500).json({ error: "Internal server error while evaluating startups." });
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
 app.post("/api/ai/analyze-pilot", async (req, res) => {
   try {
     const { kpis } = req.body;
-    if (!Array.isArray(kpis) || !kpis.length) {
-      return res.status(400).json({ error: "Please provide a 'kpis' array." });
-    }
-    console.log("📥 Analyzing pilot with " + kpis.length + " KPIs");
-    const result = await analyzePilot(kpis);
-    console.log("✅ Pilot analysis done.");
-    res.json(result);
+    if (!Array.isArray(kpis) || !kpis.length) return res.status(400).json({ error: "Please provide 'kpis'." });
+    console.log(" Analyzing pilot...");
+    res.json(await analyzePilot(kpis));
   } catch (error) {
-    console.error("❌ Error in pilot route:", error);
-    res.status(500).json({ error: "Internal server error while analyzing pilot." });
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
 app.post("/api/ai/summarize-evidence", async (req, res) => {
   try {
     const { items, excerpt } = req.body;
-    if (!Array.isArray(items)) {
-      return res.status(400).json({ error: "Please provide an 'items' array." });
-    }
-    console.log("📥 Assessing evidence package (" + items.length + " items)");
-    const result = await summarizeEvidence(items, excerpt || "");
-    console.log("✅ Evidence assessment done.");
-    res.json(result);
+    if (!Array.isArray(items)) return res.status(400).json({ error: "Please provide 'items'." });
+    console.log(" Summarizing evidence...");
+    res.json(await summarizeEvidence(items, excerpt || ""));
   } catch (error) {
-    console.error("❌ Error in evidence route:", error);
-    res.status(500).json({ error: "Internal server error while summarizing evidence." });
+    console.error(" Error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// NEW FEATURE 7 ROUTE
+app.post("/api/ai/decision-brief", async (req, res) => {
+  try {
+    const { challengeTitle, kpis, evidenceStrength } = req.body;
+    if (!challengeTitle || !kpis) return res.status(400).json({ error: "Please provide 'challengeTitle' and 'kpis'." });
+    console.log("📥 Generating decision brief...");
+    res.json(await generateDecisionBrief(challengeTitle, kpis, evidenceStrength || "medium"));
+  } catch (error) {
+    console.error("❌ Error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
 });
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

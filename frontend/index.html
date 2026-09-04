@@ -33,18 +33,19 @@
   .kpirow { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.3fr; gap: 6px; margin-bottom: 6px; }
   .evlabel { display: flex; gap: 8px; align-items: center; font-weight: 500; margin-bottom: 6px; }
   .evlabel input { width: auto; }
+  .score-circle { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white; margin: 0 auto 10px; }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
-    <h1>🏛️ AI Pre-Procurement Assistant</h1>
+    <h1>️ AI Pre-Procurement Assistant</h1>
     <p>SIH 26136 — Startup friendly public procurement (Government of Maharashtra)</p>
   </header>
 
   <div class="card">
     <label for="problem">STEP 1 — DEFINE: Government Department, describe your problem</label>
-    <textarea id="problem" placeholder="Example: Our government hospitals have long patient waiting times and we need a technology solution to reduce waiting time and improve patient flow."></textarea>
+    <textarea id="problem" placeholder="Example: Our government hospitals have long patient waiting times..."></textarea>
     <button id="btn" onclick="structureChallenge()">Structure Challenge with AI</button>
     <div class="status" id="status"></div>
   </div>
@@ -57,7 +58,6 @@
 
   <div class="card hidden" id="matchCard">
     <h2>🔎 STEP 2 — DISCOVER: Startup Discovery</h2>
-    <p style="color:#64748b;font-size:14px;">AI scans startup capability passports and recommends the best fits. The government officer makes the final decision.</p>
     <button id="matchBtn" onclick="findStartups()">Find Matching Startups</button>
     <div class="status" id="matchStatus"></div>
   </div>
@@ -66,19 +66,18 @@
     <div class="badge" id="matchBadge"></div>
     <h2>Recommended Startups (decision support only)</h2>
     <div id="matchList"></div>
-    <button id="evalBtn" onclick="evaluateTop()">⚖️ Compare Top 3 (Evaluation Assistant)</button>
+    <button id="evalBtn" onclick="evaluateTop()">⚖️ Compare Top 3</button>
     <div class="status" id="evalStatus"></div>
   </div>
 
   <div class="card hidden" id="evalResult">
     <div class="badge" id="evalBadge"></div>
-    <h2>Side-by-Side Evaluation (decision support only)</h2>
+    <h2>Side-by-Side Evaluation</h2>
     <div id="evalOutput"></div>
   </div>
 
   <div class="card">
-    <h2>📈 STEP 4 — MEASURE: Pilot Result Analyst</h2>
-    <p style="color:#64748b;font-size:14px;">Enter pilot KPI numbers (baseline = before, target = promise, actual = result). The analyst computes achievement honestly.</p>
+    <h2>📈 STEP 3 — MEASURE: Pilot Result Analyst</h2>
     <div id="kpiRows"></div>
     <button class="secondary" onclick="addKpiRow()">+ Add KPI row</button>
     <button id="pilotBtn" onclick="analyzePilotResults()">Analyze Pilot Results</button>
@@ -92,10 +91,9 @@
   </div>
 
   <div class="card">
-    <h2>🧾 STEP 5 — PROVE: Evidence Summarizer</h2>
-    <p style="color:#64748b;font-size:14px;">Tick the evidence items the startup submitted, optionally paste an excerpt, and AI judges the strength of the evidence package.</p>
+    <h2>🧾 STEP 4 — PROVE: Evidence Summarizer</h2>
     <div id="evChecks"></div>
-    <textarea id="evText" style="height:100px;" placeholder="Optional: paste an evidence excerpt (report lines, verification note...)"></textarea>
+    <textarea id="evText" style="height:80px;" placeholder="Optional: paste an evidence excerpt..."></textarea>
     <button id="evBtn" onclick="summarizeEvidence()">Summarize Evidence</button>
     <div class="status" id="evStatus"></div>
   </div>
@@ -106,17 +104,41 @@
     <div id="evOutput"></div>
   </div>
 
+  <!-- FEATURE 7: DECISION COPILOT -->
   <div class="card">
-    <h2>📄 STEP 3 — EVALUATE: Document Analyzer</h2>
-    <p style="color:#64748b;font-size:14px;">Paste any startup document text (case study, report, profile). AI converts it into a standardized evaluation summary.</p>
-    <textarea id="docText" style="height:160px;" placeholder="Paste startup document text here..."></textarea>
+    <h2> STEP 5 — SCALE: AI Decision Copilot</h2>
+    <p style="color:#64748b;font-size:14px;">Combines Pilot KPIs and Evidence Strength to generate a Procurement-Readiness Brief. AI advises, Officer decides.</p>
+    <button id="copilotBtn" onclick="generateBrief()">Generate Decision Brief</button>
+    <div class="status" id="copilotStatus"></div>
+  </div>
+
+  <div class="card hidden" id="copilotResult">
+    <div class="badge" id="copilotBadge"></div>
+    <h2>Procurement-Readiness Brief</h2>
+    <div id="copilotOutput"></div>
+    <div style="margin-top:20px; padding-top:20px; border-top:1px solid #e2e8f0;">
+      <label for="officerDecision" style="font-size:16px; color:#1e293b;">👨‍💼 Government Officer Final Decision:</label>
+      <select id="officerDecision" style="margin-top:8px; font-size:15px; padding:10px;">
+        <option value="">-- Select Decision --</option>
+        <option value="procure">✅ Proceed to Procurement Review</option>
+        <option value="extend">🔄 Extend Pilot with Modifications</option>
+        <option value="modify">⚙️ Modify Requirements & Re-pilot</option>
+        <option value="stop">❌ Stop / Reject</option>
+      </select>
+      <button class="secondary" onclick="alert('Decision recorded in audit log! (Demo)')">Record Decision</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📄 BONUS: Document Analyzer</h2>
+    <textarea id="docText" style="height:100px;" placeholder="Paste startup document text here..."></textarea>
     <button id="docBtn" onclick="analyzeDocument()">Analyze Document</button>
     <div class="status" id="docStatus"></div>
   </div>
 
   <div class="card hidden" id="docResult">
     <div class="badge" id="docBadge"></div>
-    <h2>Standardized Summary (verify originals before evaluation)</h2>
+    <h2>Standardized Summary</h2>
     <div id="docOutput"></div>
   </div>
 </div>
@@ -124,64 +146,39 @@
 <script>
 let lastChallenge = null;
 let lastMatches = null;
+let lastKpis = null;
+let lastEvidenceStrength = 'medium';
 
 /* ---------- FEATURE 1 ---------- */
 async function structureChallenge() {
   const problem = document.getElementById("problem").value.trim();
   const status = document.getElementById("status");
   const btn = document.getElementById("btn");
-
-  if (!problem) {
-    status.textContent = "Please describe the problem first.";
-    status.classList.add("error");
-    return;
-  }
-
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "AI is thinking... (this can take a few seconds)";
+  if (!problem) { status.textContent = "Please describe the problem first."; status.classList.add("error"); return; }
+  btn.disabled = true; status.classList.remove("error"); status.textContent = "AI is thinking...";
   document.getElementById("result").classList.add("hidden");
-  document.getElementById("matchCard").classList.add("hidden");
-  document.getElementById("matchResult").classList.add("hidden");
-  document.getElementById("evalResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/structure-challenge", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ problem })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/structure-challenge", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ problem }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) throw new Error(data.error);
     render(data);
-    status.textContent = "Done! Review the structured challenge below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message + " (is the backend running on port 5000?)";
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
 function render(data) {
   const c = data.challenge || data;
   lastChallenge = c;
-  const out = document.getElementById("output");
-  document.getElementById("modeBadge").textContent =
-    data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE";
-
-  const list = (arr) => Array.isArray(arr) && arr.length
-    ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>"
-    : "<p>—</p>";
-
-  out.innerHTML = `
+  document.getElementById("modeBadge").textContent = data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE";
+  const list = (arr) => Array.isArray(arr) && arr.length ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>" : "<p>—</p>";
+  document.getElementById("output").innerHTML = `
     <div class="field"><h3>Title</h3><p>${escapeHtml(c.title)}</p></div>
     <div class="field"><h3>Problem Statement</h3><p>${escapeHtml(c.problem_statement)}</p></div>
     <div class="field"><h3>Objective</h3><p>${escapeHtml(c.objective)}</p></div>
     <div class="field"><h3>Key Requirements</h3>${list(c.key_requirements)}</div>
     <div class="field"><h3>Suggested KPIs</h3>${list(c.suggested_kpis)}</div>
     <div class="field"><h3>Expected Outcome</h3><p>${escapeHtml(c.expected_outcome)}</p></div>
-    <div class="field"><h3>Risks / Considerations</h3>${list(c.risks_or_considerations)}</div>
   `;
   document.getElementById("result").classList.remove("hidden");
   document.getElementById("matchCard").classList.remove("hidden");
@@ -191,45 +188,27 @@ function render(data) {
 async function findStartups() {
   const status = document.getElementById("matchStatus");
   const btn = document.getElementById("matchBtn");
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "AI is scanning startup profiles...";
+  btn.disabled = true; status.textContent = "AI is scanning startup profiles...";
   document.getElementById("matchResult").classList.add("hidden");
-  document.getElementById("evalResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/match-startups", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ challenge: lastChallenge })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/match-startups", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ challenge: lastChallenge }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) throw new Error(data.error);
     renderMatches(data);
-    status.textContent = "Done! Review the recommendations below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message;
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
 function renderMatches(data) {
   lastMatches = data.matches || [];
-  document.getElementById("matchBadge").textContent =
-    (data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE") +
-    " · Data: " + (data.source === "supabase" ? "Supabase startup registry" : "built-in samples");
-
-  const matchList = document.getElementById("matchList");
-  matchList.innerHTML = (data.matches || []).map((m, i) => `
+  document.getElementById("matchBadge").textContent = (data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE") + " · Data: " + (data.source === "supabase" ? "Supabase startup registry" : "built-in samples");
+  document.getElementById("matchList").innerHTML = (data.matches || []).map((m, i) => `
     <div class="field">
       <h3>#${i + 1} ${escapeHtml(m.startup)} <span style="color:#64748b;text-transform:none;">(${escapeHtml(m.domain || "")})</span></h3>
       <div class="scorebar"><div class="scorefill" style="width:${Math.max(0, Math.min(100, m.score))}%"></div></div>
       <p style="margin-top:6px;">Match score: <strong>${m.score}/100</strong></p>
       <p>${escapeHtml(m.reason || "")}</p>
-      ${m.stats ? '<p style="color:#475569;font-size:12px;">' + escapeHtml(m.stats) + '</p>' : ''}
-      <p style="color:#94a3b8;font-size:12px;">${escapeHtml(m.note || "Recommendation only - final decision by government officer.")}</p>
     </div>
   `).join("");
   document.getElementById("matchResult").classList.remove("hidden");
@@ -239,55 +218,29 @@ function renderMatches(data) {
 async function evaluateTop() {
   const status = document.getElementById("evalStatus");
   const btn = document.getElementById("evalBtn");
-
-  if (!lastMatches || !lastMatches.length) {
-    status.textContent = "Run startup matching first.";
-    status.classList.add("error");
-    return;
-  }
-
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "AI is comparing the top candidates...";
+  if (!lastMatches || !lastMatches.length) { status.textContent = "Run matching first."; status.classList.add("error"); return; }
+  btn.disabled = true; status.textContent = "AI is comparing...";
   document.getElementById("evalResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/evaluate-startups", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ challenge: lastChallenge, candidates: lastMatches.slice(0, 3) })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/evaluate-startups", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ challenge: lastChallenge, candidates: lastMatches.slice(0, 3) }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) throw new Error(data.error);
     renderEvaluation(data);
-    status.textContent = "Done! Side-by-side comparison below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message;
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
 function renderEvaluation(data) {
-  document.getElementById("evalBadge").textContent =
-    data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE";
-
-  const out = document.getElementById("evalOutput");
-  const list = (arr) => Array.isArray(arr) && arr.length
-    ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>"
-    : "<p>—</p>";
-
-  out.innerHTML = (data.comparisons || []).map(c => `
+  document.getElementById("evalBadge").textContent = data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE";
+  const list = (arr) => Array.isArray(arr) && arr.length ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>" : "<p>—</p>";
+  document.getElementById("evalOutput").innerHTML = (data.comparisons || []).map(c => `
     <div class="field">
-      <h3>${escapeHtml(c.startup)} <span style="color:#64748b;text-transform:none;">(${escapeHtml(c.domain || "")} · ${c.match_score}/100)</span></h3>
+      <h3>${escapeHtml(c.startup)} (${c.match_score}/100)</h3>
       <p style="color:#16a34a;font-weight:600;">Strengths</p>${list(c.strengths)}
       <p style="color:#dc2626;font-weight:600;">Concerns</p>${list(c.concerns)}
-      <p style="color:#475569;font-weight:600;">Verification checklist</p>${list(c.verification_checklist)}
     </div>
-  `).join("") + `
-    <div class="field"><h3>Overall Notes</h3><p>${escapeHtml(data.overall_notes || "")}</p></div>
-  `;
+  `).join("") + `<div class="field"><h3>Overall Notes</h3><p>${escapeHtml(data.overall_notes || "")}</p></div>`;
   document.getElementById("evalResult").classList.remove("hidden");
 }
 
@@ -297,7 +250,6 @@ const defaultKpis = [
   { name: "Patients processed per day", baseline: 200, target: 350, actual: 320, direction: "higher" },
   { name: "Patient satisfaction score (out of 100)", baseline: 60, target: 80, actual: 84, direction: "higher" }
 ];
-
 function kpiRowHtml(k) {
   return `<div class="kpirow">
     <input class="k-name" value="${escapeHtml(k.name || "")}" placeholder="KPI name" />
@@ -310,207 +262,167 @@ function kpiRowHtml(k) {
     </select>
   </div>`;
 }
-
-function addKpiRow() {
-  document.getElementById("kpiRows").insertAdjacentHTML("beforeend", kpiRowHtml({}));
-}
+function addKpiRow() { document.getElementById("kpiRows").insertAdjacentHTML("beforeend", kpiRowHtml({})); }
 
 async function analyzePilotResults() {
   const status = document.getElementById("pilotStatus");
   const btn = document.getElementById("pilotBtn");
-
   const rows = [...document.querySelectorAll("#kpiRows .kpirow")];
-  const kpis = rows.map(r => ({
-    name: r.querySelector(".k-name").value.trim(),
-    baseline: r.querySelector(".k-base").value,
-    target: r.querySelector(".k-target").value,
-    actual: r.querySelector(".k-actual").value,
-    direction: r.querySelector(".k-dir").value
-  })).filter(k => k.name);
-
-  if (!kpis.length) {
-    status.textContent = "Add at least one KPI row with a name.";
-    status.classList.add("error");
-    return;
-  }
-
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "Analyst is computing the pilot results...";
+  const kpis = rows.map(r => ({ name: r.querySelector(".k-name").value.trim(), baseline: r.querySelector(".k-base").value, target: r.querySelector(".k-target").value, actual: r.querySelector(".k-actual").value, direction: r.querySelector(".k-dir").value })).filter(k => k.name);
+  if (!kpis.length) { status.textContent = "Add at least one KPI."; status.classList.add("error"); return; }
+  btn.disabled = true; status.textContent = "Computing pilot results...";
   document.getElementById("pilotResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/analyze-pilot", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kpis })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/analyze-pilot", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kpis }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) throw new Error(data.error);
     renderPilot(data);
-    status.textContent = "Done! Pilot summary below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message;
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    lastKpis = data.kpi_results || [];
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
 function renderPilot(data) {
-  document.getElementById("pilotBadge").textContent =
-    data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE";
-
+  document.getElementById("pilotBadge").textContent = data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE";
   const chipColor = { achieved: "#16a34a", partially_achieved: "#d97706", not_achieved: "#dc2626" };
-  const chipText = { achieved: "ACHIEVED", partially_achieved: "PARTIALLY ACHIEVED", not_achieved: "NOT ACHIEVED" };
-
-  const out = document.getElementById("pilotOutput");
-  out.innerHTML = (data.kpi_results || []).map(k => `
+  const chipText = { achieved: "ACHIEVED", partially_achieved: "PARTIAL", not_achieved: "NOT ACHIEVED" };
+  document.getElementById("pilotOutput").innerHTML = (data.kpi_results || []).map(k => `
     <div class="field">
       <h3>${escapeHtml(k.name)} <span class="chip" style="background:${chipColor[k.status]};">${chipText[k.status]}</span></h3>
-      <p>Baseline: <strong>${k.baseline}</strong> · Target: <strong>${k.target}</strong> · Actual: <strong>${k.actual}</strong> · Change vs baseline: <strong>${k.improvement_pct}%</strong></p>
-      ${k.comment ? "<p>" + escapeHtml(k.comment) + "</p>" : ""}
+      <p>Baseline: <strong>${k.baseline}</strong> · Target: <strong>${k.target}</strong> · Actual: <strong>${k.actual}</strong> · Change: <strong>${k.improvement_pct}%</strong></p>
     </div>
-  `).join("") + `
-    <div class="field"><h3>Overall Summary</h3><p>${escapeHtml(data.overall_summary || "")}</p></div>
-  `;
+  `).join("") + `<div class="field"><h3>Overall Summary</h3><p>${escapeHtml(data.overall_summary || "")}</p></div>`;
   document.getElementById("pilotResult").classList.remove("hidden");
 }
 
 /* ---------- FEATURE 6 ---------- */
-const EVIDENCE_TYPES = [
-  "Pilot completion report (submitted by startup)",
-  "Raw operational data (system/hospital exports)",
-  "User / citizen feedback survey",
-  "Independent third-party verification note",
-  "Field photos / system logs / screenshots"
-];
-
+const EVIDENCE_TYPES = ["Pilot completion report (submitted by startup)", "Raw operational data (system exports)", "User / citizen feedback survey", "Independent third-party verification note", "Field photos / system logs"];
 async function summarizeEvidence() {
   const status = document.getElementById("evStatus");
   const btn = document.getElementById("evBtn");
-
   const items = [...document.querySelectorAll(".ev-check:checked")].map(c => c.value);
   const excerpt = document.getElementById("evText").value.trim();
-
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "AI is judging the evidence package...";
+  btn.disabled = true; status.textContent = "Judging evidence...";
   document.getElementById("evResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/summarize-evidence", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, excerpt })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/summarize-evidence", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items, excerpt }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) throw new Error(data.error);
     renderEvidence(data);
-    status.textContent = "Done! Evidence assessment below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message;
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    // Extract overall strength for Feature 7
+    if (data.overall_assessment && data.overall_assessment.toLowerCase().includes("strong")) lastEvidenceStrength = 'strong';
+    else if (data.overall_assessment && data.overall_assessment.toLowerCase().includes("weak")) lastEvidenceStrength = 'weak';
+    else lastEvidenceStrength = 'medium';
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
 function renderEvidence(data) {
-  document.getElementById("evBadge").textContent =
-    data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE";
-
+  document.getElementById("evBadge").textContent = data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE";
   const chipColor = { strong: "#16a34a", medium: "#d97706", weak: "#64748b" };
-  const list = (arr) => Array.isArray(arr) && arr.length
-    ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>"
-    : "<p>—</p>";
-
-  const out = document.getElementById("evOutput");
-  out.innerHTML = (data.items || []).map(it => `
+  const list = (arr) => Array.isArray(arr) && arr.length ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>" : "<p>—</p>";
+  document.getElementById("evOutput").innerHTML = (data.items || []).map(it => `
     <div class="field">
       <h3>${escapeHtml(it.type)} <span class="chip" style="background:${chipColor[it.strength] || "#64748b"};">${String(it.strength || "").toUpperCase()}</span></h3>
       <p>${escapeHtml(it.note || "")}</p>
     </div>
-  `).join("") + `
-    <div class="field"><h3>Excerpt Notes</h3>${list(data.excerpt_notes)}</div>
-    <div class="field"><h3>Missing Pieces (Gaps)</h3>${list(data.gaps)}</div>
-    <div class="field"><h3>Overall Assessment</h3><p>${escapeHtml(data.overall_assessment || "")}</p></div>
-  `;
+  `).join("") + `<div class="field"><h3>Overall Assessment</h3><p>${escapeHtml(data.overall_assessment || "")}</p></div>`;
   document.getElementById("evResult").classList.remove("hidden");
 }
 
-/* ---------- FEATURE 3 ---------- */
+/* ---------- FEATURE 7: DECISION COPILOT ---------- */
+async function generateBrief() {
+  const status = document.getElementById("copilotStatus");
+  const btn = document.getElementById("copilotBtn");
+  if (!lastChallenge || !lastChallenge.title) { status.textContent = "Please structure a challenge first (Step 1)."; status.classList.add("error"); return; }
+  if (!lastKpis || !lastKpis.length) { status.textContent = "Please analyze pilot results first (Step 3)."; status.classList.add("error"); return; }
+  
+  btn.disabled = true; status.textContent = "AI Copilot is generating the Procurement-Readiness Brief...";
+  document.getElementById("copilotResult").classList.add("hidden");
+  
+  try {
+    const res = await fetch("http://localhost:5000/api/ai/decision-brief", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ challengeTitle: lastChallenge.title, kpis: lastKpis, evidenceStrength: lastEvidenceStrength })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    renderCopilot(data);
+    status.textContent = "Done! Brief generated below.";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
+}
+
+function renderCopilot(data) {
+  document.getElementById("copilotBadge").textContent = data.mode === "demo" ? "DEMO MODE (Advisory Only)" : "LIVE AI MODE (Advisory Only)";
+  const b = data.brief || {};
+  const score = b.scale_readiness_score || 0;
+  let color = "#dc2626";
+  if (score >= 80) color = "#16a34a";
+  else if (score >= 50) color = "#d97706";
+  
+  const list = (arr) => Array.isArray(arr) && arr.length ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>" : "<p>—</p>";
+  
+  document.getElementById("copilotOutput").innerHTML = `
+    <div style="text-align:center; margin-bottom:20px;">
+      <div class="score-circle" style="background:${color};">${score}</div>
+      <h3 style="color:${color}; font-size:18px;">Scale Readiness Score: ${score}/100</h3>
+      <p style="font-size:14px; color:#64748b; margin-top:5px;">Calculated: 60% Pilot KPI Success + 40% Evidence Strength</p>
+    </div>
+    <div class="field">
+      <h3>AI Recommendation</h3>
+      <p style="font-weight:bold; font-size:16px; color:#2563eb;">${escapeHtml(b.recommendation || "N/A")}</p>
+    </div>
+    <div class="field">
+      <h3>Executive Summary</h3>
+      <p>${escapeHtml(b.executive_summary || "")}</p>
+    </div>
+    <div class="field">
+      <h3>Risk Flags</h3>
+      ${list(b.risk_flags)}
+    </div>
+    <div class="field">
+      <h3>Recommended Next Steps</h3>
+      ${list(b.next_steps)}
+    </div>
+  `;
+  document.getElementById("copilotResult").classList.remove("hidden");
+}
+
+/* ---------- BONUS: FEATURE 3 ---------- */
 async function analyzeDocument() {
   const text = document.getElementById("docText").value.trim();
   const status = document.getElementById("docStatus");
   const btn = document.getElementById("docBtn");
-
-  if (!text) {
-    status.textContent = "Paste some document text first.";
-    status.classList.add("error");
-    return;
-  }
-
-  btn.disabled = true;
-  status.classList.remove("error");
-  status.textContent = "AI is reading the document...";
+  if (!text) { status.textContent = "Paste text first."; status.classList.add("error"); return; }
+  btn.disabled = true; status.textContent = "Reading document...";
   document.getElementById("docResult").classList.add("hidden");
-
   try {
-    const res = await fetch("http://localhost:5000/api/ai/analyze-document", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text })
-    });
+    const res = await fetch("http://localhost:5000/api/ai/analyze-document", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
-    renderAnalysis(data);
-    status.textContent = "Done! Standardized summary below.";
-  } catch (err) {
-    status.textContent = "Error: " + err.message;
-    status.classList.add("error");
-  } finally {
-    btn.disabled = false;
-  }
+    if (!res.ok) throw new Error(data.error);
+    const a = data.analysis || {};
+    const list = (arr) => Array.isArray(arr) && arr.length ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>" : "<p>—</p>";
+    document.getElementById("docOutput").innerHTML = `
+      <div class="field"><h3>Document Type</h3><p>${escapeHtml(a.document_type)}</p></div>
+      <div class="field"><h3>Technology Stack</h3>${list(a.technology_stack)}</div>
+      <div class="field"><h3>Potential Gaps</h3>${list(a.potential_gaps)}</div>
+    `;
+    document.getElementById("docBadge").textContent = data.mode === "demo" ? "DEMO MODE" : "LIVE AI MODE";
+    document.getElementById("docResult").classList.remove("hidden");
+    status.textContent = "Done!";
+  } catch (err) { status.textContent = "Error: " + err.message; status.classList.add("error"); }
+  finally { btn.disabled = false; }
 }
 
-function renderAnalysis(data) {
-  const a = data.analysis || {};
-  document.getElementById("docBadge").textContent =
-    data.mode === "demo" ? "DEMO MODE (no OpenAI key detected)" : "LIVE AI MODE";
+function escapeHtml(s) { return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 
-  const list = (arr) => Array.isArray(arr) && arr.length
-    ? "<ul>" + arr.map(i => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>"
-    : "<p>—</p>";
-
-  document.getElementById("docOutput").innerHTML = `
-    <div class="field"><h3>Document Type</h3><p>${escapeHtml(a.document_type)}</p></div>
-    <div class="field"><h3>Domain Experience</h3><p>${escapeHtml(a.domain_experience)}</p></div>
-    <div class="field"><h3>Relevant Deployments</h3>${list(a.relevant_deployments)}</div>
-    <div class="field"><h3>Technology Stack</h3>${list(a.technology_stack)}</div>
-    <div class="field"><h3>Claimed Metrics</h3>${list(a.claimed_metrics)}</div>
-    <div class="field"><h3>Timeline Years</h3>${list(a.timeline_years)}</div>
-    <div class="field"><h3>Potential Gaps</h3>${list(a.potential_gaps)}</div>
-    <div class="field"><h3>Verification Note</h3><p>${escapeHtml(a.verification_note)}</p></div>
-  `;
-  document.getElementById("docResult").classList.remove("hidden");
-}
-
-/* ---------- shared ---------- */
-function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
-}
-
-// Prefill pilot table + evidence checkboxes
+// Init
 document.getElementById("kpiRows").innerHTML = defaultKpis.map(kpiRowHtml).join("");
-document.getElementById("evChecks").innerHTML = EVIDENCE_TYPES.map((t, i) => `
-  <label class="evlabel">
-    <input type="checkbox" class="ev-check" value="${escapeHtml(t)}" ${i < 2 ? "checked" : ""} />
-    ${escapeHtml(t)}
-  </label>
-`).join("");
+document.getElementById("evChecks").innerHTML = EVIDENCE_TYPES.map((t, i) => `<label class="evlabel"><input type="checkbox" class="ev-check" value="${escapeHtml(t)}" ${i < 2 ? "checked" : ""} /> ${escapeHtml(t)}</label>`).join("");
 </script>
 </body>
 </html>
