@@ -1,10 +1,1337 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pilot & KPI Dashboard — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">GOVERNMENT PORTAL</div><nav class="side-nav"><a class="" href="screen_gov_home.html">Home</a><a class="" href="screen3.html">Challenges</a><a class="" href="screen5.html">Discover Startups</a><a class="" href="screen9.html">Proposals</a><a class="active" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
-<main class="main"><div class="dash-top"><div class="brand">Pilot & KPI Dashboard</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
-<div class="welcome"><div><span class="eyebrow">Live pilot</span><h2>Smart Traffic Management Pilot</h2><p>UrbanAI Technologies · Bengaluru Urban</p></div><span class="badge success">● In progress</span></div>
-<div class="kpi-grid"><div class="stat"><div class="value">142 / 180</div><div class="label">Pilot days</div></div><div class="stat"><div class="value">18%</div><div class="label">Wait-time reduction</div></div><div class="stat"><div class="value">94.2%</div><div class="label">Accuracy</div></div><div class="stat"><div class="value">12,450</div><div class="label">Users impacted</div></div></div>
-<div class="section"><div class="grid-2"><div class="card"><h3>Pilot progress</h3><div style="font-size:40px;font-weight:850;margin:12px 0">78%</div><div class="progress"><span style="width:78%"></span></div><p style="margin-top:12px">Target completion: 180 days · Current day: 142</p></div><div class="card"><h3>Estimated savings</h3><div style="font-size:40px;font-weight:850;margin:12px 0">₹8.2L</div><p>Based on the current pilot measurement model.</p></div></div></div>
-<div class="card"><h3>KPI performance</h3><div class="table-wrap"><table><thead><tr><th>KPI</th><th>Target</th><th>Actual</th><th>Status</th></tr></thead><tbody><tr><td>Wait-time reduction</td><td>15%</td><td>18%</td><td><span class="badge success">On target</span></td></tr><tr><td>Detection accuracy</td><td>90%</td><td>94.2%</td><td><span class="badge success">On target</span></td></tr><tr><td>User coverage</td><td>10,000</td><td>12,450</td><td><span class="badge success">On target</span></td></tr></tbody></table></div></div>
-<div class="hero-actions"><button class="btn" data-toast="Pilot review opened">Review Pilot</button><button class="btn primary" data-go="screen12.html">Complete Pilot & Evaluate</button></div>
-</div></main></div>
-<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Pilot & KPI Dashboard — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+
+      <span
+        class="logo-mark"
+        aria-label="ProcureX logo"
+      >
+        PX
+      </span>
+
+      ProcureX
+
+    </a>
+
+
+    <div class="side-label">
+      GOVERNMENT PORTAL
+    </div>
+
+
+    <nav class="side-nav">
+
+      <a href="screen_gov_home.html">
+        Home
+      </a>
+
+      <a href="screen3.html">
+        Challenges
+      </a>
+
+      <a href="screen5.html">
+        Discover Startups
+      </a>
+
+      <a href="screen9.html">
+        Proposals
+      </a>
+
+      <a class="active" href="screen11.html">
+        Pilots
+      </a>
+
+      <a href="screen13.html">
+        Impact
+      </a>
+
+    </nav>
+
+
+    <div
+      style="margin-top:28px"
+      class="notice"
+    >
+
+      Prototype workspace
+
+      <br>
+
+      <small>
+        Data is demo-driven and can later connect to the backend.
+      </small>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="main">
+
+    <div class="dash-top">
+
+      <div class="brand">
+        Pilot & KPI Dashboard
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          ☾
+        </button>
+
+
+        <button
+          class="btn"
+          id="homeBtn"
+        >
+          Home
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+
+      <!-- ================= PROTOTYPE BANNER ================= -->
+
+      <div class="prototype-banner compact">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          Illustrative records for judging only.
+        </small>
+
+      </div>
+
+
+      <!-- ================= PILOT HEADER ================= -->
+
+      <div class="welcome">
+
+        <div>
+
+          <span class="eyebrow">
+            Live pilot
+          </span>
+
+
+          <h2 id="pilotTitle">
+            Smart Traffic Management Pilot
+          </h2>
+
+
+          <p id="pilotStartup">
+            UrbanAI Technologies · Bengaluru Urban
+          </p>
+
+        </div>
+
+
+        <span
+          class="badge success"
+          id="pilotStatus"
+        >
+          ● In progress
+        </span>
+
+      </div>
+
+
+      <!-- ================= KPI SUMMARY ================= -->
+
+      <div class="kpi-grid">
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="pilotDays"
+          >
+            142 / 180
+          </div>
+
+          <div class="label">
+            Pilot days
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="waitReduction"
+          >
+            18%
+          </div>
+
+          <div class="label">
+            Wait-time reduction
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="accuracy"
+          >
+            94.2%
+          </div>
+
+          <div class="label">
+            Accuracy
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="usersImpacted"
+          >
+            12,450
+          </div>
+
+          <div class="label">
+            Users impacted
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= PILOT PROGRESS ================= -->
+
+      <div class="section">
+
+        <div class="grid-2">
+
+
+          <div class="card">
+
+            <h3>
+              Pilot progress
+            </h3>
+
+
+            <div
+              id="pilotProgressValue"
+              style="font-size:40px;font-weight:850;margin:12px 0"
+            >
+              78%
+            </div>
+
+
+            <div class="progress">
+
+              <span
+                id="pilotProgressBar"
+                style="width:78%"
+              ></span>
+
+            </div>
+
+
+            <p
+              id="pilotProgressText"
+              style="margin-top:12px"
+            >
+              Target completion: 180 days · Current day: 142
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Estimated savings
+            </h3>
+
+
+            <div
+              id="estimatedSavings"
+              style="font-size:40px;font-weight:850;margin:12px 0"
+            >
+              ₹8.2L
+            </div>
+
+
+            <p>
+              Based on the current pilot measurement model.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= KPI TABLE ================= -->
+
+      <div class="card">
+
+        <h3>
+          KPI performance
+        </h3>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  KPI
+                </th>
+
+                <th>
+                  Target
+                </th>
+
+                <th>
+                  Actual
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="kpiRows">
+
+              <tr>
+
+                <td>
+                  Wait-time reduction
+                </td>
+
+                <td>
+                  15%
+                </td>
+
+                <td>
+                  18%
+                </td>
+
+                <td>
+                  <span class="badge success">
+                    On target
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  Detection accuracy
+                </td>
+
+                <td>
+                  90%
+                </td>
+
+                <td>
+                  94.2%
+                </td>
+
+                <td>
+                  <span class="badge success">
+                    On target
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  User coverage
+                </td>
+
+                <td>
+                  10,000
+                </td>
+
+                <td>
+                  12,450
+                </td>
+
+                <td>
+                  <span class="badge success">
+                    On target
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= ACTIONS ================= -->
+
+      <div class="hero-actions">
+
+        <button
+          class="btn"
+          id="reviewPilot"
+        >
+          Review Pilot
+        </button>
+
+
+        <button
+          class="btn primary"
+          id="completePilot"
+        >
+          Complete Pilot & Evaluate
+        </button>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="../js/theme.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+
+    /* ==========================================
+       HELPER FUNCTIONS
+       ========================================== */
+
+    function getStoredJSON(key) {
+
+      const value =
+        localStorage.getItem(key);
+
+
+      if (!value) {
+        return null;
+      }
+
+
+      try {
+
+        return JSON.parse(value);
+
+      } catch (error) {
+
+        console.warn(
+          `Unable to parse ${key}:`,
+          error
+        );
+
+        return null;
+
+      }
+
+    }
+
+
+    function text(value, fallback) {
+
+      if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+      ) {
+
+        return fallback;
+
+      }
+
+      return String(value);
+
+    }
+
+
+    function number(value, fallback = 0) {
+
+      const parsed =
+        Number(value);
+
+
+      return Number.isFinite(parsed)
+        ? parsed
+        : fallback;
+
+    }
+
+
+    function formatNumber(value) {
+
+      return number(
+        value
+      ).toLocaleString(
+        "en-IN"
+      );
+
+    }
+
+
+    /* ==========================================
+       LOAD DATA FROM PREVIOUS SCREENS
+       ========================================== */
+
+    const challenge =
+      getStoredJSON(
+        "procurexLastChallenge"
+      );
+
+
+    const selectedChallenge =
+      getStoredJSON(
+        "procurexSelectedChallenge"
+      );
+
+
+    const proposal =
+      getStoredJSON(
+        "procurexLastProposal"
+      );
+
+
+    const selectedStartup =
+      getStoredJSON(
+        "procurexSelectedStartup"
+      );
+
+
+    const evaluation =
+      getStoredJSON(
+        "procurexEvaluation"
+      );
+
+
+    /*
+     * Prefer the selected challenge created by
+     * the startup flow.
+     */
+
+    const activeChallenge =
+      selectedChallenge ||
+      challenge ||
+      {};
+
+
+    /* ==========================================
+       STARTUP INFORMATION
+       ========================================== */
+
+    let startupName =
+      "UrbanAI Technologies";
+
+
+    if (
+      selectedStartup &&
+      selectedStartup.startup
+    ) {
+
+      startupName =
+        selectedStartup.startup;
+
+    } else if (
+      selectedStartup &&
+      selectedStartup.name
+    ) {
+
+      startupName =
+        selectedStartup.name;
+
+    } else if (
+      proposal &&
+      proposal.startup
+    ) {
+
+      startupName =
+        proposal.startup;
+
+    } else {
+
+      const savedStartupName =
+        localStorage.getItem(
+          "procurexStartupName"
+        );
+
+
+      if (savedStartupName) {
+
+        startupName =
+          savedStartupName;
+
+      }
+
+    }
+
+
+    /* ==========================================
+       LOCATION
+       ========================================== */
+
+    const location =
+      [
+        activeChallenge.city,
+        activeChallenge.state
+      ]
+      .filter(Boolean)
+      .join(" ");
+
+
+    document.getElementById(
+      "pilotStartup"
+    ).textContent =
+      `${startupName} · ${
+        location || "Bengaluru Urban"
+      }`;
+
+
+    /* ==========================================
+       CHALLENGE / PILOT TITLE
+       ========================================== */
+
+    const challengeTitle =
+      text(
+        activeChallenge.title,
+        "Smart Traffic Management"
+      );
+
+
+    document.getElementById(
+      "pilotTitle"
+    ).textContent =
+      `${challengeTitle} Pilot`;
+
+
+    /* ==========================================
+       EXISTING PILOT DATA
+       ========================================== */
+
+    /*
+     * If Screen 11 has already generated pilot
+     * data, restore it instead of resetting it.
+     */
+
+    const savedPilot =
+      getStoredJSON(
+        "procurexPilot"
+      );
+
+
+    let pilot =
+      savedPilot || {};
+
+
+    /* ==========================================
+       DEFAULT / DEMO KPI DATA
+       ========================================== */
+
+    /*
+     * These values are only fallback values for
+     * the prototype. Once real pilot data exists,
+     * those values are used instead.
+     */
+
+    const totalDays =
+      number(
+        pilot.totalDays,
+        number(
+          activeChallenge.pilotDays,
+          180
+        )
+      );
+
+
+    const currentDay =
+      number(
+        pilot.currentDay,
+        Math.round(
+          totalDays * 0.78
+        )
+      );
+
+
+    const waitReduction =
+      number(
+        pilot.waitTimeReduction,
+        18
+      );
+
+
+    const accuracy =
+      number(
+        pilot.accuracy,
+        94.2
+      );
+
+
+    const usersImpacted =
+      number(
+        pilot.usersImpacted,
+        12450
+      );
+
+
+    const estimatedSavings =
+      pilot.estimatedSavings ||
+      "₹8.2L";
+
+
+    /* ==========================================
+       PILOT PROGRESS
+       ========================================== */
+
+    const progress =
+      totalDays > 0
+        ? Math.min(
+            100,
+            Math.round(
+              (
+                currentDay /
+                totalDays
+              ) * 100
+            )
+          )
+        : 0;
+
+
+    document.getElementById(
+      "pilotDays"
+    ).textContent =
+      `${currentDay} / ${totalDays}`;
+
+
+    document.getElementById(
+      "pilotProgressValue"
+    ).textContent =
+      `${progress}%`;
+
+
+    document.getElementById(
+      "pilotProgressBar"
+    ).style.width =
+      `${progress}%`;
+
+
+    document.getElementById(
+      "pilotProgressText"
+    ).textContent =
+      `Target completion: ${totalDays} days · Current day: ${currentDay}`;
+
+
+    /* ==========================================
+       KPI SUMMARY
+       ========================================== */
+
+    document.getElementById(
+      "waitReduction"
+    ).textContent =
+      `${waitReduction}%`;
+
+
+    document.getElementById(
+      "accuracy"
+    ).textContent =
+      `${accuracy}%`;
+
+
+    document.getElementById(
+      "usersImpacted"
+    ).textContent =
+      formatNumber(
+        usersImpacted
+      );
+
+
+    document.getElementById(
+      "estimatedSavings"
+    ).textContent =
+      estimatedSavings;
+
+
+    /* ==========================================
+       BUILD KPI TABLE
+       ========================================== */
+
+    const kpiRows =
+      document.getElementById(
+        "kpiRows"
+      );
+
+
+    /*
+     * The backend pilot engine returns:
+     *
+     * baseline
+     * target
+     * actual
+     * improvement_pct
+     * status
+     *
+     * If that data exists, use it.
+     */
+
+    const backendKpis =
+      Array.isArray(
+        pilot.kpi_results
+      )
+        ? pilot.kpi_results
+        : Array.isArray(
+            pilot.kpis
+          )
+          ? pilot.kpis
+          : null;
+
+
+    if (
+      backendKpis &&
+      backendKpis.length
+    ) {
+
+      kpiRows.innerHTML = "";
+
+
+      backendKpis.forEach(
+        function (kpi) {
+
+          const row =
+            document.createElement(
+              "tr"
+            );
+
+
+          const status =
+            text(
+              kpi.status,
+              "Pending"
+            );
+
+
+          const normalizedStatus =
+            status.toLowerCase();
+
+
+          const isPositive =
+            normalizedStatus.includes(
+              "target"
+            ) ||
+            normalizedStatus.includes(
+              "success"
+            ) ||
+            normalizedStatus.includes(
+              "met"
+            ) ||
+            normalizedStatus.includes(
+              "on track"
+            );
+
+
+          row.innerHTML = `
+
+            <td>
+              ${text(
+                kpi.kpi ||
+                kpi.name,
+                "KPI"
+              )}
+            </td>
+
+            <td>
+              ${text(
+                kpi.target,
+                "—"
+              )}
+            </td>
+
+            <td>
+              ${text(
+                kpi.actual,
+                "—"
+              )}
+            </td>
+
+            <td>
+              <span class="badge ${
+                isPositive
+                  ? "success"
+                  : ""
+              }">
+                ${status}
+              </span>
+            </td>
+
+          `;
+
+
+          kpiRows.appendChild(
+            row
+          );
+
+        }
+      );
+
+    }
+
+
+    /* ==========================================
+       PILOT STATUS
+       ========================================== */
+
+    const pilotStatus =
+      document.getElementById(
+        "pilotStatus"
+      );
+
+
+    if (
+      progress >= 100
+    ) {
+
+      pilotStatus.textContent =
+        "● Completed";
+
+    } else {
+
+      pilotStatus.textContent =
+        "● In progress";
+
+    }
+
+
+    /* ==========================================
+       SAVE CURRENT PILOT STATE
+       ========================================== */
+
+    const pilotState = {
+
+      ...pilot,
+
+      challengeTitle:
+        activeChallenge.title,
+
+      startup:
+        startupName,
+
+      location:
+        location,
+
+      totalDays:
+        totalDays,
+
+      currentDay:
+        currentDay,
+
+      waitTimeReduction:
+        waitReduction,
+
+      accuracy:
+        accuracy,
+
+      usersImpacted:
+        usersImpacted,
+
+      estimatedSavings:
+        estimatedSavings,
+
+      progress:
+        progress,
+
+      updatedAt:
+        new Date().toISOString()
+
+    };
+
+
+    localStorage.setItem(
+      "procurexPilot",
+      JSON.stringify(
+        pilotState
+      )
+    );
+
+
+    /* ==========================================
+       REVIEW PILOT
+       ========================================== */
+
+    document
+      .getElementById(
+        "reviewPilot"
+      )
+      .addEventListener(
+        "click",
+        function () {
+
+          if (typeof toast === "function") {
+
+            toast(
+              "Pilot review opened"
+            );
+
+          }
+
+        }
+      );
+
+
+    /* ==========================================
+       COMPLETE PILOT & EVALUATE
+       ========================================== */
+
+    document
+      .getElementById(
+        "completePilot"
+      )
+      .addEventListener(
+        "click",
+        async function () {
+
+
+          /*
+           * Prevent duplicate clicks.
+           */
+
+          const button =
+            this;
+
+
+          button.disabled =
+            true;
+
+
+          button.textContent =
+            "Evaluating Pilot...";
+
+
+          /*
+           * Prepare KPI information for
+           * the backend pilot-analysis engine.
+           */
+
+          const kpis = [
+
+            {
+              name:
+                "Wait-time reduction",
+
+              baseline:
+                "0%",
+
+              target:
+                "15%",
+
+              actual:
+                `${waitReduction}%`
+
+            },
+
+
+            {
+              name:
+                "Detection accuracy",
+
+              baseline:
+                "0%",
+
+              target:
+                "90%",
+
+              actual:
+                `${accuracy}%`
+
+            },
+
+
+            {
+              name:
+                "User coverage",
+
+              baseline:
+                "0",
+
+              target:
+                "10000",
+
+              actual:
+                String(
+                  usersImpacted
+                )
+
+            }
+
+          ];
+
+
+          const pilotPayload = {
+
+            challenge: {
+
+              title:
+                activeChallenge.title ||
+                "Pilot Challenge",
+
+              problem:
+                activeChallenge.problem ||
+                activeChallenge.problem_statement ||
+                "",
+
+              objective:
+                activeChallenge.objective ||
+                activeChallenge.expectedOutcome ||
+                "",
+
+              domain:
+                activeChallenge.domain ||
+                "",
+
+              pilotDuration:
+                activeChallenge.pilotDuration ||
+                ""
+
+            },
+
+
+            startup: {
+
+              name:
+                startupName,
+
+              proposal:
+                proposal ||
+                {},
+
+              evaluation:
+                evaluation ||
+                selectedStartup ||
+                {}
+
+            },
+
+
+            kpis:
+
+              kpis
+
+          };
+
+
+          try {
+
+
+            const response =
+              await fetch(
+                "http://localhost:5000/api/ai/analyze-pilot",
+                {
+                  method: "POST",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json"
+                  },
+
+                  body:
+                    JSON.stringify(
+                      pilotPayload
+                    )
+
+                }
+              );
+
+
+            if (!response.ok) {
+
+              throw new Error(
+                `Pilot analysis failed: ${response.status}`
+              );
+
+            }
+
+
+            const result =
+              await response.json();
+
+
+            /*
+             * Save complete pilot evaluation.
+             */
+
+            const finalPilot = {
+
+              ...pilotState,
+
+              kpi_results:
+                result.kpi_results ||
+                [],
+
+              overall_summary:
+                result.overall_summary ||
+                "",
+
+              mode:
+                result.mode ||
+                "live",
+
+              evaluatedAt:
+                new Date().toISOString()
+
+            };
+
+
+            localStorage.setItem(
+              "procurexPilot",
+              JSON.stringify(
+                finalPilot
+              )
+            );
+
+
+            /*
+             * Continue to Final Decision.
+             */
+
+            window.location.href =
+              "screen12.html";
+
+
+          } catch (error) {
+
+            console.error(
+              "Pilot evaluation error:",
+              error
+            );
+
+
+            /*
+             * Even if the backend is temporarily
+             * unavailable, preserve the pilot data
+             * and allow the prototype workflow to
+             * continue.
+             */
+
+            localStorage.setItem(
+              "procurexPilot",
+              JSON.stringify(
+                pilotState
+              )
+            );
+
+
+            if (typeof toast === "function") {
+
+              toast(
+                "Pilot data saved. Evaluation service unavailable."
+              );
+
+            }
+
+
+            setTimeout(
+              function () {
+
+                window.location.href =
+                  "screen12.html";
+
+              },
+              900
+            );
+
+          }
+
+        }
+      );
+
+
+    /* ==========================================
+       HOME
+       ========================================== */
+
+    document
+      .getElementById(
+        "homeBtn"
+      )
+      .addEventListener(
+        "click",
+        function () {
+
+          window.location.href =
+            "../index.html";
+
+        }
+      );
+
+  });
+
+</script>
+
+</body>
+</html>

@@ -1,90 +1,871 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Challenge Detail — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">STARTUP PORTAL</div><nav class="side-nav"><a class="" href="screen_startup_home.html">Home</a><a class="active" href="screen7.html">Challenges</a><a class="" href="screen7.html">Discover Challenges</a><a class="" href="screen8.html">My Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
-<main class="main"><div class="dash-top"><div class="brand">Challenge Detail</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content">
-<div class="welcome"><div><span class="eyebrow">92% match · Urban Mobility</span><h2>AI-Based Urban Traffic Management</h2><p>Department of Urban Development · Bengaluru Urban · High priority</p></div><button class="btn primary" id="interest">I'm Interested</button></div>
-<div class="grid-2"><div class="card"><h3>Overview</h3><p>Improve urban traffic flow through data-driven monitoring, prediction and adaptive intervention.</p><h3 style="margin-top:22px">Requirements</h3><p>AI/ML · IoT · Computer Vision · analytics · deployment readiness.</p><h3 style="margin-top:22px">Expected outcome</h3><p>Measurable reduction in waiting time, better incident detection and a scalable pilot model.</p></div><div class="card"><h3>Challenge facts</h3><div class="stat" style="margin-bottom:10px"><div class="label">Estimated budget</div><div class="value">₹25–40L</div></div><div class="stat" style="margin-bottom:10px"><div class="label">Pilot duration</div><div class="value">6 months</div></div><div class="stat"><div class="label">Response window</div><div class="value">14 days</div></div></div></div>
-<div class="section"><div class="card"><h3>Why this matches you</h3><p>UrbanAI Technologies matches the challenge on urban mobility, AI/ML, computer vision and Karnataka deployment capability.</p><span class="chip blue">AI capability</span><span class="chip blue">Relevant deployments</span><span class="chip blue">Local readiness</span></div></div>
-</div></main></div>
-<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>
-document.addEventListener("DOMContentLoaded", () => {
+<!doctype html>
+<html lang="en">
 
-  const savedChallenge =
-    localStorage.getItem("procurexLastChallenge");
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  if (savedChallenge) {
+  <title>Challenge Detail — PROCUREX</title>
 
-    const challenge =
-      JSON.parse(savedChallenge);
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
 
-    // Challenge title
-    document.querySelector(".welcome h2").textContent =
-      challenge.title || "Challenge Detail";
+<body>
 
-    // Department, location and priority
-    document.querySelector(".welcome p").textContent =
-      `${challenge.department || "Government Department"} · ${challenge.city || "Location"} · High priority`;
+<div class="dashboard">
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+
+      <span
+        class="logo-mark"
+        aria-label="ProcureX logo"
+      >
+        PX
+      </span>
+
+      ProcureX
+
+    </a>
 
 
-    // Overview
-    const cards =
-      document.querySelectorAll(".grid-2 .card");
+    <div class="side-label">
+      STARTUP PORTAL
+    </div>
 
-    if (cards[0]) {
 
-      const headings =
-        cards[0].querySelectorAll("h3");
+    <nav class="side-nav">
 
-      const paragraphs =
-        cards[0].querySelectorAll("p");
+      <a href="screen_startup_home.html">
+        Home
+      </a>
 
-      // Problem / overview
-      if (paragraphs[0]) {
-        paragraphs[0].textContent =
-          challenge.problem ||
-          "No problem description provided.";
+      <a class="active" href="screen7.html">
+        Challenges
+      </a>
+
+      <a class="active" href="screen7.html">
+        Discover Challenges
+      </a>
+
+      <a href="screen8.html">
+        My Proposals
+      </a>
+
+      <a href="screen11.html">
+        Pilots
+      </a>
+
+      <a href="screen13.html">
+        Impact
+      </a>
+
+    </nav>
+
+
+    <div
+      style="margin-top:28px"
+      class="notice"
+    >
+
+      Prototype workspace
+
+      <br>
+
+      <small>
+        Data is demo-driven and can later connect to the backend.
+      </small>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="main">
+
+    <div class="dash-top">
+
+      <div class="brand">
+        Challenge Detail
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          ☾
+        </button>
+
+
+        <button
+          class="btn"
+          id="homeBtn"
+        >
+          Home
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+
+      <!-- ================= CHALLENGE HEADER ================= -->
+
+      <div class="welcome">
+
+        <div>
+
+          <span
+            class="eyebrow"
+            id="matchLabel"
+          >
+            92% match · Urban Mobility
+          </span>
+
+
+          <h2 id="challengeTitle">
+            AI-Based Urban Traffic Management
+          </h2>
+
+
+          <p id="challengeMeta">
+            Department of Urban Development · Bengaluru Urban · High priority
+          </p>
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          id="interest"
+        >
+          I'm Interested
+        </button>
+
+      </div>
+
+
+      <!-- ================= DETAILS ================= -->
+
+      <div class="grid-2">
+
+
+        <!-- OVERVIEW -->
+
+        <div class="card">
+
+          <h3>
+            Overview
+          </h3>
+
+
+          <p id="challengeOverview">
+            Improve urban traffic flow through data-driven
+            monitoring, prediction and adaptive intervention.
+          </p>
+
+
+          <h3 style="margin-top:22px">
+            Requirements
+          </h3>
+
+
+          <p id="challengeRequirements">
+            AI/ML · IoT · Computer Vision · analytics · deployment readiness.
+          </p>
+
+
+          <h3 style="margin-top:22px">
+            Expected outcome
+          </h3>
+
+
+          <p id="challengeOutcome">
+            Measurable reduction in waiting time,
+            better incident detection and a scalable pilot model.
+          </p>
+
+        </div>
+
+
+        <!-- CHALLENGE FACTS -->
+
+        <div class="card">
+
+          <h3>
+            Challenge facts
+          </h3>
+
+
+          <div
+            class="stat"
+            style="margin-bottom:10px"
+          >
+
+            <div class="label">
+              Estimated budget
+            </div>
+
+            <div
+              class="value"
+              id="challengeBudget"
+            >
+              ₹25–40L
+            </div>
+
+          </div>
+
+
+          <div
+            class="stat"
+            style="margin-bottom:10px"
+          >
+
+            <div class="label">
+              Pilot duration
+            </div>
+
+            <div
+              class="value"
+              id="challengePilot"
+            >
+              6 months
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="label">
+              Response window
+            </div>
+
+            <div
+              class="value"
+              id="challengeResponse"
+            >
+              14 days
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= WHY THIS MATCHES ================= -->
+
+      <div class="section">
+
+        <div class="card">
+
+          <h3>
+            Why this matches you
+          </h3>
+
+
+          <p id="matchExplanation">
+            Your startup profile matches the challenge based
+            on its capabilities, technology and deployment profile.
+          </p>
+
+
+          <div id="matchChips">
+
+            <span class="chip blue">
+              AI capability
+            </span>
+
+            <span class="chip blue">
+              Relevant deployments
+            </span>
+
+            <span class="chip blue">
+              Local readiness
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="../js/theme.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+
+    /* ==========================================
+       LOAD CHALLENGE
+       ========================================== */
+
+    const savedChallenge =
+      localStorage.getItem(
+        "procurexLastChallenge"
+      );
+
+
+    let challenge = null;
+
+
+    if (savedChallenge) {
+
+      try {
+
+        challenge =
+          JSON.parse(
+            savedChallenge
+          );
+
+      } catch (error) {
+
+        console.error(
+          "Unable to read saved challenge:",
+          error
+        );
+
       }
 
-      // Requirements
-      if (paragraphs[1]) {
-        paragraphs[1].textContent =
-          challenge.requirements ||
-          "No specific requirements provided.";
-      }
-
-      // Expected outcome
-      if (paragraphs[2]) {
-        paragraphs[2].textContent =
-          challenge.objective ||
-          "No expected outcome provided.";
-      }
     }
-  }
 
 
-  // Interest button
-  const interest =
-    document.getElementById("interest");
+    /* ==========================================
+       HELPER
+       ========================================== */
 
-  interest.onclick = () => {
+    function text(value, fallback) {
 
-    localStorage.setItem(
-      "procurexInterest",
-      "true"
+      if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+      ) {
+
+        return fallback;
+
+      }
+
+      return String(value);
+
+    }
+
+
+    function formatList(value, fallback) {
+
+      if (Array.isArray(value)) {
+
+        const cleaned =
+          value
+            .filter(
+              item =>
+                item !== undefined &&
+                item !== null &&
+                String(item).trim() !== ""
+            )
+            .map(
+              item =>
+                String(item).trim()
+            );
+
+
+        if (cleaned.length) {
+
+          return cleaned.join(" · ");
+
+        }
+
+      }
+
+
+      return text(
+        value,
+        fallback
+      );
+
+    }
+
+
+    /* ==========================================
+       POPULATE CHALLENGE
+       ========================================== */
+
+    if (challenge) {
+
+
+      /*
+       * Match label
+       *
+       * The actual matcher score will be available
+       * on Screen 5. If no score has been stored yet,
+       * keep the prototype value.
+       */
+
+      const selectedStartup =
+        localStorage.getItem(
+          "procurexSelectedStartup"
+        );
+
+
+      let matchScore = null;
+
+
+      if (selectedStartup) {
+
+        try {
+
+          const startup =
+            JSON.parse(
+              selectedStartup
+            );
+
+
+          if (
+            startup.match_score !== undefined &&
+            startup.match_score !== null
+          ) {
+
+            matchScore =
+              Number(
+                startup.match_score
+              );
+
+          }
+
+        } catch (error) {
+
+          console.warn(
+            "Unable to read selected startup:",
+            error
+          );
+
+        }
+
+      }
+
+
+      const matchLabel =
+        document.getElementById(
+          "matchLabel"
+        );
+
+
+      if (
+        matchScore !== null &&
+        !isNaN(matchScore)
+      ) {
+
+        matchLabel.textContent =
+          `${matchScore}% match · ${
+            text(
+              challenge.domain,
+              "Public Innovation"
+            )
+          }`;
+
+      } else {
+
+        matchLabel.textContent =
+          `92% match · ${
+            text(
+              challenge.domain,
+              "Public Innovation"
+            )
+          }`;
+
+      }
+
+
+      /*
+       * Title
+       */
+
+      document.getElementById(
+        "challengeTitle"
+      ).textContent =
+        text(
+          challenge.title,
+          "Challenge Detail"
+        );
+
+
+      /*
+       * Department + location + priority
+       */
+
+      const location =
+        [
+          challenge.city,
+          challenge.state
+        ]
+        .filter(Boolean)
+        .join(" ");
+
+
+      document.getElementById(
+        "challengeMeta"
+      ).textContent =
+        `${text(
+          challenge.department,
+          "Government Department"
+        )} · ${text(
+          location,
+          "Location"
+        )} · ${text(
+          challenge.priority,
+          "High"
+        )} priority`;
+
+
+      /*
+       * Problem / overview
+       */
+
+      document.getElementById(
+        "challengeOverview"
+      ).textContent =
+        text(
+          challenge.problem,
+          "No problem description provided."
+        );
+
+
+      /*
+       * Requirements
+       */
+
+      document.getElementById(
+        "challengeRequirements"
+      ).textContent =
+        formatList(
+          challenge.requirements,
+          "No specific requirements provided."
+        );
+
+
+      /*
+       * Expected outcome
+       */
+
+      document.getElementById(
+        "challengeOutcome"
+      ).textContent =
+        text(
+          challenge.objective ||
+          challenge.expectedOutcome,
+          "No expected outcome provided."
+        );
+
+
+      /*
+       * Budget
+       */
+
+      document.getElementById(
+        "challengeBudget"
+      ).textContent =
+        text(
+          challenge.budget,
+          "Not specified"
+        );
+
+
+      /*
+       * Pilot duration
+       */
+
+      document.getElementById(
+        "challengePilot"
+      ).textContent =
+        text(
+          challenge.pilotDuration,
+          "Not specified"
+        );
+
+
+      /*
+       * Response window
+       */
+
+      document.getElementById(
+        "challengeResponse"
+      ).textContent =
+        text(
+          challenge.responseWindow,
+          "Not specified"
+        );
+
+
+      /* ==========================================
+         WHY THIS MATCHES
+         ========================================== */
+
+      let startupProfile = null;
+
+
+      const savedStartup =
+        localStorage.getItem(
+          "procurexStartupProfile"
+        );
+
+
+      if (savedStartup) {
+
+        try {
+
+          startupProfile =
+            JSON.parse(
+              savedStartup
+            );
+
+        } catch (error) {
+
+          console.warn(
+            "Unable to read startup profile:",
+            error
+          );
+
+        }
+
+      }
+
+
+      const matchExplanation =
+        document.getElementById(
+          "matchExplanation"
+        );
+
+
+      if (startupProfile) {
+
+        const startupName =
+          text(
+            startupProfile.startupName,
+            "Your startup"
+          );
+
+
+        const sectors =
+          Array.isArray(
+            startupProfile.sectors
+          )
+            ? startupProfile.sectors
+            : [];
+
+
+        const technologies =
+          Array.isArray(
+            startupProfile.technologies
+          )
+            ? startupProfile.technologies
+            : [];
+
+
+        const matchAreas = [];
+
+
+        if (
+          sectors.length &&
+          challenge.domain
+        ) {
+
+          matchAreas.push(
+            "sector/domain alignment"
+          );
+
+        }
+
+
+        if (technologies.length) {
+
+          matchAreas.push(
+            "technology capabilities"
+          );
+
+        }
+
+
+        if (
+          startupProfile.city &&
+          challenge.city &&
+          startupProfile.city
+            .toLowerCase()
+            ===
+          challenge.city
+            .toLowerCase()
+        ) {
+
+          matchAreas.push(
+            "local readiness"
+          );
+
+        }
+
+
+        if (matchAreas.length) {
+
+          matchExplanation.textContent =
+            `${startupName} matches this challenge based on ${
+              matchAreas.join(", ")
+            }.`;
+
+        } else {
+
+          matchExplanation.textContent =
+            `${startupName} has been identified as a potentially relevant startup for this challenge. Review the capability profile and verification information before proceeding.`;
+
+        }
+
+      }
+
+    }
+
+
+    /* ==========================================
+       INTEREST BUTTON
+       ========================================== */
+
+    const interest =
+      document.getElementById(
+        "interest"
+      );
+
+
+    /*
+     * Restore previous interest state.
+     */
+
+    const alreadyInterested =
+      localStorage.getItem(
+        "procurexInterest"
+      );
+
+
+    if (
+      alreadyInterested === "true"
+    ) {
+
+      interest.textContent =
+        "Interest Recorded ✓";
+
+      interest.disabled = true;
+
+    }
+
+
+    interest.addEventListener(
+      "click",
+      function () {
+
+
+        /*
+         * Record interest.
+         */
+
+        localStorage.setItem(
+          "procurexInterest",
+          "true"
+        );
+
+
+        /*
+         * Keep the selected challenge
+         * available for Screen 8.
+         */
+
+        if (challenge) {
+
+          localStorage.setItem(
+            "procurexSelectedChallenge",
+            JSON.stringify(
+              challenge
+            )
+          );
+
+        }
+
+
+        interest.textContent =
+          "Interest Recorded ✓";
+
+
+        interest.disabled = true;
+
+
+        if (typeof toast === "function") {
+
+          toast(
+            "Interest successfully recorded"
+          );
+
+        }
+
+
+        /*
+         * Continue to proposal.
+         */
+
+        setTimeout(
+          function () {
+
+            window.location.href =
+              "screen8.html";
+
+          },
+          900
+        );
+
+      }
     );
 
-    toast("Interest successfully recorded");
 
-    interest.textContent =
-      "Interest Recorded ✓";
+    /* ==========================================
+       HOME BUTTON
+       ========================================== */
 
-    interest.disabled = true;
+    document
+      .getElementById("homeBtn")
+      .addEventListener(
+        "click",
+        function () {
 
-    setTimeout(() => {
-      window.location.href =
-        "screen8.html";
-    }, 900);
+          window.location.href =
+            "../index.html";
 
-  };
+        }
+      );
 
-});
-</script></body></html>
+  });
+
+</script>
+
+</body>
+</html>

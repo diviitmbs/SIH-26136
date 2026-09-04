@@ -1,19 +1,658 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Government Home — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">GOVERNMENT PORTAL</div><nav class="side-nav"><a class="active" href="screen_gov_home.html">Home</a><a class="" href="screen3.html">Challenges</a><a class="" href="screen5.html">Discover Startups</a><a class="" href="screen9.html">Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
-<main class="main"><div class="dash-top"><div class="brand">Government Home</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
-<div class="welcome"><div><span class="eyebrow">Government workspace</span><h2>Good morning, Department of Urban Development</h2><p>Let's drive innovation together.</p></div><button class="btn primary" data-go="screen3.html">＋ Create Challenge</button></div>
-<div class="kpi-grid">
-<div class="stat"><div class="value" id="challengeCount">0</div><div class="label">Your active challenges</div></div>
-<div class="stat"><div class="value">8</div><div class="label">Proposals received</div></div><div class="stat"><div class="value">2</div><div class="label">Live pilots</div></div><div class="stat"><div class="value">1</div><div class="label">Completed pilots</div></div>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Government Home — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+      <span class="logo-mark" aria-label="ProcureX logo">
+        PX
+      </span>
+      ProcureX
+    </a>
+
+    <div class="side-label">
+      GOVERNMENT PORTAL
+    </div>
+
+    <nav class="side-nav">
+
+      <a class="active" href="screen_gov_home.html">
+        Home
+      </a>
+
+      <a href="screen3.html">
+        Challenges
+      </a>
+
+      <a href="screen5.html">
+        Discover Startups
+      </a>
+
+      <a href="screen9.html">
+        Proposals
+      </a>
+
+      <a href="screen11.html">
+        Pilots
+      </a>
+
+      <a href="screen13.html">
+        Impact
+      </a>
+
+    </nav>
+
+    <div style="margin-top:28px" class="notice">
+
+      Prototype workspace
+
+      <br>
+
+      <small>
+        Data is demo-driven and can later connect to the backend.
+      </small>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <div class="dash-top">
+
+      <div class="brand">
+        Government Home
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+        >
+          ☾
+        </button>
+
+        <button
+          class="btn"
+          data-go="../index.html"
+        >
+          Home
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+
+      <!-- PROTOTYPE BANNER -->
+      <div class="prototype-banner compact">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          Illustrative records for judging only.
+        </small>
+
+      </div>
+
+
+      <!-- WELCOME -->
+      <div class="welcome">
+
+        <div>
+
+          <span class="eyebrow">
+            Government workspace
+          </span>
+
+          <h2>
+            Good morning, Department of Urban Development
+          </h2>
+
+          <p>
+            Let's drive innovation together.
+          </p>
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          data-go="screen3.html"
+        >
+          ＋ Create Challenge
+        </button>
+
+      </div>
+
+
+      <!-- KPI CARDS -->
+      <div class="kpi-grid">
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="challengeCount"
+          >
+            0
+          </div>
+
+          <div class="label">
+            Your active challenges
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="proposalCount"
+          >
+            0
+          </div>
+
+          <div class="label">
+            Proposals received
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="pilotCount"
+          >
+            2
+          </div>
+
+          <div class="label">
+            Live pilots
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="completedPilotCount"
+          >
+            1
+          </div>
+
+          <div class="label">
+            Completed pilots
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- QUICK ACTIONS -->
+      <section class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h3>
+              What would you like to work on?
+            </h3>
+
+            <p>
+              Keep the important actions close and the rest out of the way.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="action-grid">
+
+
+          <button
+            class="action"
+            data-go="screen3.html"
+          >
+
+            <div class="action-icon">
+              ◫
+            </div>
+
+            <b>
+              Create Challenge
+            </b>
+
+            <p>
+              Define a new public problem.
+            </p>
+
+          </button>
+
+
+          <button
+            class="action"
+            data-go="screen5.html"
+          >
+
+            <div class="action-icon">
+              ⌕
+            </div>
+
+            <b>
+              Discover Startups
+            </b>
+
+            <p>
+              Find relevant innovation partners.
+            </p>
+
+          </button>
+
+
+          <button
+            class="action"
+            data-go="screen9.html"
+          >
+
+            <div class="action-icon">
+              ◈
+            </div>
+
+            <b>
+              Review Proposals
+            </b>
+
+            <p>
+              Compare responses clearly.
+            </p>
+
+          </button>
+
+
+          <button
+            class="action"
+            data-go="screen11.html"
+          >
+
+            <div class="action-icon">
+              ◎
+            </div>
+
+            <b>
+              Track Pilots
+            </b>
+
+            <p>
+              Monitor measurable outcomes.
+            </p>
+
+          </button>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- ACTIVE CHALLENGES -->
+      <section class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h3>
+              Your active challenges
+            </h3>
+
+          </div>
+
+
+          <button
+            class="btn"
+            data-go="screen5.html"
+          >
+            Discover startups →
+          </button>
+
+        </div>
+
+
+        <div
+          class="grid-3"
+          id="govChallenges"
+        ></div>
+
+      </section>
+
+
+    </div>
+
+  </main>
+
 </div>
-<section class="section"><div class="section-head"><div><h3>What would you like to work on?</h3><p>Keep the important actions close and the rest out of the way.</p></div></div>
-<div class="action-grid">
-<button class="action" data-go="screen3.html"><div class="action-icon">◫</div><b>Create Challenge</b><p>Define a new public problem.</p></button>
-<button class="action" data-go="screen5.html"><div class="action-icon">⌕</div><b>Discover Startups</b><p>Find relevant innovation partners.</p></button>
-<button class="action" data-go="screen9.html"><div class="action-icon">◈</div><b>Review Proposals</b><p>Compare responses clearly.</p></button>
-<button class="action" data-go="screen11.html"><div class="action-icon">◎</div><b>Track Pilots</b><p>Monitor measurable outcomes.</p></button>
-</div></section>
-<section class="section"><div class="section-head"><div><h3>Your active challenges</h3></div><button class="btn" data-go="screen5.html">Discover startups →</button></div>
-<div class="grid-3" id="govChallenges"></div></section>
-</div></main></div>
-<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>document.addEventListener("DOMContentLoaded",()=>{document.getElementById("challengeCount").textContent=PROCUREX_DATA.challenges.length;document.getElementById("govChallenges").innerHTML=PROCUREX_DATA.challenges.map(c=>`<div class="card"><span class="badge info">${c.status}</span><h3 style="margin-top:12px">${c.title}</h3><p>${c.department}<br>${c.location}</p><span class="chip">${c.sector}</span><span class="chip blue">${c.match}% match</span></div>`).join("")})</script></body></html>
+
+
+<!-- SHARED JS -->
+<script src="../js/theme.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+
+    /*
+     * ----------------------------------------------------
+     * LOAD SAVED CHALLENGE
+     * ----------------------------------------------------
+     */
+
+    const savedChallenge =
+      localStorage.getItem(
+        "procurexLastChallenge"
+      );
+
+
+    /*
+     * ----------------------------------------------------
+     * LOAD SAVED PROPOSAL
+     * ----------------------------------------------------
+     */
+
+    const savedProposal =
+      localStorage.getItem(
+        "procurexLastProposal"
+      );
+
+
+    /*
+     * ----------------------------------------------------
+     * UPDATE PROPOSAL COUNT
+     * ----------------------------------------------------
+     */
+
+    const proposalCount =
+      document.getElementById(
+        "proposalCount"
+      );
+
+
+    if (savedProposal) {
+
+      proposalCount.textContent = "1";
+
+    } else {
+
+      /*
+       * Keep the original prototype count
+       * when no live proposal exists yet.
+       */
+
+      proposalCount.textContent = "8";
+
+    }
+
+
+    /*
+     * ----------------------------------------------------
+     * BUILD CHALLENGE LIST
+     * ----------------------------------------------------
+     */
+
+    const challengeContainer =
+      document.getElementById(
+        "govChallenges"
+      );
+
+
+    let challenges = [];
+
+
+    /*
+     * If the user has created a real challenge,
+     * show that challenge first.
+     */
+
+    if (savedChallenge) {
+
+      try {
+
+        const challenge =
+          JSON.parse(
+            savedChallenge
+          );
+
+
+        challenges.push({
+
+          title:
+            challenge.title ||
+            "Untitled Challenge",
+
+          department:
+            challenge.department ||
+            "Department of Urban Development",
+
+          location:
+            [
+              challenge.city,
+              challenge.state
+            ]
+              .filter(Boolean)
+              .join(", ") ||
+            "Location not specified",
+
+          sector:
+            challenge.domain ||
+            "Public Innovation",
+
+          status:
+            "Published",
+
+          match:
+            "AI"
+
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Could not read saved challenge:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /*
+     * ----------------------------------------------------
+     * FALLBACK DEMO CHALLENGES
+     * ----------------------------------------------------
+     */
+
+    if (!challenges.length) {
+
+      if (
+        typeof PROCUREX_DATA !== "undefined" &&
+        Array.isArray(
+          PROCUREX_DATA.challenges
+        )
+      ) {
+
+        challenges =
+          PROCUREX_DATA.challenges;
+
+      }
+
+    }
+
+
+    /*
+     * ----------------------------------------------------
+     * UPDATE CHALLENGE COUNT
+     * ----------------------------------------------------
+     */
+
+    document.getElementById(
+      "challengeCount"
+    ).textContent =
+      challenges.length;
+
+
+    /*
+     * ----------------------------------------------------
+     * RENDER CHALLENGES
+     * ----------------------------------------------------
+     */
+
+    if (!challenges.length) {
+
+      challengeContainer.innerHTML = `
+
+        <div class="card">
+
+          <h3>
+            No active challenges yet
+          </h3>
+
+          <p>
+            Create your first innovation challenge
+            to begin startup discovery.
+          </p>
+
+          <button
+            class="btn primary"
+            style="margin-top:14px"
+            onclick="window.location.href='screen3.html'"
+          >
+            Create Challenge
+          </button>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    challengeContainer.innerHTML =
+      challenges
+        .map(
+          challenge => `
+
+            <div class="card">
+
+              <span class="badge info">
+                ${
+                  challenge.status ||
+                  "Active"
+                }
+              </span>
+
+
+              <h3
+                style="margin-top:12px"
+              >
+                ${
+                  challenge.title ||
+                  "Untitled Challenge"
+                }
+              </h3>
+
+
+              <p>
+
+                ${
+                  challenge.department ||
+                  "Government Department"
+                }
+
+                <br>
+
+                ${
+                  challenge.location ||
+                  "Location not specified"
+                }
+
+              </p>
+
+
+              <span class="chip">
+                ${
+                  challenge.sector ||
+                  "Public Innovation"
+                }
+              </span>
+
+
+              ${
+                challenge.match !== undefined
+                  ? `
+                    <span class="chip blue">
+                      ${
+                        challenge.match === "AI"
+                          ? "AI matched"
+                          : challenge.match + "% match"
+                      }
+                    </span>
+                  `
+                  : ""
+              }
+
+
+            </div>
+
+          `
+        )
+        .join("");
+
+
+  }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,8 +1,1437 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI-assisted Recommendation — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">GOVERNMENT PORTAL</div><nav class="side-nav"><a class="" href="screen_gov_home.html">Home</a><a class="" href="screen3.html">Challenges</a><a class="" href="screen5.html">Discover Startups</a><a class="active" href="screen9.html">Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
-<main class="main"><div class="dash-top"><div class="brand">AI-assisted Recommendation</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
-<div class="welcome"><div><span class="eyebrow">AI-assisted evaluation</span><h2>Top recommended proposal.</h2><p>Recommendation is presented with explainable factors so the government team remains in control.</p></div><span class="badge info">Prototype recommendation</span></div>
-<div class="grid-2"><div class="card" style="padding:32px"><span class="badge success">91 / 100</span><h2 style="margin-top:18px">UrbanAI Technologies</h2><p>Strongest overall proposal for the current challenge.</p><div style="margin-top:25px"><div style="display:flex;justify-content:space-between"><b>Requirement alignment</b><span>95%</span></div><div class="bar"><span style="width:95%"></span></div><br><div style="display:flex;justify-content:space-between"><b>Pilot feasibility</b><span>93%</span></div><div class="bar"><span style="width:93%"></span></div><br><div style="display:flex;justify-content:space-between"><b>Relevant experience</b><span>92%</span></div><div class="bar"><span style="width:92%"></span></div><br><div style="display:flex;justify-content:space-between"><b>Commercial competitiveness</b><span>86%</span></div><div class="bar"><span style="width:86%"></span></div></div></div>
-<div class="card"><h3>Why it is recommended</h3><p>✓ 12 relevant deployments</p><p>✓ Previous government experience</p><p>✓ Strong AI + computer vision alignment</p><p>✓ Pilot available in Bengaluru</p><p>✓ Competitive commercial proposal</p><div class="notice" style="margin-top:20px">AI assists evaluation; final selection remains with the authorised government team.</div><div class="hero-actions"><button class="btn" data-toast="Proposal review opened">Review Proposal</button><button class="btn primary" data-go="screen11.html">Select for Pilot</button></div></div></div>
-</div></main></div>
-<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>AI-assisted Recommendation — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+      <span class="logo-mark" aria-label="ProcureX logo">PX</span>
+      ProcureX
+    </a>
+
+    <div class="side-label">
+      GOVERNMENT PORTAL
+    </div>
+
+    <nav class="side-nav">
+
+      <a href="screen_gov_home.html">Home</a>
+
+      <a href="screen3.html">Challenges</a>
+
+      <a href="screen5.html">Discover Startups</a>
+
+      <a class="active" href="screen9.html">Proposals</a>
+
+      <a href="screen11.html">Pilots</a>
+
+      <a href="screen13.html">Impact</a>
+
+    </nav>
+
+    <div
+      class="notice"
+      style="margin-top:28px"
+    >
+      Prototype workspace
+
+      <br>
+
+      <small>
+        Data is demo-driven and can later connect to the backend.
+      </small>
+    </div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <div class="dash-top">
+
+      <div class="brand">
+        AI-assisted Recommendation
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          type="button"
+        >
+          ☾
+        </button>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="window.location.href='../index.html'"
+        >
+          Home
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+      <div class="prototype-banner compact">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          Illustrative records for judging only.
+        </small>
+
+      </div>
+
+
+      <div class="welcome">
+
+        <div>
+
+          <span class="eyebrow">
+            AI-assisted evaluation
+          </span>
+
+          <h2>
+            AI-assisted recommendation
+          </h2>
+
+          <p id="challengeProblem">
+            Loading challenge...
+          </p>
+
+        </div>
+
+        <span class="badge info">
+          AI Evaluation
+        </span>
+
+      </div>
+
+
+      <div class="grid-2">
+
+
+        <div
+          class="card"
+          style="padding:32px"
+        >
+
+          <span
+            class="badge info"
+            id="scoreBadge"
+          >
+            Preparing evaluation...
+          </span>
+
+
+          <h2
+            id="startupName"
+            style="margin-top:18px"
+          >
+            Loading proposal...
+          </h2>
+
+
+          <p id="recommendationText">
+            Preparing the submitted proposal for AI evaluation.
+          </p>
+
+
+          <div style="margin-top:25px">
+
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:20px;
+              "
+            >
+
+              <b>
+                Requirement alignment
+              </b>
+
+              <span id="requirementScore">
+                --
+              </span>
+
+            </div>
+
+            <div class="bar">
+              <span
+                id="requirementBar"
+                style="width:0%"
+              ></span>
+            </div>
+
+
+            <br>
+
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:20px;
+              "
+            >
+
+              <b>
+                Pilot feasibility
+              </b>
+
+              <span id="pilotScore">
+                --
+              </span>
+
+            </div>
+
+            <div class="bar">
+              <span
+                id="pilotBar"
+                style="width:0%"
+              ></span>
+            </div>
+
+
+            <br>
+
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:20px;
+              "
+            >
+
+              <b>
+                Relevant experience
+              </b>
+
+              <span id="experienceScore">
+                --
+              </span>
+
+            </div>
+
+            <div class="bar">
+              <span
+                id="experienceBar"
+                style="width:0%"
+              ></span>
+            </div>
+
+
+            <br>
+
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:20px;
+              "
+            >
+
+              <b>
+                Commercial competitiveness
+              </b>
+
+              <span id="commercialScore">
+                --
+              </span>
+
+            </div>
+
+            <div class="bar">
+              <span
+                id="commercialBar"
+                style="width:0%"
+              ></span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>
+            Why it is recommended
+          </h3>
+
+          <div id="strengths">
+
+            <p>
+              Waiting for AI evaluation...
+            </p>
+
+          </div>
+
+
+          <div
+            class="notice"
+            style="margin-top:20px"
+          >
+            AI assists evaluation; final selection remains with the authorised government team.
+          </div>
+
+
+          <div class="hero-actions">
+
+            <button
+              class="btn"
+              type="button"
+              onclick="reviewProposal()"
+            >
+              Review Proposal
+            </button>
+
+            <button
+              class="btn primary"
+              type="button"
+              onclick="selectForPilot()"
+            >
+              Select for Pilot
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="card"
+        style="margin-top:24px"
+      >
+
+        <h3>
+          Evaluation concerns
+        </h3>
+
+        <div id="concerns">
+
+          <p>
+            Waiting for AI evaluation...
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="../js/theme.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+
+
+<script>
+
+const AI_API_URL =
+  "http://localhost:5000/api/ai/evaluate-startups";
+
+
+function getElement(id) {
+  return document.getElementById(id);
+}
+
+
+function readStoredJSON(key) {
+
+  const value =
+    localStorage.getItem(key);
+
+  if (!value) {
+    return null;
+  }
+
+  try {
+
+    return JSON.parse(value);
+
+  } catch (error) {
+
+    console.error(
+      "Could not parse localStorage key:",
+      key,
+      error
+    );
+
+    return null;
+  }
+}
+
+
+function normaliseScore(value) {
+
+  const number =
+    Number(value);
+
+  if (!Number.isFinite(number)) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(number)
+    )
+  );
+}
+
+
+function setBar(
+  scoreElementId,
+  barElementId,
+  value
+) {
+
+  const score =
+    normaliseScore(value);
+
+  const scoreElement =
+    getElement(scoreElementId);
+
+  const barElement =
+    getElement(barElementId);
+
+
+  if (scoreElement) {
+
+    scoreElement.textContent =
+      score + "%";
+
+  }
+
+
+  if (barElement) {
+
+    barElement.style.width =
+      score + "%";
+
+  }
+
+}
+
+
+function resetBars() {
+
+  const scores = [
+    "requirementScore",
+    "pilotScore",
+    "experienceScore",
+    "commercialScore"
+  ];
+
+
+  const bars = [
+    "requirementBar",
+    "pilotBar",
+    "experienceBar",
+    "commercialBar"
+  ];
+
+
+  scores.forEach(id => {
+
+    const element =
+      getElement(id);
+
+    if (element) {
+      element.textContent = "--";
+    }
+
+  });
+
+
+  bars.forEach(id => {
+
+    const element =
+      getElement(id);
+
+    if (element) {
+      element.style.width = "0%";
+    }
+
+  });
+
+}
+
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    String(value ?? "");
+
+  return div.innerHTML;
+
+}
+
+
+function displayList(
+  elementId,
+  items,
+  prefix,
+  emptyMessage
+) {
+
+  const element =
+    getElement(elementId);
+
+  if (!element) {
+    return;
+  }
+
+
+  if (
+    !Array.isArray(items) ||
+    items.length === 0
+  ) {
+
+    element.innerHTML =
+      "<p>" +
+      escapeHTML(emptyMessage) +
+      "</p>";
+
+    return;
+
+  }
+
+
+  element.innerHTML =
+    items
+      .map(item => {
+
+        return (
+          "<p>" +
+          escapeHTML(prefix) +
+          " " +
+          escapeHTML(item) +
+          "</p>"
+        );
+
+      })
+      .join("");
+
+}
+
+
+function showEvaluationError(message) {
+
+  console.error(
+    "AI evaluation failed:",
+    message
+  );
+
+
+  getElement(
+    "scoreBadge"
+  ).textContent =
+    "Evaluation unavailable";
+
+
+  getElement(
+    "recommendationText"
+  ).textContent =
+    message ||
+    "AI evaluation could not be completed.";
+
+
+  getElement(
+    "strengths"
+  ).innerHTML =
+    "<p>AI recommendation is currently unavailable.</p>";
+
+
+  getElement(
+    "concerns"
+  ).innerHTML =
+    "<p>⚠ AI evaluation could not be completed.</p>";
+
+
+  resetBars();
+
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initialiseEvaluation
+);
+
+
+async function initialiseEvaluation() {
+
+  const challenge =
+    readStoredJSON(
+      "procurexLastChallenge"
+    );
+
+
+  if (!challenge) {
+
+    getElement(
+      "challengeProblem"
+    ).textContent =
+      "No challenge has been created.";
+
+
+    getElement(
+      "startupName"
+    ).textContent =
+      "No challenge available";
+
+
+    showEvaluationError(
+      "Create and publish a challenge before running AI evaluation."
+    );
+
+    return;
+
+  }
+
+
+  const challengeProblem =
+
+    challenge.problem ||
+
+    challenge.problemStatement ||
+
+    challenge.description ||
+
+    challenge.challengeProblem ||
+
+    challenge.title ||
+
+    "Challenge details unavailable.";
+
+
+  getElement(
+    "challengeProblem"
+  ).textContent =
+    challengeProblem;
+
+
+  const proposal =
+    readStoredJSON(
+      "procurexLastProposal"
+    );
+
+
+  if (!proposal) {
+
+    getElement(
+      "startupName"
+    ).textContent =
+      "No proposal submitted";
+
+
+    showEvaluationError(
+      "A proposal must be submitted before AI evaluation can run."
+    );
+
+    return;
+
+  }
+
+
+  console.log(
+    "PROCUREX CHALLENGE:",
+    challenge
+  );
+
+
+  console.log(
+    "PROCUREX PROPOSAL:",
+    proposal
+  );
+
+
+  const startupName =
+
+    proposal.startupName ||
+
+    proposal.startup ||
+
+    proposal.companyName ||
+
+    proposal.company ||
+
+    proposal.organizationName ||
+
+    proposal.organisationName ||
+
+    proposal.vendorName ||
+
+    proposal.startup_name ||
+
+    proposal.name ||
+
+    "Submitted Startup";
+
+
+  getElement(
+    "startupName"
+  ).textContent =
+    startupName;
+
+
+  /*
+   * IMPORTANT:
+   *
+   * The backend evaluator expects:
+   *
+   * {
+   *   challenge: {...},
+   *   candidates: [...]
+   * }
+   *
+   * NOT:
+   *
+   * {
+   *   challenge: {...},
+   *   proposals: [...]
+   * }
+   */
+
+
+  const evaluationPayload = {
+
+    challenge: {
+
+      title:
+        challenge.title ||
+        challenge.challengeTitle ||
+        "",
+
+      problem:
+        challenge.problem ||
+        challenge.problemStatement ||
+        challenge.description ||
+        challenge.challengeProblem ||
+        "",
+
+      objective:
+        challenge.objective ||
+        challenge.goal ||
+        "",
+
+      requirements:
+        challenge.requirements ||
+        challenge.requirement ||
+        "",
+
+      successCriteria:
+        challenge.successCriteria ||
+        challenge.success_criteria ||
+        "",
+
+      department:
+        challenge.department ||
+        "",
+
+      state:
+        challenge.state ||
+        "",
+
+      city:
+        challenge.city ||
+        ""
+
+    },
+
+
+    /*
+     * FIXED:
+     * "candidates" instead of "proposals"
+     */
+
+    candidates: [
+
+      {
+
+        startup:
+          startupName,
+
+        domain:
+          proposal.domain ||
+          proposal.industry ||
+          "",
+
+        score:
+          proposal.score ||
+          proposal.matchScore ||
+          0,
+
+        stats:
+          proposal.stats ||
+          "",
+
+        proposedBudget:
+          proposal.proposedBudget ||
+          proposal.budget ||
+          proposal.cost ||
+          "",
+
+        pilotCost:
+          proposal.pilotCost ||
+          "",
+
+        implementationCost:
+          proposal.implementationCost ||
+          "",
+
+        maintenanceCost:
+          proposal.maintenanceCost ||
+          "",
+
+        totalTimeline:
+          proposal.totalTimeline ||
+          proposal.timeline ||
+          proposal.duration ||
+          "",
+
+        teamSize:
+          proposal.teamSize ||
+          "",
+
+        technicalTeam:
+          proposal.technicalTeam ||
+          "",
+
+        projectManager:
+          proposal.projectManager ||
+          "",
+
+        proposedSolution:
+          proposal.proposedSolution ||
+          proposal.solution ||
+          proposal.solutionDescription ||
+          proposal.description ||
+          "",
+
+        architecture:
+          proposal.architecture ||
+          "",
+
+        infrastructure:
+          proposal.infrastructure ||
+          "",
+
+        pilotDuration:
+          proposal.pilotDuration ||
+          "",
+
+        pilotLocation:
+          proposal.pilotLocation ||
+          "",
+
+        expectedUsers:
+          proposal.expectedUsers ||
+          "",
+
+        successCriteria:
+          proposal.successCriteria ||
+          proposal.success_criteria ||
+          "",
+
+        deliverables:
+          proposal.deliverables ||
+          "",
+
+        assumptions:
+          proposal.assumptions ||
+          ""
+
+      }
+
+    ]
+
+  };
+
+
+  console.log(
+    "SENDING TO AI:",
+    evaluationPayload
+  );
+
+
+  await runAIEvaluation(
+    challenge,
+    proposal,
+    evaluationPayload
+  );
+
+}
+
+
+async function runAIEvaluation(
+  challenge,
+  proposal,
+  evaluationPayload
+) {
+
+  getElement(
+    "scoreBadge"
+  ).textContent =
+    "Evaluating...";
+
+
+  getElement(
+    "recommendationText"
+  ).textContent =
+    "AI is evaluating the submitted proposal against the challenge requirements.";
+
+
+  getElement(
+    "strengths"
+  ).innerHTML =
+    "<p>Evaluating proposal strengths...</p>";
+
+
+  getElement(
+    "concerns"
+  ).innerHTML =
+    "<p>Checking potential concerns...</p>";
+
+
+  resetBars();
+
+
+  try {
+
+    const response =
+      await fetch(
+        AI_API_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify(
+              evaluationPayload
+            )
+
+        }
+      );
+
+
+    const rawResponse =
+      await response.text();
+
+
+    console.log(
+      "AI STATUS:",
+      response.status
+    );
+
+
+    console.log(
+      "AI RAW RESPONSE:",
+      rawResponse
+    );
+
+
+    if (!response.ok) {
+
+      let errorMessage =
+        rawResponse;
+
+
+      try {
+
+        const parsedError =
+          JSON.parse(
+            rawResponse
+          );
+
+
+        errorMessage =
+
+          parsedError.error ||
+
+          parsedError.message ||
+
+          parsedError.details ||
+
+          rawResponse;
+
+      } catch (error) {
+
+        // Keep raw backend response.
+
+      }
+
+
+      throw new Error(
+        "AI service returned " +
+        response.status +
+        ": " +
+        errorMessage
+      );
+
+    }
+
+
+    let result;
+
+
+    try {
+
+      result =
+        JSON.parse(
+          rawResponse
+        );
+
+    } catch (error) {
+
+      throw new Error(
+        "The AI service responded, but did not return valid JSON."
+      );
+
+    }
+
+
+    console.log(
+      "AI RESULT:",
+      result
+    );
+
+
+    let evaluation =
+      null;
+
+
+    if (
+      Array.isArray(
+        result.comparisons
+      ) &&
+      result.comparisons.length > 0
+    ) {
+
+      evaluation =
+        result.comparisons[0];
+
+    }
+
+    else if (
+      result.evaluation &&
+      typeof result.evaluation === "object"
+    ) {
+
+      evaluation =
+        result.evaluation;
+
+    }
+
+    else if (
+      result.result &&
+      typeof result.result === "object"
+    ) {
+
+      evaluation =
+        result.result;
+
+    }
+
+    else if (
+      result.data &&
+      typeof result.data === "object"
+    ) {
+
+      if (
+        Array.isArray(
+          result.data.comparisons
+        ) &&
+        result.data.comparisons.length
+      ) {
+
+        evaluation =
+          result.data.comparisons[0];
+
+      }
+
+      else {
+
+        evaluation =
+          result.data;
+
+      }
+
+    }
+
+    else if (
+      result.match_score !== undefined
+    ) {
+
+      evaluation =
+        result;
+
+    }
+
+
+    if (!evaluation) {
+
+      throw new Error(
+        "AI service responded successfully, but no evaluation was returned."
+      );
+
+    }
+
+
+    const overallScore =
+      normaliseScore(
+
+        evaluation.match_score ??
+
+        evaluation.matchScore ??
+
+        evaluation.overall_score ??
+
+        evaluation.overallScore ??
+
+        evaluation.score ??
+
+        result.match_score ??
+
+        result.score ??
+
+        0
+
+      );
+
+
+    getElement(
+      "scoreBadge"
+    ).textContent =
+      overallScore +
+      " / 100";
+
+
+    const recommendation =
+
+      result.overall_notes ||
+
+      result.overallNotes ||
+
+      evaluation.recommendation ||
+
+      evaluation.summary ||
+
+      evaluation.overall_notes ||
+
+      evaluation.overallNotes ||
+
+      "AI evaluation completed based on the submitted proposal and challenge requirements.";
+
+
+    getElement(
+      "recommendationText"
+    ).textContent =
+      recommendation;
+
+
+    const strengths =
+
+      Array.isArray(
+        evaluation.strengths
+      )
+
+        ? evaluation.strengths
+
+        : [];
+
+
+    displayList(
+      "strengths",
+      strengths,
+      "✓",
+      "No specific strengths were returned by the AI evaluator."
+    );
+
+
+    const concerns =
+
+      Array.isArray(
+        evaluation.concerns
+      )
+
+        ? evaluation.concerns
+
+        : [];
+
+
+    displayList(
+      "concerns",
+      concerns,
+      "⚠",
+      "No major concerns were returned by the AI evaluator."
+    );
+
+
+    /*
+     * The current Gemini evaluator returns one overall
+     * match_score rather than separate dimension scores.
+     *
+     * Therefore the same overall score is used for the
+     * four visual bars rather than inventing separate
+     * AI scores.
+     */
+
+    setBar(
+      "requirementScore",
+      "requirementBar",
+      overallScore
+    );
+
+
+    setBar(
+      "pilotScore",
+      "pilotBar",
+      overallScore
+    );
+
+
+    setBar(
+      "experienceScore",
+      "experienceBar",
+      overallScore
+    );
+
+
+    setBar(
+      "commercialScore",
+      "commercialBar",
+      overallScore
+    );
+
+
+    const savedEvaluation = {
+
+      challenge:
+        challenge,
+
+      proposal:
+        proposal,
+
+      evaluation:
+        evaluation,
+
+      overallScore:
+        overallScore,
+
+      overall_notes:
+        recommendation,
+
+      rawResult:
+        result,
+
+      evaluatedAt:
+        new Date().toISOString()
+
+    };
+
+
+    localStorage.setItem(
+      "procurexEvaluation",
+      JSON.stringify(
+        savedEvaluation
+      )
+    );
+
+
+    console.log(
+      "PROCUREX EVALUATION SAVED:",
+      savedEvaluation
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "AI EVALUATION ERROR:",
+      error
+    );
+
+
+    if (
+      error instanceof TypeError &&
+      error.message.includes(
+        "Failed to fetch"
+      )
+    ) {
+
+      showEvaluationError(
+        "Unable to connect to the AI backend at localhost:5000. Check that backend/server.js is running and CORS is enabled."
+      );
+
+      return;
+
+    }
+
+
+    showEvaluationError(
+      error.message ||
+      "AI evaluation could not be completed."
+    );
+
+  }
+
+}
+
+
+function reviewProposal() {
+
+  const evaluation =
+    readStoredJSON(
+      "procurexEvaluation"
+    );
+
+
+  if (!evaluation) {
+
+    if (
+      typeof showToast ===
+      "function"
+    ) {
+
+      showToast(
+        "Complete AI evaluation first"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  if (
+    typeof showToast ===
+    "function"
+  ) {
+
+    showToast(
+      "AI evaluation reviewed"
+    );
+
+  }
+
+}
+
+
+function selectForPilot() {
+
+  const evaluation =
+    readStoredJSON(
+      "procurexEvaluation"
+    );
+
+
+  if (!evaluation) {
+
+    if (
+      typeof showToast ===
+      "function"
+    ) {
+
+      showToast(
+        "Complete AI evaluation before selecting a pilot"
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "procurexSelectedForPilot",
+    "true"
+  );
+
+
+  localStorage.setItem(
+    "procurexSelectedProposal",
+    JSON.stringify(
+      evaluation.proposal
+    )
+  );
+
+
+  if (
+    typeof showToast ===
+    "function"
+  ) {
+
+    showToast(
+      "Proposal selected for pilot"
+    );
+
+  }
+
+
+  setTimeout(
+    () => {
+
+      window.location.href =
+        "screen11.html";
+
+    },
+    500
+  );
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,8 +1,597 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Startup Home — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">STARTUP PORTAL</div><nav class="side-nav"><a class="active" href="screen_startup_home.html">Home</a><a class="" href="screen7.html">Challenges</a><a class="" href="screen7.html">Discover Challenges</a><a class="" href="screen8.html">My Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
-<main class="main"><div class="dash-top"><div class="brand">Startup Home</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
-<div class="welcome"><div><span class="eyebrow">Startup workspace</span><h2>Good morning, UrbanAI Technologies</h2><p>Find public challenges where your solution can make a measurable difference.</p></div><button class="btn primary" data-go="screen7.html">Discover Challenges</button></div>
-<div class="kpi-grid"><div class="stat"><div class="value">6</div><div class="label">Relevant challenges</div></div><div class="stat"><div class="value">3</div><div class="label">Interests recorded</div></div><div class="stat"><div class="value">1</div><div class="label">Proposal submitted</div></div><div class="stat"><div class="value">1</div><div class="label">Active pilot</div></div></div>
-<section class="section"><div class="section-head"><div><h3>Recommended for you</h3><p>Based on your sectors, technologies and previous work.</p></div></div><div class="grid-3" id="startupChallenges"></div></section>
-</div></main></div>
-<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>document.addEventListener("DOMContentLoaded",()=>{document.getElementById("startupChallenges").innerHTML=PROCUREX_DATA.challenges.map(c=>`<div class="card"><span class="badge info">${c.match}% Match</span><h3 style="margin-top:12px">${c.title}</h3><p>${c.department}<br>${c.location}</p><span class="chip">${c.sector}</span><button class="btn primary" style="margin-top:14px" data-go="screen7.html">View Challenge</button></div>`).join("");bindLinks()})</script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Startup Home — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+      <a class="brand" href="../index.html">
+        <span class="logo-mark" aria-label="ProcureX logo">PX</span>
+        ProcureX
+      </a>
+
+      <div class="side-label">
+        STARTUP PORTAL
+      </div>
+
+      <nav class="side-nav">
+
+        <a class="active" href="screen_startup_home.html">
+          Home
+        </a>
+
+        <a href="screen7.html">
+          Challenges
+        </a>
+
+        <a href="screen7.html">
+          Discover Challenges
+        </a>
+
+        <a href="screen8.html">
+          My Proposals
+        </a>
+
+        <a href="screen11.html">
+          Pilots
+        </a>
+
+        <a href="screen13.html">
+          Impact
+        </a>
+
+      </nav>
+
+      <div style="margin-top:28px" class="notice">
+        Prototype workspace
+        <br>
+        <small>
+          Data is currently connected through the ProcureX prototype workflow.
+        </small>
+      </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+
+      <div class="dash-top">
+
+        <div class="brand">
+          Startup Home
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="btn icon-btn"
+            data-theme-toggle
+            aria-label="Toggle theme"
+          >
+            ☾
+          </button>
+
+          <button
+            class="btn"
+            id="homeBtn"
+          >
+            Home
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="dash-content">
+
+        <!-- ================= PROTOTYPE BANNER ================= -->
+        <div class="prototype-banner compact">
+
+          <span>
+            PROCUREX / STARTUP WORKSPACE
+          </span>
+
+          <small>
+            Discover public challenges and submit proposals.
+          </small>
+
+        </div>
+
+
+        <!-- ================= WELCOME ================= -->
+        <div class="welcome">
+
+          <div>
+
+            <span class="eyebrow">
+              Startup workspace
+            </span>
+
+            <h2 id="welcomeTitle">
+              Good morning, Startup
+            </h2>
+
+            <p>
+              Find public challenges where your solution can make
+              a measurable difference.
+            </p>
+
+          </div>
+
+          <button
+            class="btn primary"
+            id="discoverBtn"
+          >
+            Discover Challenges
+          </button>
+
+        </div>
+
+
+        <!-- ================= KPIs ================= -->
+        <div class="kpi-grid">
+
+          <div class="stat">
+
+            <div
+              class="value"
+              id="challengeCount"
+            >
+              0
+            </div>
+
+            <div class="label">
+              Relevant challenges
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div
+              class="value"
+              id="interestCount"
+            >
+              0
+            </div>
+
+            <div class="label">
+              Interests recorded
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div
+              class="value"
+              id="proposalCount"
+            >
+              0
+            </div>
+
+            <div class="label">
+              Proposal submitted
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div
+              class="value"
+              id="pilotCount"
+            >
+              0
+            </div>
+
+            <div class="label">
+              Active pilot
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= RECOMMENDED CHALLENGES ================= -->
+        <section class="section">
+
+          <div class="section-head">
+
+            <div>
+
+              <h3>
+                Recommended for you
+              </h3>
+
+              <p>
+                Based on available public challenges and your startup profile.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="grid-3"
+            id="startupChallenges"
+          ></div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="../js/theme.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const challengeContainer =
+        document.getElementById("startupChallenges");
+
+      const challengeCount =
+        document.getElementById("challengeCount");
+
+      const interestCount =
+        document.getElementById("interestCount");
+
+      const proposalCount =
+        document.getElementById("proposalCount");
+
+      const pilotCount =
+        document.getElementById("pilotCount");
+
+
+      /*
+       * -----------------------------------------
+       * STARTUP NAME
+       * -----------------------------------------
+       *
+       * The final ZIP uses UrbanAI Technologies
+       * as the prototype startup.
+       *
+       * Keep this as the default startup identity
+       * unless startup registration later stores
+       * another name.
+       */
+
+      const startupName =
+        localStorage.getItem("procurexStartupName") ||
+        "UrbanAI Technologies";
+
+
+      document.getElementById("welcomeTitle").textContent =
+        `Good morning, ${startupName}`;
+
+
+      /*
+       * -----------------------------------------
+       * CHALLENGES
+       * -----------------------------------------
+       *
+       * Use the existing challenge dataset as the
+       * discovery catalogue.
+       *
+       * If a government-created challenge exists,
+       * put it first so the two workflows connect.
+       */
+
+      let challenges = [];
+
+      if (
+        typeof PROCUREX_DATA !== "undefined" &&
+        Array.isArray(PROCUREX_DATA.challenges)
+      ) {
+        challenges = [...PROCUREX_DATA.challenges];
+      }
+
+
+      const savedChallengeRaw =
+        localStorage.getItem("procurexLastChallenge");
+
+
+      if (savedChallengeRaw) {
+
+        try {
+
+          const savedChallenge =
+            JSON.parse(savedChallengeRaw);
+
+
+          if (savedChallenge && savedChallenge.title) {
+
+            const alreadyExists =
+              challenges.some(
+                challenge =>
+                  challenge.title === savedChallenge.title
+              );
+
+
+            if (!alreadyExists) {
+
+              challenges.unshift({
+                id: "live-challenge",
+                title: savedChallenge.title,
+                department:
+                  savedChallenge.department ||
+                  "Government Department",
+                location:
+                  [
+                    savedChallenge.city,
+                    savedChallenge.state
+                  ]
+                    .filter(Boolean)
+                    .join(", ") ||
+                  "India",
+                sector:
+                  savedChallenge.domain ||
+                  "Public Innovation",
+                match: 0
+              });
+
+            }
+
+          }
+
+        } catch (error) {
+
+          console.warn(
+            "Unable to read saved challenge.",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * Update challenge count
+       */
+
+      challengeCount.textContent =
+        challenges.length;
+
+
+      /*
+       * -----------------------------------------
+       * INTEREST
+       * -----------------------------------------
+       */
+
+      const interestRecorded =
+        localStorage.getItem("procurexInterest") === "true";
+
+      interestCount.textContent =
+        interestRecorded ? "1" : "0";
+
+
+      /*
+       * -----------------------------------------
+       * PROPOSAL
+       * -----------------------------------------
+       */
+
+      const proposalRaw =
+        localStorage.getItem("procurexLastProposal");
+
+      const proposalExists =
+        !!proposalRaw;
+
+      proposalCount.textContent =
+        proposalExists ? "1" : "0";
+
+
+      /*
+       * -----------------------------------------
+       * PILOT
+       * -----------------------------------------
+       *
+       * A pilot is considered active only after
+       * the workflow reaches the pilot stage.
+       */
+
+      const pilotData =
+        localStorage.getItem("procurexPilot");
+
+      pilotCount.textContent =
+        pilotData ? "1" : "0";
+
+
+      /*
+       * -----------------------------------------
+       * RENDER CHALLENGE CARDS
+       * -----------------------------------------
+       */
+
+      if (!challenges.length) {
+
+        challengeContainer.innerHTML = `
+          <div class="card">
+            <span class="badge info">
+              No challenges yet
+            </span>
+
+            <h3 style="margin-top:12px">
+              No public challenges available
+            </h3>
+
+            <p>
+              New government challenges will appear here
+              when they are published on ProcureX.
+            </p>
+
+            <button
+              class="btn primary"
+              style="margin-top:14px"
+              id="emptyDiscoverBtn"
+            >
+              Discover Challenges
+            </button>
+          </div>
+        `;
+
+      } else {
+
+        challengeContainer.innerHTML =
+          challenges
+            .slice(0, 6)
+            .map(function (challenge) {
+
+              const match =
+                Number.isFinite(Number(challenge.match))
+                  ? `${challenge.match}% Match`
+                  : "New Challenge";
+
+
+              return `
+                <div class="card">
+
+                  <span class="badge info">
+                    ${match}
+                  </span>
+
+                  <h3 style="margin-top:12px">
+                    ${escapeHTML(challenge.title || "Public Challenge")}
+                  </h3>
+
+                  <p>
+                    ${escapeHTML(challenge.department || "Government")}
+                    <br>
+                    ${escapeHTML(challenge.location || "India")}
+                  </p>
+
+                  <span class="chip">
+                    ${escapeHTML(challenge.sector || "Public Innovation")}
+                  </span>
+
+                  <button
+                    class="btn primary"
+                    style="margin-top:14px"
+                    data-challenge-view
+                  >
+                    View Challenge
+                  </button>
+
+                </div>
+              `;
+
+            })
+            .join("");
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * NAVIGATION
+       * -----------------------------------------
+       */
+
+      function goToChallenges() {
+
+        window.location.href =
+          "screen7.html";
+
+      }
+
+
+      document
+        .getElementById("discoverBtn")
+        .addEventListener(
+          "click",
+          goToChallenges
+        );
+
+
+      const emptyDiscoverBtn =
+        document.getElementById("emptyDiscoverBtn");
+
+      if (emptyDiscoverBtn) {
+
+        emptyDiscoverBtn.addEventListener(
+          "click",
+          goToChallenges
+        );
+
+      }
+
+
+      document
+        .querySelectorAll("[data-challenge-view]")
+        .forEach(function (button) {
+
+          button.addEventListener(
+            "click",
+            goToChallenges
+          );
+
+        });
+
+
+      document
+        .getElementById("homeBtn")
+        .addEventListener(
+          "click",
+          function () {
+            window.location.href =
+              "../index.html";
+          }
+        );
+
+    });
+
+
+    /*
+     * -----------------------------------------
+     * BASIC HTML ESCAPING
+     * -----------------------------------------
+     *
+     * Prevents stored challenge text from being
+     * interpreted as HTML.
+     */
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+  </script>
+
+</body>
+</html>

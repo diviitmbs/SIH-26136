@@ -1,5 +1,1001 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Innovation Hub — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
-<header class="topbar"><div class="container" style="display:flex;justify-content:space-between;align-items:center;width:100%"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><nav class="nav"><a class="active" href="screen13.html">Innovation Hub</a><a href="screen7.html">Challenges</a></nav><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div></header>
-<main><section class="hero"><div class="container hero-grid"><div><span class="eyebrow">Public Innovation Hub</span><h1>See public innovation <span class="accent">in action.</span></h1><p>Explore public-safe government challenges, pilots and measurable outcomes without exposing confidential procurement information.</p><div class="hero-actions"><button class="btn primary" data-go="screen7.html">Explore Challenges</button></div></div><div class="hero-art"><div class="city-line"><div class="building"></div></div><div class="node one"><b>78%</b>Pilot</div><div class="node two"><b>18%</b>Impact</div><div class="node three"><b>94%</b>KPI</div></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Featured impact</span><h2>Smart Traffic Management</h2><p>Bengaluru Urban · Pilot in progress · UrbanAI Technologies</p></div><span class="badge info">Innovation Impact</span></div><div class="grid-3"><div class="card"><div class="value" style="font-size:32px;font-weight:850">12,450</div><p>Users impacted</p></div><div class="card"><div class="value" style="font-size:32px;font-weight:850">18%</div><p>Wait-time reduction</p></div><div class="card"><div class="value" style="font-size:32px;font-weight:850">78%</div><p>Pilot progress</p></div></div></div></section>
-<section class="section"><div class="container"><div class="card"><h3>Public transparency</h3><p>Public pages show challenge context, pilot status and safe impact metrics. Confidential quotations, internal evaluation notes, AI scores and private officer information remain restricted.</p></div></div></section></main><footer class="footer"><div class="container">PROCUREX Public Innovation Hub · Prototype demonstration data</div></footer><script src="../js/theme.js"></script><script src="../js/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Innovation Hub — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+
+  <!--
+    Screen 13 specific styles.
+    Kept here so the hero visual works even if theme.css
+    does not contain styles for the Innovation Hub artwork.
+  -->
+  <style>
+
+    /* =========================================================
+       HERO IMPACT VISUAL
+       ========================================================= */
+
+    .impact-visual {
+      position: relative;
+      min-height: 360px;
+      border-radius: 28px;
+      overflow: hidden;
+      padding: 32px;
+
+      background:
+        radial-gradient(
+          circle at 70% 25%,
+          rgba(67, 97, 238, 0.16),
+          transparent 35%
+        ),
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,0.96),
+          rgba(245,248,255,0.92)
+        );
+
+      border: 1px solid rgba(80, 100, 160, 0.12);
+
+      box-shadow:
+        0 20px 50px rgba(30, 45, 90, 0.08);
+    }
+
+
+    /* Background circles */
+
+    .impact-ring {
+      position: absolute;
+      width: 230px;
+      height: 230px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid rgba(70, 90, 180, 0.15);
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+    }
+
+
+    .impact-ring::before {
+      content: "";
+
+      position: absolute;
+
+      width: 160px;
+      height: 160px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid rgba(70, 90, 180, 0.12);
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+    }
+
+
+    /* Centre element */
+
+    .impact-center {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width: 105px;
+      height: 105px;
+
+      border-radius: 24px;
+
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #3157d5,
+          #5277ee
+        );
+
+      color: white;
+
+      box-shadow:
+        0 20px 40px rgba(49, 87, 213, 0.25);
+
+      z-index: 3;
+    }
+
+
+    .impact-center strong {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+
+    .impact-center span {
+      font-size: 12px;
+      margin-top: 7px;
+      opacity: 0.9;
+    }
+
+
+    /* Metric cards */
+
+    .impact-node {
+      position: absolute;
+
+      min-width: 110px;
+
+      padding: 14px 16px;
+
+      border-radius: 16px;
+
+      background:
+        rgba(255,255,255,0.96);
+
+      border:
+        1px solid rgba(60, 80, 150, 0.12);
+
+      box-shadow:
+        0 12px 30px rgba(35, 50, 100, 0.10);
+
+      z-index: 4;
+    }
+
+
+    .impact-node strong {
+      display: block;
+
+      font-size: 23px;
+      line-height: 1;
+
+      color: #2949ba;
+
+      margin-bottom: 5px;
+    }
+
+
+    .impact-node span {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+
+    .impact-node.pilot {
+      top: 35px;
+      left: 35px;
+    }
+
+
+    .impact-node.impact {
+      top: 80px;
+      right: 30px;
+    }
+
+
+    .impact-node.kpi {
+      bottom: 35px;
+      right: 60px;
+    }
+
+
+    /* Connecting lines */
+
+    .impact-line {
+      position: absolute;
+
+      height: 1px;
+
+      background:
+        rgba(65, 90, 180, 0.20);
+
+      z-index: 1;
+
+      transform-origin: left center;
+    }
+
+
+    .line-one {
+      width: 125px;
+
+      left: 145px;
+      top: 105px;
+
+      transform: rotate(27deg);
+    }
+
+
+    .line-two {
+      width: 120px;
+
+      right: 120px;
+      top: 145px;
+
+      transform: rotate(-18deg);
+    }
+
+
+    .line-three {
+      width: 125px;
+
+      left: 52%;
+      bottom: 95px;
+
+      transform: rotate(18deg);
+    }
+
+
+    /* Responsive */
+
+    @media (max-width: 800px) {
+
+      .impact-visual {
+        min-height: 320px;
+        margin-top: 25px;
+      }
+
+      .impact-node {
+        min-width: 90px;
+      }
+
+      .impact-node.pilot {
+        left: 20px;
+      }
+
+      .impact-node.impact {
+        right: 20px;
+      }
+
+      .impact-node.kpi {
+        right: 30px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="topbar">
+
+  <div
+    class="container"
+    style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      width:100%;
+    "
+  >
+
+    <a
+      class="brand"
+      href="../index.html"
+    >
+      <span
+        class="logo-mark"
+        aria-label="ProcureX logo"
+      >
+        PX
+      </span>
+
+      ProcureX
+    </a>
+
+
+    <nav class="nav">
+
+      <a
+        class="active"
+        href="screen13.html"
+      >
+        Innovation Hub
+      </a>
+
+      <a href="screen7.html">
+        Challenges
+      </a>
+
+    </nav>
+
+
+    <div class="actions">
+
+      <button
+        class="btn icon-btn"
+        data-theme-toggle
+        aria-label="Toggle theme"
+      >
+        ☾
+      </button>
+
+      <button
+        class="btn"
+        onclick="window.location.href='../index.html'"
+      >
+        Home
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+
+    <!-- LEFT SIDE -->
+
+    <div>
+
+      <span class="eyebrow">
+        Public Innovation Hub
+      </span>
+
+
+      <h1>
+
+        See public innovation
+
+        <span class="accent">
+          in action.
+        </span>
+
+      </h1>
+
+
+      <p>
+        Explore public-safe government challenges,
+        pilots and measurable outcomes without exposing
+        confidential procurement information.
+      </p>
+
+
+      <div class="hero-actions">
+
+        <button
+          class="btn primary"
+          onclick="window.location.href='screen7.html'"
+        >
+          Explore Challenges
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- RIGHT SIDE VISUAL -->
+
+    <div class="impact-visual">
+
+
+      <div class="impact-ring"></div>
+
+
+      <div class="impact-line line-one"></div>
+      <div class="impact-line line-two"></div>
+      <div class="impact-line line-three"></div>
+
+
+      <!-- Pilot -->
+
+      <div class="impact-node pilot">
+
+        <strong id="heroPilot">
+          78%
+        </strong>
+
+        <span>
+          Pilot progress
+        </span>
+
+      </div>
+
+
+      <!-- Impact -->
+
+      <div class="impact-node impact">
+
+        <strong id="heroImpact">
+          18%
+        </strong>
+
+        <span>
+          Impact
+        </span>
+
+      </div>
+
+
+      <!-- KPI -->
+
+      <div class="impact-node kpi">
+
+        <strong>
+          94%
+        </strong>
+
+        <span>
+          KPI achievement
+        </span>
+
+      </div>
+
+
+      <!-- Centre -->
+
+      <div class="impact-center">
+
+        <strong>
+          PX
+        </strong>
+
+        <span>
+          Innovation
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FEATURED IMPACT
+     ========================================================= -->
+
+<section class="section">
+
+  <div class="container">
+
+
+    <div class="section-head">
+
+
+      <div>
+
+        <span class="eyebrow">
+          Featured impact
+        </span>
+
+
+        <h2 id="impactTitle">
+          Smart Traffic Management
+        </h2>
+
+
+        <p id="impactSubtitle">
+          Bengaluru Urban · Pilot in progress ·
+          UrbanAI Technologies
+        </p>
+
+      </div>
+
+
+      <span class="badge info">
+        Innovation Impact
+      </span>
+
+
+    </div>
+
+
+
+    <!-- IMPACT CARDS -->
+
+    <div class="grid-3">
+
+
+      <!-- USERS -->
+
+      <div class="card">
+
+        <div
+          class="value"
+          id="usersImpacted"
+          style="
+            font-size:32px;
+            font-weight:850;
+          "
+        >
+          12,450
+        </div>
+
+        <p>
+          Users impacted
+        </p>
+
+      </div>
+
+
+
+      <!-- IMPACT -->
+
+      <div class="card">
+
+        <div
+          class="value"
+          id="impactMetric"
+          style="
+            font-size:32px;
+            font-weight:850;
+          "
+        >
+          18%
+        </div>
+
+        <p>
+          Wait-time reduction
+        </p>
+
+      </div>
+
+
+
+      <!-- PROGRESS -->
+
+      <div class="card">
+
+        <div
+          class="value"
+          id="pilotProgress"
+          style="
+            font-size:32px;
+            font-weight:850;
+          "
+        >
+          78%
+        </div>
+
+        <p>
+          Pilot progress
+        </p>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     PUBLIC TRANSPARENCY
+     ========================================================= -->
+
+<section class="section">
+
+  <div class="container">
+
+    <div class="card">
+
+      <h3>
+        Public transparency
+      </h3>
+
+
+      <p>
+
+        Public pages show challenge context,
+        pilot status and safe impact metrics.
+
+        Confidential quotations, internal evaluation
+        notes, AI scores and private officer information
+        remain restricted.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="footer">
+
+  <div class="container">
+
+    PROCUREX Public Innovation Hub ·
+    Prototype demonstration data
+
+  </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     GLOBAL JS
+     ========================================================= -->
+
+<script src="../js/theme.js"></script>
+<script src="../js/app.js"></script>
+
+
+
+<!-- =========================================================
+     SCREEN 13 DATA
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+
+    /* =======================================================
+       LOAD CHALLENGE
+       ======================================================= */
+
+    const savedChallenge =
+      localStorage.getItem(
+        "procurexLastChallenge"
+      );
+
+
+    if (savedChallenge) {
+
+      try {
+
+        const challenge =
+          JSON.parse(savedChallenge);
+
+
+        /* Challenge title */
+
+        if (challenge.title) {
+
+          document
+            .getElementById("impactTitle")
+            .textContent =
+            challenge.title;
+
+        }
+
+
+        /* Challenge location */
+
+        const locationParts = [];
+
+
+        if (challenge.city) {
+
+          locationParts.push(
+            challenge.city
+          );
+
+        }
+
+
+        if (challenge.state) {
+
+          locationParts.push(
+            challenge.state
+          );
+
+        }
+
+
+        if (locationParts.length) {
+
+          document
+            .getElementById("impactSubtitle")
+            .textContent =
+            locationParts.join(" · ") +
+            " · Pilot in progress";
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Could not load challenge data:",
+          error
+        );
+
+      }
+
+    }
+
+
+
+    /* =======================================================
+       LOAD PILOT RESULTS
+       ======================================================= */
+
+    const savedPilot =
+      localStorage.getItem(
+        "procurexPilotResults"
+      );
+
+
+    if (!savedPilot) {
+
+      /*
+       * No pilot data exists yet.
+       * Keep the prototype/demo values already
+       * displayed in the HTML.
+       */
+
+      return;
+
+    }
+
+
+    try {
+
+      const pilot =
+        JSON.parse(savedPilot);
+
+
+      if (
+        !pilot.kpi_results ||
+        !Array.isArray(
+          pilot.kpi_results
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      const kpis =
+        pilot.kpi_results;
+
+
+
+      /* =====================================================
+         USERS IMPACTED
+         ===================================================== */
+
+      const usersKpi =
+        kpis.find(function (kpi) {
+
+          const text =
+            JSON.stringify(kpi)
+              .toLowerCase();
+
+
+          return (
+            text.includes("user") ||
+            text.includes("citizen") ||
+            text.includes("people")
+          );
+
+        });
+
+
+      if (usersKpi) {
+
+        const usersValue =
+          usersKpi.actual ??
+          usersKpi.value;
+
+
+        if (
+          usersValue !== undefined &&
+          usersValue !== null
+        ) {
+
+          document
+            .getElementById(
+              "usersImpacted"
+            )
+            .textContent =
+            usersValue;
+
+        }
+
+      }
+
+
+
+      /* =====================================================
+         IMPACT / IMPROVEMENT
+         ===================================================== */
+
+      const impactKpi =
+        kpis.find(function (kpi) {
+
+          const text =
+            JSON.stringify(kpi)
+              .toLowerCase();
+
+
+          return (
+            text.includes("reduction") ||
+            text.includes("improvement") ||
+            text.includes("impact") ||
+            text.includes("wait")
+          );
+
+        });
+
+
+      if (impactKpi) {
+
+        const impactValue =
+          impactKpi.improvement_pct ??
+          impactKpi.actual ??
+          impactKpi.value;
+
+
+        if (
+          impactValue !== undefined &&
+          impactValue !== null
+        ) {
+
+          const displayValue =
+            typeof impactValue === "number"
+              ? impactValue + "%"
+              : impactValue;
+
+
+          /* Main impact card */
+
+          document
+            .getElementById(
+              "impactMetric"
+            )
+            .textContent =
+            displayValue;
+
+
+          /* Hero visual */
+
+          document
+            .getElementById(
+              "heroImpact"
+            )
+            .textContent =
+            displayValue;
+
+        }
+
+      }
+
+
+
+      /* =====================================================
+         PILOT PROGRESS
+         ===================================================== */
+
+      const progressKpi =
+        kpis.find(function (kpi) {
+
+          const text =
+            JSON.stringify(kpi)
+              .toLowerCase();
+
+
+          return (
+            text.includes("progress") ||
+            text.includes("completion")
+          );
+
+        });
+
+
+      if (progressKpi) {
+
+        const progressValue =
+          progressKpi.actual ??
+          progressKpi.value;
+
+
+        if (
+          progressValue !== undefined &&
+          progressValue !== null
+        ) {
+
+          const displayValue =
+            typeof progressValue === "number"
+              ? progressValue + "%"
+              : progressValue;
+
+
+          /* Main card */
+
+          document
+            .getElementById(
+              "pilotProgress"
+            )
+            .textContent =
+            displayValue;
+
+
+          /* Hero visual */
+
+          document
+            .getElementById(
+              "heroPilot"
+            )
+            .textContent =
+            displayValue;
+
+        }
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Could not load pilot data:",
+        error
+      );
+
+    }
+
+
+  }
+);
+
+</script>
+
+
+</body>
+</html>
