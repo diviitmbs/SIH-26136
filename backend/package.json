@@ -13,6 +13,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@google/genai": "^2.21.0",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/orm-postgres": "^8.0.0-rc.8",
     "cors": "^2.8.6",
     "csv-parser": "^3.2.1",

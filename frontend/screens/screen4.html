@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Challenge Registered — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+
+  <header class="topbar">
+
+    <div
+      class="container"
+      style="display:flex;justify-content:space-between;align-items:center;width:100%"
+    >
+
+      <a class="brand" href="../index.html">
+
+        <span
+          class="logo-mark"
+          aria-label="ProcureX logo"
+        >
+          PX
+        </span>
+
+        ProcureX
+
+      </a>
+
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          ☾
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="section">
+
+    <div class="container">
+
+      <div class="card success-box">
+
+        <div class="success-icon">
+          ✓
+        </div>
+
+
+        <span class="eyebrow">
+          Problem statement registered
+        </span>
+
+
+        <h1 style="font-size:48px">
+          Your problem statement has been successfully registered.
+        </h1>
+
+
+        <p
+          style="max-width:650px;margin:0 auto 25px"
+        >
+          The challenge is now available for controlled startup
+          discovery based on relevance and eligibility.
+        </p>
+
+
+        <!-- ================= CHALLENGE META ================= -->
+
+        <div
+          class="grid-2"
+          style="max-width:720px;margin:25px auto;text-align:left"
+        >
+
+          <div class="card">
+
+            <small>
+              Challenge ID
+            </small>
+
+            <h3 id="challengeId">
+              PX-GOV-2026-00124
+            </h3>
+
+
+            <small>
+              Status
+            </small>
+
+            <br>
+
+            <span
+              class="badge success"
+              id="challengeStatus"
+            >
+              ● Active
+            </span>
+
+          </div>
+
+
+          <div class="card">
+
+            <small>
+              Posted
+            </small>
+
+            <h3 id="postedDate">
+              04 September 2026
+            </h3>
+
+
+            <small>
+              Startup Response Window
+            </small>
+
+            <br>
+
+            <b id="responseWindow">
+              14 Days
+            </b>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <div
+          class="card"
+          style="max-width:720px;margin:0 auto;text-align:left"
+        >
+
+          <h3>
+            Challenge summary
+          </h3>
+
+
+          <p>
+
+            <b id="summaryTitle">
+              AI-Based Urban Traffic Management
+            </b>
+
+            <br>
+
+            <span id="summaryDepartment">
+              Department of Urban Development
+            </span>
+
+            ·
+
+            <span id="summaryLocation">
+              Bengaluru Urban
+            </span>
+
+            <br>
+
+            Estimated Budget:
+
+            <span id="summaryBudget">
+              ₹25–40 Lakhs
+            </span>
+
+            · Pilot:
+
+            <span id="summaryPilot">
+              6 Months
+            </span>
+
+          </p>
+
+
+          <div id="technologyChips">
+
+            <span class="chip blue">
+              AI/ML
+            </span>
+
+            <span class="chip blue">
+              IoT
+            </span>
+
+            <span class="chip blue">
+              Computer Vision
+            </span>
+
+            <span class="chip orange">
+              High Priority
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= WHAT HAPPENS NEXT ================= -->
+
+        <div
+          style="max-width:720px;margin:28px auto;text-align:left"
+        >
+
+          <h3>
+            What happens next?
+          </h3>
+
+
+          <div class="steps">
+
+            <div class="step active">
+              <b>✓</b>
+              <br>
+              Registered
+            </div>
+
+            <div class="step active">
+              <b>●</b>
+              <br>
+              Startup discovery
+            </div>
+
+            <div class="step">
+              <b>03</b>
+              <br>
+              Interest window
+            </div>
+
+            <div class="step">
+              <b>04</b>
+              <br>
+              Proposal
+            </div>
+
+            <div class="step">
+              <b>05</b>
+              <br>
+              Evaluation
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= ACTIONS ================= -->
+
+        <div
+          class="hero-actions"
+          style="justify-content:center"
+        >
+
+          <button
+            class="btn"
+            id="viewChallengeBtn"
+          >
+            View Challenge
+          </button>
+
+
+          <button
+            class="btn primary"
+            id="governmentHomeBtn"
+          >
+            Go to Government Home
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ================= SCRIPTS ================= -->
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/app.js"></script>
+
+
+  <script>
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      /*
+       * ==========================================
+       * LOAD PUBLISHED CHALLENGE
+       * ==========================================
+       */
+
+      const savedChallenge =
+        localStorage.getItem(
+          "procurexLastChallenge"
+        );
+
+
+      if (!savedChallenge) {
+
+        console.warn(
+          "No published challenge found."
+        );
+
+      } else {
+
+        try {
+
+          const challenge =
+            JSON.parse(
+              savedChallenge
+            );
+
+
+          /*
+           * ========================================
+           * CHALLENGE ID
+           * ========================================
+           *
+           * Prototype ID for the current challenge.
+           * A production backend would generate this.
+           */
+
+          const challengeId =
+            challenge.id ||
+            "PX-GOV-2026-00124";
+
+
+          document.getElementById(
+            "challengeId"
+          ).textContent =
+            challengeId;
+
+
+          /*
+           * ========================================
+           * STATUS
+           * ========================================
+           */
+
+          document.getElementById(
+            "challengeStatus"
+          ).textContent =
+            challenge.status === "Published"
+              ? "● Active"
+              : "● Active";
+
+
+          /*
+           * ========================================
+           * POSTED DATE
+           * ========================================
+           */
+
+          let postedDate =
+            challenge.publishedAt ||
+            challenge.savedAt;
+
+
+          if (postedDate) {
+
+            const date =
+              new Date(
+                postedDate
+              );
+
+
+            if (!isNaN(date.getTime())) {
+
+              document.getElementById(
+                "postedDate"
+              ).textContent =
+                date.toLocaleDateString(
+                  "en-IN",
+                  {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                  }
+                );
+
+            }
+
+          }
+
+
+          /*
+           * ========================================
+           * RESPONSE WINDOW
+           * ========================================
+           */
+
+          if (challenge.responseWindow) {
+
+            document.getElementById(
+              "responseWindow"
+            ).textContent =
+              challenge.responseWindow;
+
+          }
+
+
+          /*
+           * ========================================
+           * TITLE
+           * ========================================
+           */
+
+          if (challenge.title) {
+
+            document.getElementById(
+              "summaryTitle"
+            ).textContent =
+              challenge.title;
+
+          }
+
+
+          /*
+           * ========================================
+           * DEPARTMENT
+           * ========================================
+           */
+
+          if (challenge.department) {
+
+            document.getElementById(
+              "summaryDepartment"
+            ).textContent =
+              challenge.department;
+
+          }
+
+
+          /*
+           * ========================================
+           * LOCATION
+           * ========================================
+           */
+
+          const locationParts = [
+
+            challenge.city,
+            challenge.state
+
+          ].filter(Boolean);
+
+
+          if (locationParts.length) {
+
+            document.getElementById(
+              "summaryLocation"
+            ).textContent =
+              locationParts.join(
+                " · "
+              );
+
+          }
+
+
+          /*
+           * ========================================
+           * BUDGET
+           * ========================================
+           */
+
+          if (challenge.budget) {
+
+            document.getElementById(
+              "summaryBudget"
+            ).textContent =
+              challenge.budget;
+
+          }
+
+
+          /*
+           * ========================================
+           * PILOT
+           * ========================================
+           */
+
+          if (challenge.pilotDuration) {
+
+            document.getElementById(
+              "summaryPilot"
+            ).textContent =
+              challenge.pilotDuration;
+
+          }
+
+
+          /*
+           * ========================================
+           * TECHNOLOGY CHIPS
+           * ========================================
+           */
+
+          const technologyContainer =
+            document.getElementById(
+              "technologyChips"
+            );
+
+
+          const technologies =
+            Array.isArray(
+              challenge.technologies
+            )
+              ? challenge.technologies
+              : [];
+
+
+          technologyContainer.innerHTML = "";
+
+
+          if (technologies.length) {
+
+            technologies.forEach(
+              function (technology) {
+
+                const chip =
+                  document.createElement(
+                    "span"
+                  );
+
+
+                chip.className =
+                  "chip blue";
+
+
+                chip.textContent =
+                  technology;
+
+
+                technologyContainer.appendChild(
+                  chip
+                );
+
+              }
+            );
+
+          } else {
+
+            /*
+             * Keep a useful default when the
+             * challenge has no technologies selected.
+             */
+
+            technologyContainer.innerHTML = `
+              <span class="chip blue">
+                Public Innovation
+              </span>
+            `;
+
+          }
+
+
+          /*
+           * Priority chip
+           */
+
+          const priorityChip =
+            document.createElement(
+              "span"
+            );
+
+
+          priorityChip.className =
+            "chip orange";
+
+
+          priorityChip.textContent =
+            `${challenge.priority || "High"} Priority`;
+
+
+          technologyContainer.appendChild(
+            priorityChip
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Unable to load challenge:",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * ==========================================
+       * VIEW CHALLENGE
+       * ==========================================
+       *
+       * For the Government workflow, this takes
+       * the officer back to the Challenge Builder.
+       */
+
+      document
+        .getElementById(
+          "viewChallengeBtn"
+        )
+        .addEventListener(
+          "click",
+          function () {
+
+            window.location.href =
+              "screen3.html";
+
+          }
+        );
+
+
+      /*
+       * ==========================================
+       * GOVERNMENT HOME
+       * ==========================================
+       */
+
+      document
+        .getElementById(
+          "governmentHomeBtn"
+        )
+        .addEventListener(
+          "click",
+          function () {
+
+            window.location.href =
+              "screen_gov_home.html";
+
+          }
+        );
+
+    });
+
+  </script>
+
+</body>
+</html>

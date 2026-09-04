@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Government Registration — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="topbar">
+
+    <div
+      class="container"
+      style="display:flex;justify-content:space-between;align-items:center;width:100%"
+    >
+
+      <a class="brand" href="../index.html">
+        <span
+          class="logo-mark"
+          aria-label="ProcureX logo"
+        >
+          PX
+        </span>
+
+        ProcureX
+      </a>
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          ☾
+        </button>
+
+        <button
+          class="btn"
+          id="backHomeBtn"
+        >
+          Back to Home
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ================= MAIN ================= -->
+  <main class="form-shell">
+
+    <div class="container">
+
+      <!-- PROTOTYPE BANNER -->
+      <div class="prototype-banner">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          Sample values are included only to demonstrate the workflow.
+          Replace them with real organisation data before production use.
+        </small>
+
+      </div>
+
+
+      <!-- INTRO -->
+      <div
+        style="max-width:760px;margin-bottom:30px"
+      >
+
+        <span class="eyebrow">
+          Government onboarding
+        </span>
+
+        <h1 style="font-size:48px">
+          Register your government organisation.
+        </h1>
+
+        <p>
+          Tell PROCUREX who you are, where you operate and what
+          public-sector areas you work in. This creates the foundation
+          for relevant challenge and startup discovery.
+        </p>
+
+      </div>
+
+
+      <!-- ================= STEPS ================= -->
+      <div class="steps">
+
+        <div class="step active">
+          <b>01</b>
+          <br>
+          Identity
+        </div>
+
+        <div class="step">
+          <b>02</b>
+          <br>
+          Administration
+        </div>
+
+        <div class="step">
+          <b>03</b>
+          <br>
+          Representative
+        </div>
+
+        <div class="step">
+          <b>04</b>
+          <br>
+          Focus Areas
+        </div>
+
+        <div class="step">
+          <b>05</b>
+          <br>
+          Review
+        </div>
+
+      </div>
+
+
+      <!-- ================= FORM ================= -->
+      <form
+        id="govForm"
+        class="form-layout"
+        style="margin-top:25px"
+      >
+
+        <div>
+
+          <!-- ================= GOVERNMENT IDENTITY ================= -->
+          <div class="card form-section">
+
+            <h3>
+              Government identity
+            </h3>
+
+            <p>
+              Institutional information used to identify your organisation.
+            </p>
+
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  Government type *
+                </label>
+
+                <select
+                  id="governmentType"
+                  required
+                >
+                  <option>State Government</option>
+                  <option>Central Government</option>
+                  <option>Union Territory</option>
+                  <option>Municipal Corporation</option>
+                  <option>District Administration</option>
+                  <option>PSU / Government Undertaking</option>
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Administrative level *
+                </label>
+
+                <select
+                  id="administrativeLevel"
+                  required
+                >
+                  <option>State</option>
+                  <option>District</option>
+                  <option>City / ULB</option>
+                  <option>Central</option>
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Ministry / Department *
+                </label>
+
+                <input
+                  id="ministryDepartment"
+                  required
+                  value="Department of Urban Development"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Government organisation / authority *
+                </label>
+
+                <input
+                  id="organisationName"
+                  required
+                  value="Bengaluru Urban Development Authority (Demo)"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Official organisation ID
+                </label>
+
+                <input
+                  id="organisationId"
+                  placeholder="Government / department reference"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Establishment date
+                </label>
+
+                <input
+                  id="establishmentDate"
+                  type="date"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= ADMINISTRATIVE DETAILS ================= -->
+          <div class="card form-section">
+
+            <h3>
+              Administrative details
+            </h3>
+
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  State / UT *
+                </label>
+
+                <select
+                  id="state"
+                  required
+                >
+                  <option>Karnataka</option>
+                  <option>Maharashtra</option>
+                  <option>Tamil Nadu</option>
+                  <option>Delhi</option>
+                  <option>Other</option>
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  District *
+                </label>
+
+                <input
+                  id="district"
+                  required
+                  value="Bengaluru Urban"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  City *
+                </label>
+
+                <input
+                  id="city"
+                  required
+                  value="Bengaluru"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  PIN code
+                </label>
+
+                <input
+                  id="pinCode"
+                  inputmode="numeric"
+                  maxlength="6"
+                  value="560001"
+                >
+
+              </div>
+
+
+              <div class="field full">
+
+                <label>
+                  Office address *
+                </label>
+
+                <textarea
+                  id="officeAddress"
+                  required
+                  placeholder="Official office address"
+                ></textarea>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Official website
+                </label>
+
+                <input
+                  id="officialWebsite"
+                  placeholder="Government website"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Official email *
+                </label>
+
+                <input
+                  id="officialEmail"
+                  type="email"
+                  required
+                  placeholder="name@department.gov.in"
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= AUTHORITY ================= -->
+          <div class="card form-section">
+
+            <h3>
+              Authority & legal status
+            </h3>
+
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  Constitutional / legal status
+                </label>
+
+                <select id="legalStatus">
+
+                  <option>
+                    Constitutional / Statutory Authority
+                  </option>
+
+                  <option>
+                    Government Department
+                  </option>
+
+                  <option>
+                    Local Government Body
+                  </option>
+
+                  <option>
+                    Government Company / PSU
+                  </option>
+
+                  <option>
+                    Other
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Parent ministry / department
+                </label>
+
+                <input id="parentMinistry">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Reporting authority
+                </label>
+
+                <input id="reportingAuthority">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Procurement authority level
+                </label>
+
+                <select id="procurementAuthorityLevel">
+
+                  <option>
+                    Department-level
+                  </option>
+
+                  <option>
+                    State-level
+                  </option>
+
+                  <option>
+                    District-level
+                  </option>
+
+                  <option>
+                    Local-body level
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= REPRESENTATIVE ================= -->
+          <div class="card form-section">
+
+            <h3>
+              Authorised representative
+            </h3>
+
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  Full name *
+                </label>
+
+                <input
+                  id="representativeName"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Designation *
+                </label>
+
+                <input
+                  id="representativeDesignation"
+                  required
+                  placeholder="e.g. Joint Secretary"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Official email *
+                </label>
+
+                <input
+                  id="representativeEmail"
+                  type="email"
+                  required
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Phone *
+                </label>
+
+                <input
+                  id="representativePhone"
+                  required
+                >
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= SECTORS ================= -->
+          <div class="card form-section">
+
+            <h3>
+              Sectors & capabilities
+            </h3>
+
+            <p>
+              Select areas in which your organisation creates or
+              manages public challenges.
+            </p>
+
+
+            <div class="checkbox-grid">
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Urban Mobility"
+                  checked
+                >
+                Urban Mobility
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Healthcare"
+                >
+                Healthcare
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Education"
+                >
+                Education
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Agriculture"
+                >
+                Agriculture
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Environment"
+                >
+                Environment
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Public Safety"
+                >
+                Public Safety
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Digital Governance"
+                >
+                Digital Governance
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Infrastructure"
+                >
+                Infrastructure
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Energy"
+                >
+                Energy
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Water"
+                >
+                Water
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Transport"
+                >
+                Transport
+              </label>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  name="sector"
+                  value="Rural Development"
+                >
+                Rural Development
+              </label>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================= ACTIONS ================= -->
+          <div
+            class="actions"
+            style="justify-content:flex-end"
+          >
+
+            <button
+              type="button"
+              class="btn"
+              id="saveGov"
+            >
+              Save Draft
+            </button>
+
+            <button
+              type="submit"
+              class="btn primary"
+            >
+              Register Government Organisation
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= SIDE CARD ================= -->
+        <aside class="card sticky-card">
+
+          <h3>
+            Your registration
+          </h3>
+
+          <div class="progress">
+            <span style="width:80%"></span>
+          </div>
+
+          <p style="margin-top:9px">
+            Core organisation details are ready.
+          </p>
+
+
+          <div class="notice">
+
+            <b>
+              Verification
+            </b>
+
+            <br>
+
+            Prototype verification is simulated.
+            Backend identity checks can be connected later.
+
+          </div>
+
+
+          <div style="margin-top:15px">
+
+            <b>
+              Next
+            </b>
+
+            <p>
+              After registration, you enter the Government Home
+              workspace and can create challenges or discover startups.
+            </p>
+
+          </div>
+
+        </aside>
+
+      </form>
+
+    </div>
+
+  </main>
+
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="../js/theme.js"></script>
+  <script src="../js/app.js"></script>
+
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const form =
+        document.getElementById("govForm");
+
+      const saveButton =
+        document.getElementById("saveGov");
+
+      const backHomeButton =
+        document.getElementById("backHomeBtn");
+
+
+      /*
+       * -----------------------------------------
+       * HELPERS
+       * -----------------------------------------
+       */
+
+      function getValue(id) {
+
+        const element =
+          document.getElementById(id);
+
+        return element
+          ? element.value.trim()
+          : "";
+
+      }
+
+
+      function collectGovernmentData() {
+
+        const selectedSectors =
+          Array.from(
+            document.querySelectorAll(
+              'input[name="sector"]:checked'
+            )
+          ).map(
+            checkbox => checkbox.value
+          );
+
+
+        return {
+
+          governmentType:
+            getValue("governmentType"),
+
+          administrativeLevel:
+            getValue("administrativeLevel"),
+
+          ministryDepartment:
+            getValue("ministryDepartment"),
+
+          organisationName:
+            getValue("organisationName"),
+
+          organisationId:
+            getValue("organisationId"),
+
+          establishmentDate:
+            getValue("establishmentDate"),
+
+          state:
+            getValue("state"),
+
+          district:
+            getValue("district"),
+
+          city:
+            getValue("city"),
+
+          pinCode:
+            getValue("pinCode"),
+
+          officeAddress:
+            getValue("officeAddress"),
+
+          officialWebsite:
+            getValue("officialWebsite"),
+
+          officialEmail:
+            getValue("officialEmail"),
+
+          legalStatus:
+            getValue("legalStatus"),
+
+          parentMinistry:
+            getValue("parentMinistry"),
+
+          reportingAuthority:
+            getValue("reportingAuthority"),
+
+          procurementAuthorityLevel:
+            getValue("procurementAuthorityLevel"),
+
+          representativeName:
+            getValue("representativeName"),
+
+          representativeDesignation:
+            getValue("representativeDesignation"),
+
+          representativeEmail:
+            getValue("representativeEmail"),
+
+          representativePhone:
+            getValue("representativePhone"),
+
+          sectors:
+            selectedSectors,
+
+          savedAt:
+            new Date().toISOString()
+
+        };
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * LOAD EXISTING DRAFT
+       * -----------------------------------------
+       */
+
+      const existingDraft =
+        localStorage.getItem(
+          "procurexGovernmentDraft"
+        );
+
+
+      if (existingDraft) {
+
+        try {
+
+          const draft =
+            JSON.parse(existingDraft);
+
+
+          Object.keys(draft).forEach(function (key) {
+
+            const element =
+              document.getElementById(key);
+
+            if (
+              element &&
+              key !== "savedAt" &&
+              key !== "sectors"
+            ) {
+
+              element.value =
+                draft[key] || "";
+
+            }
+
+          });
+
+
+          if (Array.isArray(draft.sectors)) {
+
+            document
+              .querySelectorAll(
+                'input[name="sector"]'
+              )
+              .forEach(function (checkbox) {
+
+                checkbox.checked =
+                  draft.sectors.includes(
+                    checkbox.value
+                  );
+
+              });
+
+          }
+
+        } catch (error) {
+
+          console.warn(
+            "Unable to load government draft.",
+            error
+          );
+
+        }
+
+      }
+
+
+      /*
+       * -----------------------------------------
+       * SAVE DRAFT
+       * -----------------------------------------
+       */
+
+      saveButton.addEventListener(
+        "click",
+        function () {
+
+          const data =
+            collectGovernmentData();
+
+          localStorage.setItem(
+            "procurexGovernmentDraft",
+            JSON.stringify(data)
+          );
+
+          if (typeof toast === "function") {
+
+            toast(
+              "Government registration draft saved"
+            );
+
+          } else {
+
+            alert(
+              "Government registration draft saved"
+            );
+
+          }
+
+        }
+      );
+
+
+      /*
+       * -----------------------------------------
+       * REGISTER GOVERNMENT
+       * -----------------------------------------
+       */
+
+      form.addEventListener(
+        "submit",
+        function (event) {
+
+          event.preventDefault();
+
+
+          /*
+           * Browser performs required-field validation
+           * before this handler is triggered.
+           */
+
+          const governmentData =
+            collectGovernmentData();
+
+
+          localStorage.setItem(
+            "procurexGovernment",
+            JSON.stringify(
+              governmentData
+            )
+          );
+
+
+          localStorage.setItem(
+            "procurexGovernmentRegistered",
+            "true"
+          );
+
+
+          /*
+           * Keep the draft too so the data is not lost.
+           */
+
+          localStorage.setItem(
+            "procurexGovernmentDraft",
+            JSON.stringify(
+              governmentData
+            )
+          );
+
+
+          window.location.href =
+            "screen_gov_registered.html";
+
+        }
+      );
+
+
+      /*
+       * -----------------------------------------
+       * BACK TO HOME
+       * -----------------------------------------
+       */
+
+      backHomeButton.addEventListener(
+        "click",
+        function () {
+
+          window.location.href =
+            "../index.html";
+
+        }
+      );
+
+    });
+
+  </script>
+
+</body>
+</html>

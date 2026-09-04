@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Final Decision — PROCUREX</title>
+
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+
+      <span
+        class="logo-mark"
+        aria-label="ProcureX logo"
+      >
+        PX
+      </span>
+
+      ProcureX
+
+    </a>
+
+
+    <div class="side-label">
+      GOVERNMENT PORTAL
+    </div>
+
+
+    <nav class="side-nav">
+
+      <a href="screen_gov_home.html">
+        Home
+      </a>
+
+      <a href="screen3.html">
+        Challenges
+      </a>
+
+      <a href="screen5.html">
+        Discover Startups
+      </a>
+
+      <a href="screen9.html">
+        Proposals
+      </a>
+
+      <a class="active" href="screen11.html">
+        Pilots
+      </a>
+
+      <a href="screen13.html">
+        Impact
+      </a>
+
+    </nav>
+
+
+    <div
+      style="margin-top:28px"
+      class="notice"
+    >
+
+      Prototype workspace
+
+      <br>
+
+      <small>
+        Data is demo-driven and can later connect to the backend.
+      </small>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="main">
+
+    <div class="dash-top">
+
+      <div class="brand">
+        Final Decision
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+          aria-label="Toggle theme"
+        >
+          ☾
+        </button>
+
+
+        <button
+          class="btn"
+          id="homeBtn"
+        >
+          Home
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+
+      <!-- ================= BANNER ================= -->
+
+      <div class="prototype-banner compact">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          Illustrative records for judging only.
+        </small>
+
+      </div>
+
+
+      <!-- ================= HEADER ================= -->
+
+      <div class="welcome">
+
+        <div>
+
+          <span
+            class="eyebrow"
+            id="pilotState"
+          >
+            Pilot completed
+          </span>
+
+
+          <h2>
+            Make the final decision.
+          </h2>
+
+
+          <p>
+            Use pilot outcomes and KPI achievement
+            to decide whether to scale.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= DECISION STATS ================= -->
+
+      <div class="grid-3">
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="overallKpi"
+          >
+            94%
+          </div>
+
+          <div class="label">
+            Overall KPI achievement
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="implementationRating"
+          >
+            92%
+          </div>
+
+          <div class="label">
+            Implementation rating
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div
+            class="value"
+            id="impactRating"
+          >
+            High
+          </div>
+
+          <div class="label">
+            Impact rating
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= PILOT OUTCOME ================= -->
+
+      <div class="section">
+
+        <div class="card">
+
+          <h3>
+            Pilot outcome
+          </h3>
+
+
+          <p id="pilotOutcome">
+
+            Smart Traffic Management Pilot achieved
+            the core success criteria and exceeded the
+            wait-time and accuracy targets.
+
+          </p>
+
+
+          <!-- ================= DECISION ================= -->
+
+          <div
+            class="hero-actions"
+            style="margin-top:20px"
+          >
+
+            <button
+              class="btn primary"
+              id="procure"
+            >
+              Proceed to Procurement
+            </button>
+
+
+            <button
+              class="btn"
+              id="extendPilot"
+            >
+              Extend Pilot
+            </button>
+
+
+            <button
+              class="btn"
+              id="closeChallenge"
+            >
+              Close Challenge
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= DECISION NOTE ================= -->
+
+      <div
+        class="card"
+        id="decisionNote"
+        style="display:none"
+      >
+
+        <h3 id="decisionTitle">
+          Decision
+        </h3>
+
+        <p id="decisionMessage">
+          Decision recorded.
+        </p>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="../js/theme.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/app.js"></script>
+
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+
+    /* ==========================================
+       HELPERS
+       ========================================== */
+
+    function getJSON(key) {
+
+      const value =
+        localStorage.getItem(key);
+
+
+      if (!value) {
+        return null;
+      }
+
+
+      try {
+
+        return JSON.parse(value);
+
+      } catch (error) {
+
+        console.warn(
+          `Unable to read ${key}:`,
+          error
+        );
+
+        return null;
+
+      }
+
+    }
+
+
+    function number(value, fallback) {
+
+      const parsed =
+        Number(value);
+
+
+      return Number.isFinite(parsed)
+        ? parsed
+        : fallback;
+
+    }
+
+
+    function text(value, fallback) {
+
+      if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+      ) {
+
+        return fallback;
+
+      }
+
+      return String(value);
+
+    }
+
+
+    /* ==========================================
+       LOAD PREVIOUS WORKFLOW DATA
+       ========================================== */
+
+    const challenge =
+      getJSON(
+        "procurexLastChallenge"
+      );
+
+
+    const selectedChallenge =
+      getJSON(
+        "procurexSelectedChallenge"
+      );
+
+
+    const pilot =
+      getJSON(
+        "procurexPilot"
+      ) || {};
+
+
+    const proposal =
+      getJSON(
+        "procurexLastProposal"
+      );
+
+
+    const evaluation =
+      getJSON(
+        "procurexEvaluation"
+      );
+
+
+    const activeChallenge =
+      selectedChallenge ||
+      challenge ||
+      {};
+
+
+    /* ==========================================
+       KPI RESULTS
+       ========================================== */
+
+    const kpiResults =
+      Array.isArray(
+        pilot.kpi_results
+      )
+        ? pilot.kpi_results
+        : [];
+
+
+    /*
+     * Calculate overall KPI achievement from
+     * the actual pilot KPI results where possible.
+     */
+
+    let overallKpi =
+      number(
+        pilot.overallKpiAchievement,
+        0
+      );
+
+
+    if (
+      !overallKpi &&
+      kpiResults.length
+    ) {
+
+      const percentages = [];
+
+
+      kpiResults.forEach(
+        function (kpi) {
+
+          const target =
+            parseFloat(
+              kpi.target
+            );
+
+
+          const actual =
+            parseFloat(
+              kpi.actual
+            );
+
+
+          if (
+            Number.isFinite(target) &&
+            target !== 0 &&
+            Number.isFinite(actual)
+          ) {
+
+            percentages.push(
+              Math.min(
+                100,
+                Math.round(
+                  (
+                    actual /
+                    target
+                  ) * 100
+                )
+              )
+            );
+
+          }
+
+        }
+      );
+
+
+      if (percentages.length) {
+
+        overallKpi =
+          Math.round(
+            percentages.reduce(
+              (sum, value) =>
+                sum + value,
+              0
+            ) /
+            percentages.length
+          );
+
+      }
+
+    }
+
+
+    /*
+     * Fallback for prototype/demo state.
+     */
+
+    if (!overallKpi) {
+
+      overallKpi =
+        94;
+
+    }
+
+
+    document.getElementById(
+      "overallKpi"
+    ).textContent =
+      `${overallKpi}%`;
+
+
+    /* ==========================================
+       IMPLEMENTATION RATING
+       ========================================== */
+
+    let implementationRating =
+      number(
+        pilot.implementationRating,
+        0
+      );
+
+
+    if (!implementationRating) {
+
+      implementationRating =
+        number(
+          pilot.implementation_score,
+          92
+        );
+
+    }
+
+
+    document.getElementById(
+      "implementationRating"
+    ).textContent =
+      `${implementationRating}%`;
+
+
+    /* ==========================================
+       IMPACT RATING
+       ========================================== */
+
+    let impactRating =
+      text(
+        pilot.impactRating,
+        ""
+      );
+
+
+    if (!impactRating) {
+
+      /*
+       * Determine a simple prototype rating
+       * from KPI achievement.
+       */
+
+      if (overallKpi >= 90) {
+
+        impactRating =
+          "High";
+
+      } else if (overallKpi >= 70) {
+
+        impactRating =
+          "Medium";
+
+      } else {
+
+        impactRating =
+          "Low";
+
+      }
+
+    }
+
+
+    document.getElementById(
+      "impactRating"
+    ).textContent =
+      impactRating;
+
+
+    /* ==========================================
+       PILOT OUTCOME TEXT
+       ========================================== */
+
+    const pilotTitle =
+      text(
+        activeChallenge.title,
+        "Pilot"
+      );
+
+
+    const overallSummary =
+      text(
+        pilot.overall_summary,
+        ""
+      );
+
+
+    const outcomeElement =
+      document.getElementById(
+        "pilotOutcome"
+      );
+
+
+    if (overallSummary) {
+
+      outcomeElement.textContent =
+        overallSummary;
+
+    } else {
+
+      outcomeElement.textContent =
+        `${pilotTitle} completed the pilot evaluation. Review the KPI outcomes and evidence before making the final procurement decision.`;
+
+    }
+
+
+    /* ==========================================
+       PILOT STATE
+       ========================================== */
+
+    const pilotState =
+      document.getElementById(
+        "pilotState"
+      );
+
+
+    if (
+      pilot.evaluatedAt ||
+      kpiResults.length
+    ) {
+
+      pilotState.textContent =
+        "Pilot evaluated";
+
+    } else {
+
+      pilotState.textContent =
+        "Pilot completed";
+
+    }
+
+
+    /* ==========================================
+       DECISION NOTE
+       ========================================== */
+
+    const decisionNote =
+      document.getElementById(
+        "decisionNote"
+      );
+
+
+    const decisionTitle =
+      document.getElementById(
+        "decisionTitle"
+      );
+
+
+    const decisionMessage =
+      document.getElementById(
+        "decisionMessage"
+      );
+
+
+    function showDecision(
+      title,
+      message
+    ) {
+
+      decisionTitle.textContent =
+        title;
+
+      decisionMessage.textContent =
+        message;
+
+      decisionNote.style.display =
+        "block";
+
+    }
+
+
+    /* ==========================================
+       PROCEED TO PROCUREMENT
+       ========================================== */
+
+    document
+      .getElementById("procure")
+      .addEventListener(
+        "click",
+        function () {
+
+
+          /*
+           * Store the officer's decision.
+           */
+
+          const decision = {
+
+            decision:
+              "Proceed to Procurement",
+
+            challenge:
+              activeChallenge.title ||
+              "",
+
+            startup:
+              proposal?.startup ||
+              pilot.startup ||
+              "",
+
+            overallKpi:
+              overallKpi,
+
+            implementationRating:
+              implementationRating,
+
+            impactRating:
+              impactRating,
+
+            decidedAt:
+              new Date().toISOString()
+
+          };
+
+
+          localStorage.setItem(
+            "procurexFinalDecision",
+            JSON.stringify(
+              decision
+            )
+          );
+
+
+          showDecision(
+            "Procurement workflow initiated",
+            "The pilot has been marked for procurement review. Final procurement authorization remains with the government team."
+          );
+
+
+          if (
+            typeof toast ===
+            "function"
+          ) {
+
+            toast(
+              "Procurement workflow initiated"
+            );
+
+          }
+
+
+          /*
+           * Continue to the public impact/
+           * innovation stage.
+           */
+
+          setTimeout(
+            function () {
+
+              window.location.href =
+                "screen13.html";
+
+            },
+            900
+          );
+
+        }
+      );
+
+
+    /* ==========================================
+       EXTEND PILOT
+       ========================================== */
+
+    document
+      .getElementById("extendPilot")
+      .addEventListener(
+        "click",
+        function () {
+
+
+          const decision = {
+
+            decision:
+              "Extend Pilot",
+
+            challenge:
+              activeChallenge.title ||
+              "",
+
+            startup:
+              proposal?.startup ||
+              pilot.startup ||
+              "",
+
+            decidedAt:
+              new Date().toISOString()
+
+          };
+
+
+          localStorage.setItem(
+            "procurexFinalDecision",
+            JSON.stringify(
+              decision
+            )
+          );
+
+
+          showDecision(
+            "Pilot extension requested",
+            "The pilot extension workflow has been opened for further review."
+          );
+
+
+          if (
+            typeof toast ===
+            "function"
+          ) {
+
+            toast(
+              "Pilot extension workflow opened"
+            );
+
+          }
+
+        }
+      );
+
+
+    /* ==========================================
+       CLOSE CHALLENGE
+       ========================================== */
+
+    document
+      .getElementById("closeChallenge")
+      .addEventListener(
+        "click",
+        function () {
+
+
+          const decision = {
+
+            decision:
+              "Close Challenge",
+
+            challenge:
+              activeChallenge.title ||
+              "",
+
+            startup:
+              proposal?.startup ||
+              pilot.startup ||
+              "",
+
+            decidedAt:
+              new Date().toISOString()
+
+          };
+
+
+          localStorage.setItem(
+            "procurexFinalDecision",
+            JSON.stringify(
+              decision
+            )
+          );
+
+
+          showDecision(
+            "Challenge closure initiated",
+            "The challenge closure workflow has been opened for government review."
+          );
+
+
+          if (
+            typeof toast ===
+            "function"
+          ) {
+
+            toast(
+              "Challenge closure workflow opened"
+            );
+
+          }
+
+        }
+      );
+
+
+    /* ==========================================
+       HOME
+       ========================================== */
+
+    document
+      .getElementById("homeBtn")
+      .addEventListener(
+        "click",
+        function () {
+
+          window.location.href =
+            "../index.html";
+
+        }
+      );
+
+  });
+
+</script>
+
+</body>
+</html>

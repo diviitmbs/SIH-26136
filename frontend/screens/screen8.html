@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Proposal — PROCUREX</title>
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <a class="brand" href="../index.html">
+      <span class="logo-mark" aria-label="ProcureX logo">PX</span>
+      ProcureX
+    </a>
+
+    <div class="side-label">STARTUP PORTAL</div>
+
+    <nav class="side-nav">
+      <a href="screen_startup_home.html">Home</a>
+      <a href="screen7.html">Discover Challenges</a>
+      <a class="active" href="screen8.html">My Proposals</a>
+      <a href="screen11.html">Pilots</a>
+    </nav>
+
+  </aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="dash-top">
+
+      <div class="brand">
+        Proposal / Quotation
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn icon-btn"
+          data-theme-toggle
+        >
+          ☾
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="dash-content">
+
+      <!-- PROTOTYPE BANNER -->
+      <div class="prototype-banner compact">
+
+        <span>
+          PROTOTYPE / SYNTHETIC DEMO DATA
+        </span>
+
+        <small>
+          One sample commercial value is shown to demonstrate the comparison workflow.
+        </small>
+
+      </div>
+
+
+      <!-- WELCOME -->
+      <div class="welcome">
+
+        <div>
+
+          <span class="eyebrow">
+            Formal response
+          </span>
+
+          <h2>
+            Submit your proposal.
+          </h2>
+
+          <p>
+            Respond with a clear commercial, technical and pilot plan.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- PROPOSAL FORM -->
+      <form id="proposal" class="form-layout">
+
+        <div>
+
+
+          <!-- COMMERCIAL PROPOSAL -->
+          <div class="card form-section">
+
+            <h3>
+              Commercial proposal
+            </h3>
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  Proposed budget *
+                </label>
+
+                <input
+                  id="proposedBudget"
+                  required
+                  value="₹28,00,000"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Pilot cost
+                </label>
+
+                <input id="pilotCost">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Implementation cost
+                </label>
+
+                <input id="implementationCost">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Maintenance / recurring
+                </label>
+
+                <input id="maintenanceCost">
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- TIMELINE & TEAM -->
+          <div class="card form-section">
+
+            <h3>
+              Timeline & team
+            </h3>
+
+            <div class="field-grid">
+
+              <div class="field">
+
+                <label>
+                  Total timeline
+                </label>
+
+                <input
+                  id="totalTimeline"
+                  placeholder="Example: 5 months"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Team size
+                </label>
+
+                <input
+                  id="teamSize"
+                  type="number"
+                  placeholder="Example: 8"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Technical team
+                </label>
+
+                <input
+                  id="technicalTeam"
+                  type="number"
+                  placeholder="Example: 5"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Project manager
+                </label>
+
+                <input id="projectManager">
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- TECHNICAL PROPOSAL -->
+          <div class="card form-section">
+
+            <h3>
+              Technical proposal
+            </h3>
+
+
+            <div class="field full">
+
+              <label>
+                Proposed solution
+              </label>
+
+              <textarea
+                id="proposedSolution"
+                required
+              ></textarea>
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>
+                Architecture & technology
+              </label>
+
+              <textarea
+                id="architecture"
+              ></textarea>
+
+            </div>
+
+
+            <div class="field full">
+
+              <label>
+                Infrastructure / data requirements
+              </label>
+
+              <textarea
+                id="infrastructure"
+              ></textarea>
+
+            </div>
+
+          </div>
+
+
+          <!-- PILOT PLAN -->
+          <div class="card form-section">
+
+            <h3>
+              Pilot plan
+            </h3>
+
+            <div class="field-grid">
+
+
+              <div class="field">
+
+                <label>
+                  Pilot duration
+                </label>
+
+                <input
+                  id="pilotDuration"
+                  placeholder="Example: 6 months"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Pilot location
+                </label>
+
+                <input
+                  id="pilotLocation"
+                  value="Bengaluru Urban"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Expected users
+                </label>
+
+                <input id="expectedUsers">
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Success criteria
+                </label>
+
+                <input id="successCriteria">
+
+              </div>
+
+
+              <div class="field full">
+
+                <label>
+                  Deliverables
+                </label>
+
+                <textarea id="deliverables"></textarea>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ASSUMPTIONS -->
+          <div class="card form-section">
+
+            <h3>
+              Assumptions & government dependencies
+            </h3>
+
+            <textarea
+              id="assumptions"
+              placeholder="APIs, data, field coordination, permissions, staff, infrastructure..."
+            ></textarea>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+          <div
+            class="actions"
+            style="justify-content:flex-end"
+          >
+
+            <button
+              type="button"
+              class="btn"
+              id="saveDraft"
+            >
+              Save Draft
+            </button>
+
+
+            <button
+              type="submit"
+              class="btn primary"
+            >
+              Submit Proposal
+            </button>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <aside class="card sticky-card">
+
+          <h3>
+            Response status
+          </h3>
+
+          <span class="badge info">
+            Eligible to respond
+          </span>
+
+
+          <p style="margin-top:15px">
+
+            Challenge:
+            <span id="challengeName">
+              Loading...
+            </span>
+
+          </p>
+
+
+          <div class="notice">
+
+            Your proposal becomes visible to the government evaluation team after submission.
+
+          </div>
+
+        </aside>
+
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- COMMON JS -->
+<script src="../js/theme.js"></script>
+<script src="../js/app.js"></script>
+
+
+<!-- PROPOSAL LOGIC -->
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* =========================================
+     LOAD CHALLENGE
+  ========================================= */
+
+  let challenge = {};
+
+  const savedChallenge =
+    localStorage.getItem("procurexLastChallenge");
+
+
+  if (savedChallenge) {
+
+    try {
+
+      challenge =
+        JSON.parse(savedChallenge);
+
+    } catch (error) {
+
+      console.error(
+        "Unable to read saved challenge:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD SELECTED STARTUP
+  ========================================= */
+
+  let selectedStartup = {};
+
+  const savedStartup =
+    localStorage.getItem("procurexSelectedStartup");
+
+
+  if (savedStartup) {
+
+    try {
+
+      selectedStartup =
+        JSON.parse(savedStartup);
+
+    } catch (error) {
+
+      console.error(
+        "Unable to read selected startup:",
+        error
+      );
+
+    }
+
+  }
+
+
+  console.log(
+    "Selected startup loaded on Screen 8:",
+    selectedStartup
+  );
+
+
+  /* =========================================
+     CHALLENGE DETAILS
+  ========================================= */
+
+  document
+    .getElementById("challengeName")
+    .textContent =
+      challenge.title ||
+      "Untitled Challenge";
+
+
+  /* =========================================
+     PILOT LOCATION
+  ========================================= */
+
+  if (
+    challenge.city ||
+    challenge.state
+  ) {
+
+    document
+      .getElementById("pilotLocation")
+      .value =
+        `${challenge.city || ""}${
+          challenge.city && challenge.state
+            ? ", "
+            : ""
+        }${challenge.state || ""}`;
+
+  }
+
+
+  /* =========================================
+     SUCCESS CRITERIA
+  ========================================= */
+
+  if (challenge.successCriteria) {
+
+    document
+      .getElementById("successCriteria")
+      .value =
+        Array.isArray(challenge.successCriteria)
+          ? challenge.successCriteria.join(", ")
+          : challenge.successCriteria;
+
+  }
+
+
+  /* =========================================
+     PROPOSED SOLUTION GUIDANCE
+  ========================================= */
+
+  if (challenge.objective) {
+
+    document
+      .getElementById("proposedSolution")
+      .placeholder =
+        "Explain how your startup will address: " +
+        challenge.objective;
+
+  }
+
+
+  /* =========================================
+     ARCHITECTURE GUIDANCE
+  ========================================= */
+
+  if (challenge.requirements) {
+
+    const requirements =
+      Array.isArray(challenge.requirements)
+        ? challenge.requirements.join(", ")
+        : challenge.requirements;
+
+    document
+      .getElementById("architecture")
+      .placeholder =
+        "Address the required capabilities: " +
+        requirements;
+
+  }
+
+
+  /* =========================================
+     RESTORE EXISTING DRAFT
+  ========================================= */
+
+  const savedDraft =
+    localStorage.getItem("procurexProposalDraft");
+
+
+  if (savedDraft) {
+
+    try {
+
+      const draft =
+        JSON.parse(savedDraft);
+
+
+      restoreField(
+        "proposedBudget",
+        draft.proposedBudget
+      );
+
+      restoreField(
+        "pilotCost",
+        draft.pilotCost
+      );
+
+      restoreField(
+        "implementationCost",
+        draft.implementationCost
+      );
+
+      restoreField(
+        "maintenanceCost",
+        draft.maintenanceCost
+      );
+
+      restoreField(
+        "totalTimeline",
+        draft.totalTimeline
+      );
+
+      restoreField(
+        "teamSize",
+        draft.teamSize
+      );
+
+      restoreField(
+        "technicalTeam",
+        draft.technicalTeam
+      );
+
+      restoreField(
+        "projectManager",
+        draft.projectManager
+      );
+
+      restoreField(
+        "proposedSolution",
+        draft.proposedSolution
+      );
+
+      restoreField(
+        "architecture",
+        draft.architecture
+      );
+
+      restoreField(
+        "infrastructure",
+        draft.infrastructure
+      );
+
+      restoreField(
+        "pilotDuration",
+        draft.pilotDuration
+      );
+
+      restoreField(
+        "pilotLocation",
+        draft.pilotLocation
+      );
+
+      restoreField(
+        "expectedUsers",
+        draft.expectedUsers
+      );
+
+      restoreField(
+        "successCriteria",
+        draft.successCriteria
+      );
+
+      restoreField(
+        "deliverables",
+        draft.deliverables
+      );
+
+      restoreField(
+        "assumptions",
+        draft.assumptions
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Unable to restore proposal draft:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     SAVE DRAFT
+  ========================================= */
+
+  document
+    .getElementById("saveDraft")
+    .onclick = () => {
+
+      const proposal =
+        collectProposal();
+
+
+      localStorage.setItem(
+        "procurexProposalDraft",
+        JSON.stringify(proposal)
+      );
+
+
+      toast(
+        "Proposal draft saved"
+      );
+
+    };
+
+
+  /* =========================================
+     SUBMIT PROPOSAL
+  ========================================= */
+
+  document
+    .getElementById("proposal")
+    .onsubmit = (e) => {
+
+      e.preventDefault();
+
+
+      const proposal =
+        collectProposal();
+
+
+      /*
+       * IMPORTANT:
+       *
+       * The selected startup from Screen 5
+       * is merged into the proposal here.
+       *
+       * This is what Screen 10 needs for
+       * AI evaluation.
+       */
+
+      localStorage.setItem(
+        "procurexLastProposal",
+        JSON.stringify(proposal)
+      );
+
+
+      /*
+       * Proposal is no longer just a draft.
+       */
+
+      localStorage.removeItem(
+        "procurexProposalDraft"
+      );
+
+
+      console.log(
+        "Submitted proposal:",
+        proposal
+      );
+
+
+      toast(
+        "Proposal submitted successfully"
+      );
+
+
+      setTimeout(() => {
+
+        location.href =
+          "screen9.html";
+
+      }, 900);
+
+    };
+
+
+  /* =========================================
+     COLLECT PROPOSAL DATA
+  ========================================= */
+
+  function collectProposal() {
+
+    /*
+     * Determine startup name from the
+     * selected startup object.
+     *
+     * Different matcher responses can use
+     * slightly different property names, so
+     * we safely check all expected variants.
+     */
+
+    const startupName =
+      selectedStartup.startup ||
+      selectedStartup.name ||
+      selectedStartup.startupName ||
+      selectedStartup.company ||
+      "Submitted Startup";
+
+
+    /*
+     * Preserve the actual matcher score.
+     */
+
+    const matchScore =
+      Number(
+        selectedStartup.match_score ??
+        selectedStartup.matchScore ??
+        selectedStartup.score ??
+        0
+      );
+
+
+    return {
+
+      /* =====================================
+         STARTUP IDENTITY
+      ===================================== */
+
+      startup:
+        startupName,
+
+      startupName:
+        startupName,
+
+      match_score:
+        matchScore,
+
+      matchScore:
+        matchScore,
+
+      selectedStartup:
+        selectedStartup,
+
+
+      /* =====================================
+         CHALLENGE
+      ===================================== */
+
+      challengeTitle:
+        document
+          .getElementById("challengeName")
+          .textContent,
+
+      challengeId:
+        challenge.id ||
+        challenge.challengeId ||
+        "",
+
+
+      /* =====================================
+         COMMERCIAL
+      ===================================== */
+
+      proposedBudget:
+        document
+          .getElementById("proposedBudget")
+          .value,
+
+      pilotCost:
+        document
+          .getElementById("pilotCost")
+          .value,
+
+      implementationCost:
+        document
+          .getElementById("implementationCost")
+          .value,
+
+      maintenanceCost:
+        document
+          .getElementById("maintenanceCost")
+          .value,
+
+
+      /* =====================================
+         TIMELINE & TEAM
+      ===================================== */
+
+      totalTimeline:
+        document
+          .getElementById("totalTimeline")
+          .value,
+
+      teamSize:
+        document
+          .getElementById("teamSize")
+          .value,
+
+      technicalTeam:
+        document
+          .getElementById("technicalTeam")
+          .value,
+
+      projectManager:
+        document
+          .getElementById("projectManager")
+          .value,
+
+
+      /* =====================================
+         TECHNICAL
+      ===================================== */
+
+      proposedSolution:
+        document
+          .getElementById("proposedSolution")
+          .value,
+
+      architecture:
+        document
+          .getElementById("architecture")
+          .value,
+
+      infrastructure:
+        document
+          .getElementById("infrastructure")
+          .value,
+
+
+      /* =====================================
+         PILOT
+      ===================================== */
+
+      pilotDuration:
+        document
+          .getElementById("pilotDuration")
+          .value,
+
+      pilotLocation:
+        document
+          .getElementById("pilotLocation")
+          .value,
+
+      expectedUsers:
+        document
+          .getElementById("expectedUsers")
+          .value,
+
+      successCriteria:
+        document
+          .getElementById("successCriteria")
+          .value,
+
+      deliverables:
+        document
+          .getElementById("deliverables")
+          .value,
+
+
+      /* =====================================
+         ASSUMPTIONS
+      ===================================== */
+
+      assumptions:
+        document
+          .getElementById("assumptions")
+          .value,
+
+
+      /* =====================================
+         METADATA
+      ===================================== */
+
+      submittedAt:
+        new Date().toISOString()
+
+    };
+
+  }
+
+
+  /* =========================================
+     RESTORE FIELD HELPER
+  ========================================= */
+
+  function restoreField(
+    id,
+    value
+  ) {
+
+    if (
+      value !== undefined &&
+      value !== null
+    ) {
+
+      const element =
+        document.getElementById(id);
+
+
+      if (element) {
+
+        element.value =
+          Array.isArray(value)
+            ? value.join(", ")
+            : value;
+
+      }
+
+    }
+
+  }
+
+
+});
+
+</script>
+
+</body>
+</html>
