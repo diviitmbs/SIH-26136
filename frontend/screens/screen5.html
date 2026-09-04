@@ -1,0 +1,254 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Discover Startups — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
+<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">GOVERNMENT PORTAL</div><nav class="side-nav"><a class="" href="screen_gov_home.html">Home</a><a class="" href="screen3.html">Challenges</a><a class="active" href="screen5.html">Discover Startups</a><a class="" href="screen9.html">Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
+<main class="main"><div class="dash-top"><div class="brand">Discover Startups</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
+<div class="welcome"><div><span class="eyebrow">Startup discovery</span><h2>Find innovation partners.</h2><p>Search PROCUREX-registered companies and explore external sources separately.</p></div><button class="btn primary" data-toast="Invite flow opened for this prototype">Invite Startup</button></div>
+<div class="actions" style="margin-bottom:18px"><input id="search" placeholder="Search startups, technologies, sectors..." style="max-width:420px"><button class="btn">Filters</button></div>
+<div class="card" style="margin-bottom:20px"><b>PROCUREX STARTUPS</b><span style="margin-left:20px;color:var(--muted)">EXTERNAL SOURCES</span></div>
+<div class="grid-3" id="startupGrid"></div>
+</div></main></div>
+<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const g = document.getElementById("startupGrid");
+  const s = document.getElementById("search");
+
+  let startups = [];
+
+  // Get the challenge created on Screen 3
+  const savedChallenge =
+    localStorage.getItem("procurexLastChallenge");
+
+  if (!savedChallenge) {
+
+    g.innerHTML = `
+      <div class="card">
+        <h3>No challenge found</h3>
+        <p>Please create and publish a challenge first.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  const challenge =
+    JSON.parse(savedChallenge);
+
+
+  // Show loading state
+  g.innerHTML = `
+    <div class="card">
+      <h3>🤖 AI is finding the best startup matches...</h3>
+      <p>
+        Searching PROCUREX startup profiles and analyzing
+        their capabilities.
+      </p>
+    </div>
+  `;
+
+
+  try {
+
+    const response = await fetch(
+      "http://localhost:5000/api/ai/match-startups",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          challenge: {
+            title: challenge.title,
+            problem: challenge.problem,
+            objective: challenge.objective,
+            requirements: challenge.requirements,
+            successCriteria: challenge.successCriteria,
+            department: challenge.department,
+            state: challenge.state,
+            city: challenge.city
+          }
+        })
+      }
+    );
+
+
+    const data = await response.json();
+
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Startup matching failed"
+      );
+    }
+
+
+    startups = data.matches || [];
+
+
+    if (!startups.length) {
+
+      g.innerHTML = `
+        <div class="card">
+          <h3>No startup matches found</h3>
+          <p>
+            No suitable startups were returned for this challenge.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    render();
+
+
+  } catch (error) {
+
+    console.error(
+      "Startup matching error:",
+      error
+    );
+
+    g.innerHTML = `
+      <div class="card">
+        <h3>❌ Could not load startup matches</h3>
+        <p>${error.message}</p>
+      </div>
+    `;
+  }
+
+
+  function render() {
+
+    const q =
+      s.value.toLowerCase().trim();
+
+
+    const filtered =
+      startups.filter(x => {
+
+        const searchable = [
+
+          x.startup,
+          x.name,
+          x.domain,
+          ...(x.strengths || []),
+          ...(x.concerns || [])
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        return searchable.includes(q);
+
+      });
+
+
+    g.innerHTML =
+      filtered.map((x, index) => {
+
+        const name =
+          x.startup ||
+          x.name ||
+          "Unknown Startup";
+
+        const score =
+          x.match_score ??
+          x.score ??
+          x.match ??
+          0;
+
+        const domain =
+          x.domain ||
+          "Technology";
+
+        const strengths =
+          Array.isArray(x.strengths)
+            ? x.strengths
+            : [];
+
+        const concerns =
+          Array.isArray(x.concerns)
+            ? x.concerns
+            : [];
+
+
+        return `
+
+          <div class="card">
+
+            <span class="badge info">
+              ${score}% relevance
+            </span>
+
+            <h3 style="margin-top:12px">
+              ${name}
+            </h3>
+
+            <p>
+              ${domain}
+            </p>
+
+
+            ${
+              strengths.length
+                ? `
+                  <p>
+                    <b>Why it matches:</b>
+                    ${strengths.slice(0, 3).join(" · ")}
+                  </p>
+                `
+                : ""
+            }
+
+
+            ${
+              concerns.length
+                ? `
+                  <p>
+                    <b>Considerations:</b>
+                    ${concerns.slice(0, 2).join(" · ")}
+                  </p>
+                `
+                : ""
+            }
+
+
+            <button
+              class="btn primary"
+              style="margin-top:15px"
+              data-toast="Startup profile opened"
+            >
+              View Profile
+            </button>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+    if (!filtered.length) {
+
+      g.innerHTML = `
+        <div class="card">
+          <h3>No matching startups</h3>
+          <p>
+            Try a different search term.
+          </p>
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  s.oninput = render;
+
+});
+</script></body></html>

@@ -1,0 +1,143 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Discover Challenges — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
+<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a><div class="side-label">STARTUP PORTAL</div><nav class="side-nav"><a class="" href="screen_startup_home.html">Home</a><a class="active" href="screen7.html">Challenges</a><a class="" href="screen7.html">Discover Challenges</a><a class="" href="screen8.html">My Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
+<main class="main"><div class="dash-top"><div class="brand">Discover Challenges</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content"><div class="prototype-banner compact"><span>PROTOTYPE / SYNTHETIC DEMO DATA</span><small>Illustrative records for judging only.</small></div>
+<div class="welcome"><div><span class="eyebrow">Recommended for you</span><h2>Challenges worth exploring.</h2><p>Only relevant demo challenges are surfaced here. Search remains available when you want broader discovery.</p></div></div>
+<div class="actions" style="margin-bottom:18px"><input id="search" placeholder="Search challenges, sectors, technologies..." style="max-width:460px"></div>
+<div class="grid-3" id="challengeGrid"></div>
+</div></main></div>
+<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const grid = document.getElementById("challengeGrid");
+  const search = document.getElementById("search");
+
+  const savedChallenge =
+    localStorage.getItem("procurexLastChallenge");
+
+  let challenges = [];
+
+
+  // Load the challenge created by the government
+  if (savedChallenge) {
+
+    const c = JSON.parse(savedChallenge);
+
+    challenges.push({
+      title: c.title || "Untitled Challenge",
+      department: c.department || "Government Department",
+      location:
+        `${c.city || "Location not specified"} · ${c.state || ""}`,
+      responseDays: 14,
+      sector: "Technology",
+      priority: "High",
+      tech: [],
+      problem: c.problem || "",
+      objective: c.objective || "",
+      requirements: c.requirements || "",
+      successCriteria: c.successCriteria || ""
+    });
+
+  }
+
+
+  // If no newly created challenge exists,
+  // keep the original demo challenges visible.
+  if (!challenges.length && typeof PROCUREX_DATA !== "undefined") {
+    challenges = PROCUREX_DATA.challenges;
+  }
+
+
+  function render() {
+
+    const q =
+      search.value.toLowerCase().trim();
+
+
+    const filtered =
+      challenges.filter(c => {
+
+        const searchable = [
+
+          c.title,
+          c.department,
+          c.location,
+          c.sector,
+          ...(c.tech || []),
+          c.problem,
+          c.objective
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+
+        return searchable.includes(q);
+
+      });
+
+
+    grid.innerHTML =
+      filtered.map(c => `
+
+        <div class="card">
+
+          <span class="badge info">
+            ${c.match ? c.match + "% Match" : "New Challenge"}
+          </span>
+
+          <h3 style="margin-top:12px">
+            ${c.title}
+          </h3>
+
+          <p>
+            ${c.department}<br>
+            ${c.location}<br>
+            Response window: ${c.responseDays} days
+          </p>
+
+          <span class="chip blue">
+            ${c.sector}
+          </span>
+
+          <span class="chip orange">
+            ${c.priority} priority
+          </span>
+
+          <br>
+
+          <button
+            class="btn primary"
+            style="margin-top:14px"
+            data-go="screen7_detail.html"
+          >
+            View Challenge
+          </button>
+
+        </div>
+
+      `).join("");
+
+
+    if (!filtered.length) {
+
+      grid.innerHTML = `
+        <div class="card">
+          <h3>No challenges found</h3>
+          <p>
+            Try a different search term.
+          </p>
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  search.oninput = render;
+
+  render();
+
+});
+</script></body></html>

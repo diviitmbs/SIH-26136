@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create Challenge — PROCUREX</title>
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+    <a class="brand" href="../index.html">
+      <span class="logo-mark" aria-label="ProcureX logo">PX</span>
+      ProcureX
+    </a>
+
+    <div class="side-label">GOVERNMENT PORTAL</div>
+
+    <nav class="side-nav">
+      <a href="screen_gov_home.html">Home</a>
+      <a class="active" href="screen3.html">Challenges</a>
+      <a href="screen5.html">Discover Startups</a>
+      <a href="screen9.html">Proposals</a>
+      <a href="screen11.html">Pilots</a>
+      <a href="screen13.html">Impact</a>
+    </nav>
+  </aside>
+
+
+  <main class="main">
+
+    <div class="dash-top">
+      <div class="brand">Challenge Builder</div>
+
+      <div class="actions">
+        <button class="btn icon-btn" data-theme-toggle>☾</button>
+        <button class="btn" data-go="screen_gov_home.html">
+          Dashboard
+        </button>
+      </div>
+    </div>
+
+
+    <div class="dash-content">
+
+      <div class="prototype-banner">
+        <span>PROTOTYPE / SYNTHETIC DEMO DATA</span>
+        <small>
+          Sample challenge values are illustrative only. Backend data will replace them in production.
+        </small>
+      </div>
+
+
+      <div class="welcome">
+        <div>
+          <span class="eyebrow">Government challenge</span>
+          <h2>Define the public problem clearly.</h2>
+          <p>Good challenge information creates better startup matches.</p>
+        </div>
+      </div>
+
+
+      <div class="steps">
+        <div class="step active"><b>01</b><br>Problem</div>
+        <div class="step"><b>02</b><br>Requirements</div>
+        <div class="step"><b>03</b><br>Pilot</div>
+        <div class="step"><b>04</b><br>Review</div>
+        <div class="step"><b>05</b><br>Publish</div>
+      </div>
+
+
+      <form id="challengeForm" class="form-layout" style="margin-top:24px">
+
+        <div>
+
+          <!-- Challenge Identity -->
+          <div class="card form-section">
+            <h3>Challenge identity</h3>
+
+            <div class="field-grid">
+
+              <div class="field full">
+                <label>Challenge title *</label>
+                <input
+                  id="ctitle"
+                  required
+                  value="AI-Based Urban Traffic Management"
+                >
+              </div>
+
+              <div class="field">
+                <label>Ministry / Department *</label>
+                <input
+                  id="department"
+                  required
+                  value="Department of Urban Development"
+                >
+              </div>
+
+              <div class="field">
+                <label>Priority</label>
+                <select id="priority">
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Location -->
+          <div class="card form-section">
+            <h3>Location & affected area</h3>
+
+            <div class="field-grid">
+
+              <div class="field">
+                <label>State / UT *</label>
+                <input
+                  id="state"
+                  required
+                  value="Karnataka"
+                >
+              </div>
+
+              <div class="field">
+                <label>District / City *</label>
+                <input
+                  id="city"
+                  required
+                  value="Bengaluru Urban"
+                >
+              </div>
+
+              <div class="field full">
+                <label>Specific area / jurisdiction</label>
+                <input
+                  id="jurisdiction"
+                  placeholder="Zone, corridor, wards, facilities..."
+                >
+              </div>
+
+              <div class="field full">
+                <label>Who is affected?</label>
+                <textarea
+                  id="affected"
+                  placeholder="Example: Current process, baseline condition, known constraints."
+                ></textarea>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Problem -->
+          <div class="card form-section">
+
+            <h3>Problem & desired outcome</h3>
+
+            <div class="field full">
+
+              <label>Problem description *</label>
+
+              <textarea
+                id="problemDescription"
+                required
+                placeholder="Example: Describe the public problem, its scale and why current processes are insufficient."
+              ></textarea>
+
+
+              <!-- AI BUTTON -->
+              <button
+                type="button"
+                class="btn primary"
+                id="aiStructureBtn"
+                style="margin-top:12px;"
+              >
+                🤖 Structure Challenge with AI
+              </button>
+
+
+              <!-- AI STATUS / RESULT -->
+              <div
+                id="aiResult"
+                style="display:none; margin-top:16px;"
+              ></div>
+
+            </div>
+
+
+            <div class="field full">
+              <label>Current situation</label>
+              <textarea id="currentSituation"></textarea>
+            </div>
+
+
+            <div class="field full">
+              <label>Desired outcome *</label>
+              <textarea
+                id="desiredOutcome"
+                required
+                placeholder="Example: Reduce average peak-hour delay by 15% within the pilot area."
+              ></textarea>
+            </div>
+
+          </div>
+
+
+          <!-- Commercial -->
+          <div class="card form-section">
+
+            <h3>Commercial & response window</h3>
+
+            <div class="field-grid">
+
+              <div class="field">
+                <label>Estimated budget</label>
+                <input
+                  id="budget"
+                  value="₹25–40 Lakhs"
+                >
+              </div>
+
+              <div class="field">
+                <label>Pilot duration</label>
+                <input
+                  id="pilotDuration"
+                  value="6 Months"
+                >
+              </div>
+
+              <div class="field">
+                <label>Startup response window</label>
+
+                <select id="responseWindow">
+                  <option>14 Days</option>
+                  <option>7 Days</option>
+                  <option>21 Days</option>
+                  <option>30 Days</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Challenge start date</label>
+                <input id="startDate" type="date">
+              </div>
+
+              <div class="field">
+                <label>Challenge end date</label>
+                <input id="endDate" type="date">
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Requirements -->
+          <div class="card form-section">
+
+            <h3>Requirements & technology</h3>
+
+            <div class="field full">
+
+              <label>Required technologies / areas</label>
+
+              <div class="checkbox-grid">
+
+                <label class="check">
+                  <input type="checkbox" value="AI/ML" checked>
+                  AI/ML
+                </label>
+
+                <label class="check">
+                  <input type="checkbox" value="IoT" checked>
+                  IoT
+                </label>
+
+                <label class="check">
+                  <input type="checkbox" value="Computer Vision" checked>
+                  Computer Vision
+                </label>
+
+                <label class="check">
+                  <input type="checkbox" value="GIS">
+                  GIS
+                </label>
+
+                <label class="check">
+                  <input type="checkbox" value="Cloud">
+                  Cloud
+                </label>
+
+                <label class="check">
+                  <input type="checkbox" value="Analytics">
+                  Analytics
+                </label>
+
+              </div>
+            </div>
+
+
+            <div class="field full">
+              <label>Special requirements</label>
+
+              <textarea
+                id="specialRequirements"
+                placeholder="Data, API, hardware, security, field coordination, compliance..."
+              ></textarea>
+            </div>
+
+
+            <div class="field full">
+              <label>Supporting documents</label>
+              <input type="file" id="supportingDocuments" multiple>
+            </div>
+
+          </div>
+
+
+          <!-- Pilot Success -->
+          <div class="card form-section">
+
+            <h3>Pilot success criteria</h3>
+
+            <div class="field-grid">
+
+              <div class="field full">
+
+                <label>Success criteria</label>
+
+                <textarea
+                  id="successCriteria"
+                  placeholder="Define measurable pilot completion conditions."
+                ></textarea>
+
+              </div>
+
+
+              <div class="field">
+                <label>Expected users / coverage</label>
+                <input id="expectedUsers">
+              </div>
+
+
+              <div class="field">
+                <label>Review frequency</label>
+
+                <select id="reviewFrequency">
+                  <option>Monthly</option>
+                  <option>Bi-weekly</option>
+                  <option>Quarterly</option>
+                </select>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Actions -->
+          <div
+            class="actions"
+            style="justify-content:flex-end"
+          >
+
+            <button
+              type="button"
+              class="btn"
+              id="draft"
+            >
+              Save Draft
+            </button>
+
+            <button
+              type="submit"
+              class="btn primary"
+            >
+              Register & Publish Challenge
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- Challenge Snapshot -->
+        <aside class="card sticky-card">
+
+          <h3>Challenge snapshot</h3>
+
+          <div class="notice">
+
+            <b id="snapTitle">
+              AI-Based Urban Traffic Management
+            </b>
+
+            <br>
+
+            <span id="snapLoc">
+              Bengaluru Urban · Karnataka
+            </span>
+
+          </div>
+
+          <p style="margin-top:15px">
+            Startup Response Window
+          </p>
+
+          <h3>14 Days</h3>
+
+          <p>
+            After publication, matched startups can discover the challenge and register interest.
+          </p>
+
+          <div class="progress">
+            <span style="width:82%"></span>
+          </div>
+
+        </aside>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="../js/theme.js"></script>
+<script src="../js/app.js"></script>
+
+<script>
+
+  /* -----------------------------
+     Existing title snapshot
+  ----------------------------- */
+
+  const title = document.getElementById("ctitle");
+
+  title.oninput = () => {
+    document.getElementById("snapTitle").textContent =
+      title.value || "Challenge title";
+  };
+
+
+  /* -----------------------------
+     Save Draft
+  ----------------------------- */
+
+  document.getElementById("draft").onclick = () => {
+
+    localStorage.setItem(
+      "procurexChallengeDraft",
+      JSON.stringify({
+        title: title.value,
+        problem: document.getElementById("problemDescription").value,
+        savedAt: new Date().toISOString()
+      })
+    );
+
+    toast("Challenge draft saved");
+  };
+
+
+  /* -----------------------------
+     GEMINI AI INTEGRATION
+  ----------------------------- */
+
+  const aiButton = document.getElementById("aiStructureBtn");
+  const problemInput = document.getElementById("problemDescription");
+  const aiResult = document.getElementById("aiResult");
+
+
+  aiButton.addEventListener("click", async () => {
+
+    const problem = problemInput.value.trim();
+
+
+    if (!problem) {
+
+      alert("Please enter a problem description first.");
+
+      return;
+    }
+
+
+    /* Loading state */
+
+    aiButton.disabled = true;
+
+    aiButton.textContent =
+      "🤖 Structuring with AI...";
+
+    aiResult.style.display = "block";
+
+    aiResult.innerHTML = `
+      <div class="notice">
+        <strong>🤖 AI is analyzing your challenge...</strong>
+        <p>Please wait a moment.</p>
+      </div>
+    `;
+
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/ai/structure-challenge",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            problem: problem
+          })
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error || "AI request failed"
+        );
+
+      }
+
+
+      const challenge =
+        data.challenge || data;
+
+
+      /* Put AI title into title field */
+
+      if (challenge.title) {
+
+  title.value = challenge.title;
+
+  document.getElementById("snapTitle").textContent =
+    challenge.title;
+
+}
+
+if (challenge.problem_statement) {
+
+  document.getElementById("problemDescription").value =
+    challenge.problem_statement;
+
+}
+
+if (challenge.objective) {
+
+  document.getElementById("desiredOutcome").value =
+    challenge.objective;
+
+}
+
+if (Array.isArray(challenge.requirements)) {
+
+  document.getElementById("specialRequirements").value =
+    challenge.requirements.join("\n");
+
+}
+
+if (Array.isArray(challenge.success_metrics)) {
+
+  document.getElementById("successCriteria").value =
+    challenge.success_metrics.join("\n");
+
+}
+
+      /* Show AI result */
+
+      aiResult.innerHTML = `
+
+        <div class="notice">
+
+          <h3>🤖 AI Structured Challenge</h3>
+
+          <p>
+            <strong>Title:</strong>
+            ${challenge.title || "Not generated"}
+          </p>
+
+          <p>
+            <strong>Problem Statement:</strong>
+            ${challenge.problem_statement || "Not generated"}
+          </p>
+
+          <p>
+            <strong>Domain:</strong>
+            ${challenge.domain || "Not generated"}
+          </p>
+
+          ${
+            challenge.objective
+              ? `
+                <p>
+                  <strong>Objective:</strong>
+                  ${challenge.objective}
+                </p>
+              `
+              : ""
+          }
+
+          ${
+            Array.isArray(challenge.requirements)
+              ? `
+                <p>
+                  <strong>Requirements:</strong>
+                </p>
+
+                <ul>
+                  ${challenge.requirements
+                    .map(item => `<li>${item}</li>`)
+                    .join("")}
+                </ul>
+              `
+              : ""
+          }
+
+          ${
+            Array.isArray(challenge.success_metrics)
+              ? `
+                <p>
+                  <strong>Success Metrics:</strong>
+                </p>
+
+                <ul>
+                  ${challenge.success_metrics
+                    .map(item => `<li>${item}</li>`)
+                    .join("")}
+                </ul>
+              `
+              : ""
+          }
+
+        </div>
+
+      `;
+
+
+    } catch (error) {
+
+      console.error("AI error:", error);
+
+
+      aiResult.style.display = "block";
+
+      aiResult.innerHTML = `
+
+        <div class="notice">
+
+          <strong>
+            ❌ AI could not structure the challenge.
+          </strong>
+
+          <p>
+            ${error.message}
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* Restore button */
+
+    aiButton.disabled = false;
+
+    aiButton.textContent =
+      "🤖 Structure Challenge with AI";
+
+  });
+
+
+  /* -----------------------------
+     Publish Challenge
+  ----------------------------- */
+
+  document.getElementById("challengeForm").onsubmit = e => {
+
+    e.preventDefault();
+
+   localStorage.setItem(
+  "procurexLastChallenge",
+  JSON.stringify({
+    title: title.value,
+    department: document.getElementById("department").value,
+    state: document.getElementById("state").value,
+    city: document.getElementById("city").value,
+    problem: document.getElementById("problemDescription").value,
+    objective: document.getElementById("desiredOutcome").value,
+    requirements: document.getElementById("specialRequirements").value,
+    successCriteria: document.getElementById("successCriteria").value
+  })
+);
+
+    window.location.href = "screen4.html";
+
+  };
+
+</script>
+
+</body>
+</html>
