@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Government Home — PROCUREX</title><link rel="stylesheet" href="../css/theme.css"></head><body>
+<div class="dashboard"><aside class="sidebar"><a class="brand" href="../index.html"><span class="logo-mark">PX</span>PROCUREX</a><div class="side-label">GOVERNMENT PORTAL</div><nav class="side-nav"><a class="active" href="screen_gov_home.html">Home</a><a class="" href="screen3.html">Challenges</a><a class="" href="screen5.html">Discover Startups</a><a class="" href="screen9.html">Proposals</a><a class="" href="screen11.html">Pilots</a><a class="" href="screen13.html">Impact</a></nav><div style="margin-top:28px" class="notice">Prototype workspace<br><small>Data is demo-driven and can later connect to the backend.</small></div></aside>
+<main class="main"><div class="dash-top"><div class="brand">Government Home</div><div class="actions"><button class="btn icon-btn" data-theme-toggle>☾</button><button class="btn" data-go="../index.html">Home</button></div></div><div class="dash-content">
+<div class="welcome"><div><span class="eyebrow">Government workspace</span><h2>Good morning, Department of Urban Development</h2><p>Let's drive innovation together.</p></div><button class="btn primary" data-go="screen3.html">＋ Create Challenge</button></div>
+<div class="kpi-grid">
+<div class="stat"><div class="value" id="challengeCount">0</div><div class="label">Your active challenges</div></div>
+<div class="stat"><div class="value">8</div><div class="label">Proposals received</div></div><div class="stat"><div class="value">2</div><div class="label">Live pilots</div></div><div class="stat"><div class="value">1</div><div class="label">Completed pilots</div></div>
+</div>
+<section class="section"><div class="section-head"><div><h3>What would you like to work on?</h3><p>Keep the important actions close and the rest out of the way.</p></div></div>
+<div class="action-grid">
+<button class="action" data-go="screen3.html"><div class="action-icon">◫</div><b>Create Challenge</b><p>Define a new public problem.</p></button>
+<button class="action" data-go="screen5.html"><div class="action-icon">⌕</div><b>Discover Startups</b><p>Find relevant innovation partners.</p></button>
+<button class="action" data-go="screen9.html"><div class="action-icon">◈</div><b>Review Proposals</b><p>Compare responses clearly.</p></button>
+<button class="action" data-go="screen11.html"><div class="action-icon">◎</div><b>Track Pilots</b><p>Monitor measurable outcomes.</p></button>
+</div></section>
+<section class="section"><div class="section-head"><div><h3>Your active challenges</h3></div><button class="btn" data-go="screen5.html">Discover startups →</button></div>
+<div class="grid-3" id="govChallenges"></div></section>
+</div></main></div>
+<script src="../js/theme.js"></script><script src="../js/data.js"></script><script src="../js/app.js"></script><script>document.addEventListener("DOMContentLoaded",()=>{document.getElementById("challengeCount").textContent=PROCUREX_DATA.challenges.length;document.getElementById("govChallenges").innerHTML=PROCUREX_DATA.challenges.map(c=>`<div class="card"><span class="badge info">${c.status}</span><h3 style="margin-top:12px">${c.title}</h3><p>${c.department}<br>${c.location}</p><span class="chip">${c.sector}</span><span class="chip blue">${c.match}% match</span></div>`).join("")})</script></body></html>
