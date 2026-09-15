@@ -1,27 +1,277 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PROCUREX — Public Innovation Platform</title><link rel="stylesheet" href="css/theme.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProcureX — Smart City Innovation Engine</title>
+  <meta name="description" content="A unified pipeline to post municipal challenges, match verified startups, and run measurable pilots.">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
 <body>
-<header class="topbar"><div class="container" style="display:flex;justify-content:space-between;align-items:center;width:100%">
-<a class="brand" href="index.html"><span class="logo-mark" aria-label="ProcureX logo">PX</span>ProcureX</a>
-<nav class="nav"><a class="active" href="index.html">Home</a><a href="screens/screen5.html">Discover</a><a href="screens/screen11.html">Impact</a></nav>
-<div class="actions"><button class="btn icon-btn" data-theme-toggle title="Toggle theme">☾</button><button class="btn" data-go="screens/screen2.html">Government</button><button class="btn primary" data-go="screens/screen6.html">Startup</button></div>
-</div></header>
-<main><div class="prototype-ribbon"><div class="container"><span>PROCUREX PROTOTYPE</span><span>Synthetic demo data · Not production records</span></div></div>
-<section class="hero"><div class="container hero-grid">
-<div class="hero-copy"><span class="eyebrow">India's innovation procurement platform</span><h1>Public problems.<br>Private innovation.<br><span class="accent">Measurable impact.</span></h1><p>PROCUREX connects government departments with capable startups to discover solutions, run pilots and make evidence-led procurement decisions.</p><div class="hero-actions"><button class="btn primary" data-go="screens/screen2.html">I'm a Government</button><button class="btn" data-go="screens/screen6.html">I'm a Startup</button></div></div>
-<div class="hero-art photo-hero"><div class="hero-photo photo-one"></div><div class="hero-photo photo-two"></div><div class="hero-photo photo-three"></div><div class="hero-overlay"><span class="hero-tag">DISCOVER · VALIDATE · SCALE</span><strong>Innovation that moves public services forward.</strong><small>Illustrative prototype visuals</small></div><div class="hero-dots"><i class="active"></i><i></i><i></i></div></div>
-</div></section>
-<section class="section"><div class="container"><div class="stat-row">
-<div class="stat"><div class="value">Discover</div><div class="label">Public challenges</div></div><div class="stat"><div class="value">Match</div><div class="label">Relevant startups</div></div><div class="stat"><div class="value">Pilot</div><div class="label">Test before scaling</div></div><div class="stat"><div class="value">Impact</div><div class="label">Measure outcomes</div></div>
-</div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Explore</span><h2>What's happening in innovation</h2><p>Explore by problem area, not by cluttered dashboards.</p></div></div>
-<div class="grid-3">
-<div class="card image-card"><div class="image-placeholder mobility"></div><div class="content"><span class="chip">Urban Mobility</span><h3>Smarter movement across cities</h3></div></div>
-<div class="card image-card"><div class="image-placeholder healthcare"></div><div class="content"><span class="chip">Healthcare</span><h3>Technology for better public services</h3></div></div>
-<div class="card image-card"><div class="image-placeholder environment"></div><div class="content"><span class="chip">Environment</span><h3>Measurable climate and civic impact</h3></div></div>
-</div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">How it works</span><h2>From challenge to impact.</h2></div></div><div class="steps">
-<div class="step active"><b>01</b><br>Challenge</div><div class="step"><b>02</b><br>Discover</div><div class="step"><b>03</b><br>Evaluate</div><div class="step"><b>04</b><br>Pilot</div><div class="step"><b>05</b><br>Impact</div>
-</div></div></section>
-</main><footer class="footer"><div class="container">© 2026 PROCUREX · SIH26136 prototype · Built for transparent, startup-friendly public procurement.</div></footer>
-<script src="js/theme.js"></script><script src="js/data.js"></script><script src="js/app.js"></script></body></html>
+
+  <!-- ================= TOPBAR NAVIGATION ================= -->
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="logo-mark" aria-label="ProcureX logo">PX</span>
+        ProcureX
+      </a>
+
+      <nav class="nav">
+        <a class="active" href="index.html">Home</a>
+        <a href="screens/screen3.html">Discover Challenges</a>
+        <a href="screens/screen5.html">Startups</a>
+        <a href="screens/screen13.html">Impact Metrics</a>
+      </nav>
+
+      <div class="actions">
+        <button class="btn icon-btn" data-theme-toggle title="Toggle theme" aria-label="Toggle theme">☾</button>
+        <button class="btn" data-go="screens/screen_gov_home.html">Government</button>
+        <button class="btn primary" data-go="screens/screen_startup_home.html">Startup Portal</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= PROTOTYPE BANNER ================= -->
+  <div class="prototype-ribbon">
+    <div class="container">
+      <span>PROCUREX · SIH26136 PROTOTYPE</span>
+      <span>Synthetic demo data · Public Innovation & Enterprise Procurement Pipeline</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Smart City Innovation Engine</span>
+          <h1>Bridging Public Problems with<br><span class="accent">Scalable Startup Tech.</span></h1>
+          <p>A unified pipeline to post municipal challenges, match verified startups, and run measurable pilots.</p>
+          <div class="hero-actions">
+            <button class="btn primary" data-go="screens/screen_gov_home.html">Government Portal</button>
+            <button class="btn orange" data-go="screens/screen_startup_home.html">Startup Portal</button>
+            <button class="btn ghost" data-go="screens/screen3.html">Explore Challenges →</button>
+          </div>
+        </div>
+
+        <div class="hero-art photo-hero">
+          <div class="hero-photo photo-one"></div>
+          <div class="hero-photo photo-two"></div>
+          <div class="hero-photo photo-three"></div>
+          <div class="hero-overlay">
+            <span class="hero-tag">DISCOVER · VALIDATE · SCALE</span>
+            <strong>Innovation that moves public services forward.</strong>
+            <small>Empowering civic departments through evidence-led technology partnerships.</small>
+          </div>
+          <div class="hero-dots">
+            <i class="active"></i>
+            <i></i>
+            <i></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CALL-TO-ACTION PORTALS ================= -->
+    <section class="section" style="padding-top: 10px;">
+      <div class="container">
+        <div class="grid-2">
+          <!-- Government Portal Card -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); border-radius:50%; pointer-events:none;"></div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                <span class="badge info">Municipal & Civic Authorities</span>
+                <span style="font-size:24px;">🏛️</span>
+              </div>
+              <h3 style="font-size:24px; margin-bottom:10px;">Government Portal</h3>
+              <p style="margin-bottom:20px;">Publish municipal operational challenges, discover vetted high-readiness startups, review AI-assisted bid evaluations, and oversee structured sandbox pilots.</p>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;">
+                <span class="chip blue">Post Challenges</span>
+                <span class="chip blue">AI Scored Proposals</span>
+                <span class="chip blue">Pilot Oversight</span>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="btn primary" data-go="screens/screen_gov_home.html">Launch Government Portal →</button>
+              <button class="btn ghost" data-go="screens/screen2.html">Register Department</button>
+            </div>
+          </div>
+
+          <!-- Startup Portal Card -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:-30px; right:-30px; width:120px; height:120px; background:radial-gradient(circle, rgba(234,88,12,0.2) 0%, transparent 70%); border-radius:50%; pointer-events:none;"></div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                <span class="badge warn">Tech Startups & Innovators</span>
+                <span style="font-size:24px;">🚀</span>
+              </div>
+              <h3 style="font-size:24px; margin-bottom:10px;">Startup Portal</h3>
+              <p style="margin-bottom:20px;">Access live public sector problem statements, submit tailored technical proposals, qualify for fast-track pilot contracts, and scale across municipal bodies.</p>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;">
+                <span class="chip orange">Browse RFPs</span>
+                <span class="chip orange">Direct Contracting</span>
+                <span class="chip orange">Civic Validation</span>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="btn orange" data-go="screens/screen_startup_home.html">Launch Startup Portal →</button>
+              <button class="btn ghost" data-go="screens/screen6.html">Register Startup</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS (3-STEP GRID) ================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Seamless Pipeline</span>
+            <h2>How It Works</h2>
+            <p>From identified civic problem to measured outcome in three transparent stages.</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <!-- Step 1 -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <span class="badge info" style="font-family:var(--font-mono); font-size:12px; font-weight:800;">STEP 01</span>
+                <span style="font-size:22px;">📋</span>
+              </div>
+              <h3 style="font-size:20px; margin-bottom:10px;">1. Post Need</h3>
+              <p>Civic departments articulate specific municipal bottlenecks, set target operational KPIs, and define pilot resource parameters.</p>
+            </div>
+            <div style="padding-top:16px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:20px; font-weight:850; color:var(--primary); line-height:1.1;">48 hrs</div>
+                <small style="color:var(--muted); font-size:11.5px;">Avg. Challenge Review</small>
+              </div>
+              <span class="chip blue">Fast Onboarding</span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <span class="badge warn" style="font-family:var(--font-mono); font-size:12px; font-weight:800;">STEP 02</span>
+                <span style="font-size:22px;">⚡</span>
+              </div>
+              <h3 style="font-size:20px; margin-bottom:10px;">2. AI Matching</h3>
+              <p>Intelligent matching algorithms filter verified startups based on technical readiness (TRL), past performance, and civic feasibility.</p>
+            </div>
+            <div style="padding-top:16px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:20px; font-weight:850; color:var(--orange); line-height:1.1;">94.8%</div>
+                <small style="color:var(--muted); font-size:11.5px;">Match Precision</small>
+              </div>
+              <span class="chip orange">Automated Scoring</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <span class="badge success" style="font-family:var(--font-mono); font-size:12px; font-weight:800;">STEP 03</span>
+                <span style="font-size:22px;">🎯</span>
+              </div>
+              <h3 style="font-size:20px; margin-bottom:10px;">3. Pilot & Deploy</h3>
+              <p>Authorize structured 60–90 day sandbox pilots with verifiable milestones before committing to full municipal procurement and scale.</p>
+            </div>
+            <div style="padding-top:16px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:20px; font-weight:850; color:var(--success); line-height:1.1;">3x Faster</div>
+                <small style="color:var(--muted); font-size:11.5px;">Procurement Cycle</small>
+              </div>
+              <span class="chip green">Evidence-Led Scale</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= IMPACT COUNTERS ================= -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="stat-row">
+          <div class="stat">
+            <div class="value">120+</div>
+            <div class="label">Public Challenges</div>
+          </div>
+          <div class="stat">
+            <div class="value">450+</div>
+            <div class="label">Vetted Tech Startups</div>
+          </div>
+          <div class="stat">
+            <div class="value">85</div>
+            <div class="label">Sandbox Pilots Completed</div>
+          </div>
+          <div class="stat">
+            <div class="value">₹14.2 Cr</div>
+            <div class="label">Civic Value Delivered</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EXPLORE BY FOCUS AREA ================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Priority Domains</span>
+            <h2>Explore by Problem Area</h2>
+            <p>Targeted solutions tackling urgent civic infrastructure and municipal needs.</p>
+          </div>
+          <button class="btn" data-go="screens/screen3.html">View All Challenges →</button>
+        </div>
+        <div class="grid-3">
+          <div class="card image-card" data-go="screens/screen3.html" style="cursor:pointer;" title="Explore Urban Mobility Challenges">
+            <div class="image-placeholder mobility"></div>
+            <div class="content">
+              <span class="chip blue">Urban Mobility</span>
+              <h3>Intelligent Transit & Congestion Control</h3>
+            </div>
+          </div>
+          <div class="card image-card" data-go="screens/screen3.html" style="cursor:pointer;" title="Explore Healthcare Challenges">
+            <div class="image-placeholder healthcare"></div>
+            <div class="content">
+              <span class="chip blue">Public Health</span>
+              <h3>Primary Care Telemedicine & Clinic Analytics</h3>
+            </div>
+          </div>
+          <div class="card image-card" data-go="screens/screen3.html" style="cursor:pointer;" title="Explore Environment Challenges">
+            <div class="image-placeholder environment"></div>
+            <div class="content">
+              <span class="chip green">Environment</span>
+              <h3>Real-Time Air Quality & Waste Management</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>© 2026 ProcureX · SIH26136 Prototype · Transparent, Evidence-Led Public Innovation Procurement.</div>
+      <div style="display:flex; gap:18px; align-items:center;">
+        <a href="screens/screen_gov_home.html" style="color:var(--muted); font-size:13px; font-weight:500;">Government Portal</a>
+        <a href="screens/screen_startup_home.html" style="color:var(--muted); font-size:13px; font-weight:500;">Startup Portal</a>
+        <a href="screens/screen13.html" style="color:var(--muted); font-size:13px; font-weight:500;">Impact Metrics</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/theme.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

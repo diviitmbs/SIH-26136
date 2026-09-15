@@ -3,3 +3,8 @@ uvicorn
 sqlalchemy
 psycopg2-binary
 pydantic
+google-genai
+instructor
+jsonref
+reportlab
+python-dotenv

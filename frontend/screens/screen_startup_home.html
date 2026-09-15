@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Startup Home — PROCUREX</title>
-
+  <title>Startup Vendor Dashboard — PROCUREX</title>
+  <meta name="description" content="ProcureX Startup Dashboard - Review AI match recommendations, track active pilot applications, and submit proposals.">
   <link rel="stylesheet" href="../css/theme.css">
 </head>
 
@@ -27,58 +26,50 @@
       </div>
 
       <nav class="side-nav">
-
         <a class="active" href="screen_startup_home.html">
           Home
         </a>
-
-        <a href="screen7.html">
-          Challenges
-        </a>
-
         <a href="screen7.html">
           Discover Challenges
         </a>
-
         <a href="screen8.html">
           My Proposals
         </a>
-
         <a href="screen11.html">
           Pilots
         </a>
-
         <a href="screen13.html">
           Impact
         </a>
-
+        <a href="../index.html" style="margin-top:12px; border-top:1px solid var(--border-subtle); padding-top:12px;">
+          ← Back to Home
+        </a>
       </nav>
 
-      <div style="margin-top:28px" class="notice">
-        Prototype workspace
+      <div style="margin-top:auto; margin-bottom:12px;" class="notice">
+        <b>Startup Workspace</b>
         <br>
         <small>
-          Data is currently connected through the ProcureX prototype workflow.
+          Vendor credentials verified · DPIIT StartinUp ID #PX-KA-8812.
         </small>
       </div>
 
     </aside>
 
-
-    <!-- ================= MAIN ================= -->
+    <!-- ================= MAIN CONTENT ================= -->
     <main class="main">
 
+      <!-- TOP BAR -->
       <div class="dash-top">
-
-        <div class="brand">
-          Startup Home
+        <div class="brand" style="font-size:16px;">
+          Startup Vendor Dashboard
         </div>
 
         <div class="actions">
-
           <button
             class="btn icon-btn"
             data-theme-toggle
+            title="Toggle theme"
             aria-label="Toggle theme"
           >
             ☾
@@ -86,156 +77,260 @@
 
           <button
             class="btn"
-            id="homeBtn"
+            data-go="../index.html"
+            title="Return to Public Landing Page"
           >
-            Home
+            ← Back to Home
           </button>
 
-        </div>
-
-      </div>
-
-
-      <div class="dash-content">
-
-        <!-- ================= PROTOTYPE BANNER ================= -->
-        <div class="prototype-banner compact">
-
-          <span>
-            PROCUREX / STARTUP WORKSPACE
-          </span>
-
-          <small>
-            Discover public challenges and submit proposals.
-          </small>
-
-        </div>
-
-
-        <!-- ================= WELCOME ================= -->
-        <div class="welcome">
-
-          <div>
-
-            <span class="eyebrow">
-              Startup workspace
-            </span>
-
-            <h2 id="welcomeTitle">
-              Good morning, Startup
-            </h2>
-
-            <p>
-              Find public challenges where your solution can make
-              a measurable difference.
-            </p>
-
-          </div>
+          <button
+            class="btn"
+            onclick="openCapabilitiesModal()"
+          >
+            ⚙ Update Capabilities
+          </button>
 
           <button
             class="btn primary"
-            id="discoverBtn"
+            data-go="screen8.html"
           >
-            Discover Challenges
+            ＋ Submit Proposal
           </button>
+        </div>
+      </div>
 
+      <div class="dash-content">
+
+        <!-- PROTOTYPE BANNER -->
+        <div class="prototype-banner compact">
+          <span>
+            PROCUREX · STARTUP INNOVATION PIPELINE
+          </span>
+          <small>
+            AI matchmaking enabled · 3 High-Relevance Challenges Available.
+          </small>
         </div>
 
-
-        <!-- ================= KPIs ================= -->
-        <div class="kpi-grid">
-
-          <div class="stat">
-
-            <div
-              class="value"
-              id="challengeCount"
-            >
-              0
-            </div>
-
-            <div class="label">
-              Relevant challenges
-            </div>
-
+        <!-- WELCOME & QUICK ACTIONS -->
+        <div class="welcome">
+          <div>
+            <span class="eyebrow">
+              Verified Solution Provider · TRL 8
+            </span>
+            <h2 id="welcomeTitle">
+              Good morning, UrbanAI Technologies
+            </h2>
+            <p>
+              Review AI-matched municipal challenges, track active sandbox pilots, and submit technical proposals.
+            </p>
           </div>
 
-
-          <div class="stat">
-
-            <div
-              class="value"
-              id="interestCount"
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button
+              class="btn primary"
+              data-go="screen8.html"
+              id="submitProposalBtn"
             >
-              0
-            </div>
-
-            <div class="label">
-              Interests recorded
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div
-              class="value"
-              id="proposalCount"
+              ＋ Submit Proposal
+            </button>
+            <button
+              class="btn"
+              onclick="openCapabilitiesModal()"
+              id="updateCapBtn"
             >
-              0
-            </div>
-
-            <div class="label">
-              Proposal submitted
-            </div>
-
-          </div>
-
-
-          <div class="stat">
-
-            <div
-              class="value"
-              id="pilotCount"
+              Update Capabilities
+            </button>
+            <button
+              class="btn ghost"
+              data-go="screen7.html"
+              id="discoverBtn"
             >
-              0
-            </div>
-
-            <div class="label">
-              Active pilot
-            </div>
-
+              Discover Challenges →
+            </button>
           </div>
-
         </div>
 
+        <!-- EXECUTIVE SUMMARY STATS ROW -->
+        <div class="kpi-grid" style="margin-bottom:32px;">
+          <div class="stat">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <span class="label" style="font-weight:600; color:var(--text); font-size:13.5px;">Relevant Challenges</span>
+              <span style="font-size:18px;">📋</span>
+            </div>
+            <div class="value" id="challengeCount" style="color:var(--primary);">
+              3
+            </div>
+            <div class="label" style="font-size:12px; margin-top:4px;">
+              94% Peak Match Score
+            </div>
+          </div>
 
-        <!-- ================= RECOMMENDED CHALLENGES ================= -->
-        <section class="section">
+          <div class="stat">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <span class="label" style="font-weight:600; color:var(--text); font-size:13.5px;">Interests Recorded</span>
+              <span style="font-size:18px;">⭐</span>
+            </div>
+            <div class="value" id="interestCount" style="color:var(--gold);">
+              2
+            </div>
+            <div class="label" style="font-size:12px; margin-top:4px;">
+              Direct Civic Inquiries
+            </div>
+          </div>
 
+          <div class="stat">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <span class="label" style="font-weight:600; color:var(--text); font-size:13.5px;">Proposals Submitted</span>
+              <span style="font-size:18px;">📄</span>
+            </div>
+            <div class="value" id="proposalCount" style="color:var(--orange);">
+              1
+            </div>
+            <div class="label" style="font-size:12px; margin-top:4px;">
+              Score: 91/100 · Shortlisted
+            </div>
+          </div>
+
+          <div class="stat">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <span class="label" style="font-weight:600; color:var(--text); font-size:13.5px;">Active Sandbox Pilot</span>
+              <span style="font-size:18px;">⚡</span>
+            </div>
+            <div class="value" id="pilotCount" style="color:var(--success);">
+              1
+            </div>
+            <div class="label" style="font-size:12px; margin-top:4px;">
+              Stage 3 · Day 142 of 180
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= ACTIVE APPLICATIONS / PILOTS PIPELINE VIEW ================= -->
+        <section class="section" style="padding-top:0;">
           <div class="section-head">
-
             <div>
-
-              <h3>
-                Recommended for you
-              </h3>
-
-              <p>
-                Based on available public challenges and your startup profile.
-              </p>
-
+              <span class="eyebrow" style="margin-bottom:8px;">Live Deployment Pipeline</span>
+              <h3>Active Applications & Pilot Status</h3>
+              <p>End-to-end municipal procurement progression from submission to full enterprise scaling.</p>
             </div>
-
+            <button class="btn" data-go="screen11.html">
+              View Pilot Telemetry →
+            </button>
           </div>
 
+          <div class="card" style="position:relative; overflow:hidden; border:1px solid var(--border-hover); margin-bottom:12px;">
+            <!-- Pilot Header Row -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+              <div>
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+                  <span class="badge success" style="font-size:11.5px; font-weight:800;">● IN PILOT (STAGE 3 OF 4)</span>
+                  <span class="chip blue" style="margin:0;">Urban Mobility</span>
+                </div>
+                <h3 style="font-size:20px; margin:0 0 4px; font-weight:750;">
+                  Smart Traffic Management Sandbox Pilot
+                </h3>
+                <p style="margin:0; font-size:13px; color:var(--muted);">
+                  🏛️ Department of Urban Development · Bengaluru Urban · Grant Ref #PX-PLT-2026-088
+                </p>
+              </div>
 
-          <div
-            class="grid-3"
-            id="startupChallenges"
-          ></div>
+              <div style="text-align:right;">
+                <div style="font-size:13px; color:var(--muted); margin-bottom:4px;">Milestone Progress</div>
+                <div style="font-size:22px; font-weight:850; color:var(--primary);">78% Complete</div>
+              </div>
+            </div>
 
+            <!-- 4-Stage Pipeline Stepper -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:24px;">
+              <!-- Stage 1 -->
+              <div style="padding:14px; background:var(--surface-2); border-radius:var(--radius-sm); border:1px solid var(--border-subtle); position:relative;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:11px; font-family:var(--font-mono); font-weight:800; color:var(--success);">01 STAGE</span>
+                  <span style="color:var(--success); font-weight:900;">✓</span>
+                </div>
+                <div style="font-weight:700; font-size:13px; margin-bottom:2px;">Application Submitted</div>
+                <small style="color:var(--muted); font-size:11.5px;">Verified RFP dossier</small>
+              </div>
+
+              <!-- Stage 2 -->
+              <div style="padding:14px; background:var(--surface-2); border-radius:var(--radius-sm); border:1px solid var(--border-subtle); position:relative;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:11px; font-family:var(--font-mono); font-weight:800; color:var(--success);">02 STAGE</span>
+                  <span style="color:var(--success); font-weight:900;">✓</span>
+                </div>
+                <div style="font-weight:700; font-size:13px; margin-bottom:2px;">Shortlisted</div>
+                <small style="color:var(--muted); font-size:11.5px;">Score: 91/100 (Rank #1)</small>
+              </div>
+
+              <!-- Stage 3 (Active) -->
+              <div style="padding:14px; background:var(--primary-subtle); border-radius:var(--radius-sm); border:1.5px solid var(--primary); position:relative; box-shadow:0 0 16px -4px var(--primary-glow);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:11px; font-family:var(--font-mono); font-weight:800; color:var(--primary);">03 ACTIVE</span>
+                  <span style="color:var(--primary); font-weight:900;">●</span>
+                </div>
+                <div style="font-weight:750; font-size:13px; color:var(--primary); margin-bottom:2px;">In Pilot</div>
+                <small style="color:var(--text); font-size:11.5px;">Day 142 of 180 (78%)</small>
+              </div>
+
+              <!-- Stage 4 -->
+              <div style="padding:14px; background:var(--surface); border-radius:var(--radius-sm); border:1px dashed var(--line); opacity:0.85;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:11px; font-family:var(--font-mono); font-weight:800; color:var(--muted);">04 NEXT</span>
+                  <span style="color:var(--muted);">○</span>
+                </div>
+                <div style="font-weight:650; font-size:13px; color:var(--muted); margin-bottom:2px;">Procured</div>
+                <small style="color:var(--muted); font-size:11.5px;">Civic Enterprise Rollout</small>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div style="margin-bottom:20px;">
+              <div class="progress" style="height:10px;">
+                <span style="width:78%; background:linear-gradient(90deg, var(--primary), var(--accent));"></span>
+              </div>
+            </div>
+
+            <!-- Key Metric Counters & Quick Actions -->
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); margin-bottom:18px;">
+              <div>
+                <small style="color:var(--muted); font-size:11.5px; display:block;">Wait Time Reduction</small>
+                <div style="font-size:19px; font-weight:850; color:var(--primary);">-18.4%</div>
+              </div>
+              <div>
+                <small style="color:var(--muted); font-size:11.5px; display:block;">Computer Vision Accuracy</small>
+                <div style="font-size:19px; font-weight:850; color:var(--success);">94.2%</div>
+              </div>
+              <div>
+                <small style="color:var(--muted); font-size:11.5px; display:block;">Projected Civic Savings</small>
+                <div style="font-size:19px; font-weight:850; color:var(--orange);">₹8.2 Lakhs</div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+              <button class="btn ghost" data-go="screen8.html">View Submitted Proposal</button>
+              <button class="btn primary" data-go="screen11.html">Open Pilot Command Center →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= AI MATCH RECOMMENDATIONS PANEL ================= -->
+        <section class="section" style="padding-top:0;">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow" style="margin-bottom:8px;">Algorithmic Fit</span>
+              <h3>AI Match Recommendations</h3>
+              <p>Municipal challenges ranked by technical readiness level (TRL), past civic performance, and stack compatibility.</p>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+              <button class="btn ghost" style="padding:6px 12px; font-size:12.5px;" data-go="screen7.html">Browse All (120+) →</button>
+            </div>
+          </div>
+
+          <!-- Dynamic challenge container -->
+          <div class="grid-3" id="startupChallenges">
+            <!-- Rendered by JavaScript -->
+          </div>
         </section>
 
       </div>
@@ -244,353 +339,276 @@
 
   </div>
 
+  <!-- ================= MODAL: UPDATE CAPABILITIES ================= -->
+  <div id="capabilitiesModalOverlay" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(9, 13, 22, 0.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px;">
+    <div class="card" style="width:100%; max-width:540px; box-shadow:var(--shadow-elevated); border:1px solid var(--border-hover); max-height:90vh; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border-subtle); padding-bottom:12px;">
+        <div>
+          <span class="badge info">Vendor Profile</span>
+          <h3 style="margin:6px 0 0; font-size:20px;">Update Startup Capabilities</h3>
+        </div>
+        <button class="btn icon-btn" onclick="closeCapabilitiesModal()" aria-label="Close modal" style="font-size:18px;">✕</button>
+      </div>
+
+      <form id="capabilitiesForm" onsubmit="handleSaveCapabilities(event)">
+        <div class="field" style="margin-bottom:14px;">
+          <label for="cStartupName">Startup Company Name *</label>
+          <input id="cStartupName" type="text" value="UrbanAI Technologies" required>
+        </div>
+
+        <div class="field-grid" style="margin-bottom:14px;">
+          <div class="field">
+            <label for="cSector">Primary Domain</label>
+            <select id="cSector">
+              <option value="Urban Mobility" selected>Urban Mobility</option>
+              <option value="Digital Governance">Digital Governance</option>
+              <option value="Water & Sanitation">Water & Sanitation</option>
+              <option value="Clean Tech & Environment">Clean Tech & Environment</option>
+              <option value="Public Health">Public Health</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cTRL">Readiness Level (TRL)</label>
+            <select id="cTRL">
+              <option value="TRL 7">TRL 7 — System Prototype</option>
+              <option value="TRL 8" selected>TRL 8 — Qualified System</option>
+              <option value="TRL 9">TRL 9 — Proven in Mission</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-grid" style="margin-bottom:14px;">
+          <div class="field">
+            <label for="cDeployments">Active Civic Deployments</label>
+            <input id="cDeployments" type="number" value="12">
+          </div>
+          <div class="field">
+            <label for="cExperience">Experience (Years)</label>
+            <input id="cExperience" type="number" value="8">
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:18px;">
+          <label>Core Technical Capabilities</label>
+          <div class="checkbox-grid">
+            <label class="check"><input type="checkbox" checked value="AI/ML"> AI/ML</label>
+            <label class="check"><input type="checkbox" checked value="Computer Vision"> Computer Vision</label>
+            <label class="check"><input type="checkbox" checked value="IoT Sensors"> IoT Sensors</label>
+            <label class="check"><input type="checkbox" checked value="Edge Computing"> Edge Computing</label>
+            <label class="check"><input type="checkbox" value="GIS Telematics"> GIS Telematics</label>
+            <label class="check"><input type="checkbox" value="Data Analytics"> Analytics API</label>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--border-subtle); padding-top:16px;">
+          <button type="button" class="btn ghost" onclick="closeCapabilitiesModal()">Cancel</button>
+          <button type="submit" class="btn primary">Save Capabilities</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ================= SCRIPTS ================= -->
   <script src="../js/theme.js"></script>
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
 
-
   <script>
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-      const challengeContainer =
-        document.getElementById("startupChallenges");
-
-      const challengeCount =
-        document.getElementById("challengeCount");
-
-      const interestCount =
-        document.getElementById("interestCount");
-
-      const proposalCount =
-        document.getElementById("proposalCount");
-
-      const pilotCount =
-        document.getElementById("pilotCount");
-
-
-      /*
-       * -----------------------------------------
-       * STARTUP NAME
-       * -----------------------------------------
-       *
-       * The final ZIP uses UrbanAI Technologies
-       * as the prototype startup.
-       *
-       * Keep this as the default startup identity
-       * unless startup registration later stores
-       * another name.
-       */
-
-      const startupName =
-        localStorage.getItem("procurexStartupName") ||
-        "UrbanAI Technologies";
-
-
-      document.getElementById("welcomeTitle").textContent =
-        `Good morning, ${startupName}`;
-
-
-      /*
-       * -----------------------------------------
-       * CHALLENGES
-       * -----------------------------------------
-       *
-       * Use the existing challenge dataset as the
-       * discovery catalogue.
-       *
-       * If a government-created challenge exists,
-       * put it first so the two workflows connect.
-       */
-
-      let challenges = [];
-
-      if (
-        typeof PROCUREX_DATA !== "undefined" &&
-        Array.isArray(PROCUREX_DATA.challenges)
-      ) {
-        challenges = [...PROCUREX_DATA.challenges];
-      }
-
-
-      const savedChallengeRaw =
-        localStorage.getItem("procurexLastChallenge");
-
-
-      if (savedChallengeRaw) {
-
-        try {
-
-          const savedChallenge =
-            JSON.parse(savedChallengeRaw);
-
-
-          if (savedChallenge && savedChallenge.title) {
-
-            const alreadyExists =
-              challenges.some(
-                challenge =>
-                  challenge.title === savedChallenge.title
-              );
-
-
-            if (!alreadyExists) {
-
-              challenges.unshift({
-                id: "live-challenge",
-                title: savedChallenge.title,
-                department:
-                  savedChallenge.department ||
-                  "Government Department",
-                location:
-                  [
-                    savedChallenge.city,
-                    savedChallenge.state
-                  ]
-                    .filter(Boolean)
-                    .join(", ") ||
-                  "India",
-                sector:
-                  savedChallenge.domain ||
-                  "Public Innovation",
-                match: 0
-              });
-
-            }
-
-          }
-
-        } catch (error) {
-
-          console.warn(
-            "Unable to read saved challenge.",
-            error
-          );
-
-        }
-
-      }
-
-
-      /*
-       * Update challenge count
-       */
-
-      challengeCount.textContent =
-        challenges.length;
-
-
-      /*
-       * -----------------------------------------
-       * INTEREST
-       * -----------------------------------------
-       */
-
-      const interestRecorded =
-        localStorage.getItem("procurexInterest") === "true";
-
-      interestCount.textContent =
-        interestRecorded ? "1" : "0";
-
-
-      /*
-       * -----------------------------------------
-       * PROPOSAL
-       * -----------------------------------------
-       */
-
-      const proposalRaw =
-        localStorage.getItem("procurexLastProposal");
-
-      const proposalExists =
-        !!proposalRaw;
-
-      proposalCount.textContent =
-        proposalExists ? "1" : "0";
-
-
-      /*
-       * -----------------------------------------
-       * PILOT
-       * -----------------------------------------
-       *
-       * A pilot is considered active only after
-       * the workflow reaches the pilot stage.
-       */
-
-      const pilotData =
-        localStorage.getItem("procurexPilot");
-
-      pilotCount.textContent =
-        pilotData ? "1" : "0";
-
-
-      /*
-       * -----------------------------------------
-       * RENDER CHALLENGE CARDS
-       * -----------------------------------------
-       */
-
-      if (!challenges.length) {
-
-        challengeContainer.innerHTML = `
-          <div class="card">
-            <span class="badge info">
-              No challenges yet
-            </span>
-
-            <h3 style="margin-top:12px">
-              No public challenges available
-            </h3>
-
-            <p>
-              New government challenges will appear here
-              when they are published on ProcureX.
-            </p>
-
-            <button
-              class="btn primary"
-              style="margin-top:14px"
-              id="emptyDiscoverBtn"
-            >
-              Discover Challenges
-            </button>
-          </div>
-        `;
-
-      } else {
-
-        challengeContainer.innerHTML =
-          challenges
-            .slice(0, 6)
-            .map(function (challenge) {
-
-              const match =
-                Number.isFinite(Number(challenge.match))
-                  ? `${challenge.match}% Match`
-                  : "New Challenge";
-
-
-              return `
-                <div class="card">
-
-                  <span class="badge info">
-                    ${match}
-                  </span>
-
-                  <h3 style="margin-top:12px">
-                    ${escapeHTML(challenge.title || "Public Challenge")}
-                  </h3>
-
-                  <p>
-                    ${escapeHTML(challenge.department || "Government")}
-                    <br>
-                    ${escapeHTML(challenge.location || "India")}
-                  </p>
-
-                  <span class="chip">
-                    ${escapeHTML(challenge.sector || "Public Innovation")}
-                  </span>
-
-                  <button
-                    class="btn primary"
-                    style="margin-top:14px"
-                    data-challenge-view
-                  >
-                    View Challenge
-                  </button>
-
-                </div>
-              `;
-
-            })
-            .join("");
-
-      }
-
-
-      /*
-       * -----------------------------------------
-       * NAVIGATION
-       * -----------------------------------------
-       */
-
-      function goToChallenges() {
-
-        window.location.href =
-          "screen7.html";
-
-      }
-
-
-      document
-        .getElementById("discoverBtn")
-        .addEventListener(
-          "click",
-          goToChallenges
-        );
-
-
-      const emptyDiscoverBtn =
-        document.getElementById("emptyDiscoverBtn");
-
-      if (emptyDiscoverBtn) {
-
-        emptyDiscoverBtn.addEventListener(
-          "click",
-          goToChallenges
-        );
-
-      }
-
-
-      document
-        .querySelectorAll("[data-challenge-view]")
-        .forEach(function (button) {
-
-          button.addEventListener(
-            "click",
-            goToChallenges
-          );
-
-        });
-
-
-      document
-        .getElementById("homeBtn")
-        .addEventListener(
-          "click",
-          function () {
-            window.location.href =
-              "../index.html";
-          }
-        );
-
+    /* Modal functions */
+    function openCapabilitiesModal() {
+      const modal = document.getElementById("capabilitiesModalOverlay");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeCapabilitiesModal() {
+      const modal = document.getElementById("capabilitiesModalOverlay");
+      if (modal) modal.style.display = "none";
+    }
+
+    document.getElementById("capabilitiesModalOverlay")?.addEventListener("click", (e) => {
+      if (e.target.id === "capabilitiesModalOverlay") closeCapabilitiesModal();
     });
 
+    function handleSaveCapabilities(e) {
+      e.preventDefault();
+      const newName = document.getElementById("cStartupName").value.trim() || "UrbanAI Technologies";
+      localStorage.setItem("procurexStartupName", newName);
 
-    /*
-     * -----------------------------------------
-     * BASIC HTML ESCAPING
-     * -----------------------------------------
-     *
-     * Prevents stored challenge text from being
-     * interpreted as HTML.
-     */
+      document.getElementById("welcomeTitle").textContent = `Good morning, ${newName}`;
+      closeCapabilitiesModal();
+
+      if (typeof toast === "function") {
+        toast("Capabilities updated! AI Match rankings recomputed.");
+      } else {
+        alert("Capabilities updated!");
+      }
+    }
 
     function escapeHTML(value) {
-
-      return String(value)
+      return String(value || "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
     }
 
+    document.addEventListener("DOMContentLoaded", function () {
+      const challengeContainer = document.getElementById("startupChallenges");
+      const challengeCount = document.getElementById("challengeCount");
+      const interestCount = document.getElementById("interestCount");
+      const proposalCount = document.getElementById("proposalCount");
+      const pilotCount = document.getElementById("pilotCount");
+
+      // Load Startup Name
+      const startupName = localStorage.getItem("procurexStartupName") || "UrbanAI Technologies";
+      document.getElementById("welcomeTitle").textContent = `Good morning, ${startupName}`;
+
+      // Curated challenges with AI Match details
+      let challenges = [
+        {
+          id: "PX-GOV-2026-00124",
+          title: "AI-Based Urban Traffic Management",
+          department: "Department of Urban Development",
+          location: "Bengaluru Urban",
+          sector: "Urban Mobility",
+          budget: "₹25–40 Lakhs",
+          deadline: "14 Days Remaining · Oct 15",
+          match: 94,
+          tech: ["AI/ML", "Computer Vision", "Edge IoT"]
+        },
+        {
+          id: "PX-GOV-2026-00128",
+          title: "Automated Bus Fleet Tracking & Dynamic Dispatch",
+          department: "Metropolitan Transport Corp",
+          location: "Bengaluru Urban",
+          sector: "Urban Mobility",
+          budget: "₹30–45 Lakhs",
+          deadline: "21 Days Remaining · Oct 22",
+          match: 88,
+          tech: ["GPS Telematics", "Predictive AI", "Cloud"]
+        },
+        {
+          id: "PX-GOV-2026-00125",
+          title: "Smart Municipal Waste Route Optimization",
+          department: "Bengaluru Municipal Corporation",
+          location: "Bengaluru",
+          sector: "Environment",
+          budget: "₹18–30 Lakhs",
+          deadline: "9 Days Remaining · Oct 10",
+          match: 78,
+          tech: ["IoT Sensors", "Route Optimization"]
+        }
+      ];
+
+      // If government created a new challenge, prepend it
+      const savedChallengeRaw = localStorage.getItem("procurexLastChallenge");
+      if (savedChallengeRaw) {
+        try {
+          const saved = JSON.parse(savedChallengeRaw);
+          if (saved && saved.title) {
+            challenges.unshift({
+              id: "live-challenge",
+              title: saved.title,
+              department: saved.department || "Department of Urban Development",
+              location: saved.location || "Bengaluru Urban",
+              sector: saved.sector || "Urban Mobility",
+              budget: saved.budget || "₹25–40 Lakhs",
+              deadline: "30 Days Remaining",
+              match: 96,
+              tech: ["AI Match", "Civic Fit"]
+            });
+          }
+        } catch (e) {
+          console.warn("Could not parse saved challenge", e);
+        }
+      }
+
+      // Update KPI counters
+      if (challengeCount) challengeCount.textContent = challenges.length;
+
+      const interestRecorded = localStorage.getItem("procurexInterest") === "true";
+      if (interestCount) interestCount.textContent = interestRecorded ? "2" : "1";
+
+      const proposalRaw = localStorage.getItem("procurexLastProposal");
+      if (proposalCount) proposalCount.textContent = proposalRaw ? "2" : "1";
+
+      if (pilotCount) pilotCount.textContent = "1";
+
+      // Render AI Match Recommendation Cards
+      if (challengeContainer) {
+        challengeContainer.innerHTML = challenges.map(c => {
+          const matchBadge = c.match >= 90
+            ? `<span class="badge info" style="font-weight:800; font-size:12px; padding:5px 11px;">⚡ ${c.match}% Match</span>`
+            : (c.match >= 80
+              ? `<span class="badge warn" style="font-weight:800; font-size:12px; padding:5px 11px;">⚡ ${c.match}% Match</span>`
+              : `<span class="badge" style="background:var(--surface-2); font-weight:800; font-size:12px; padding:5px 11px;">⚡ ${c.match}% Match</span>`);
+
+          const sectorClass = c.sector.includes("Mobility") ? "chip blue" : (c.sector.includes("Environment") ? "chip green" : "chip");
+
+          return `
+            <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; position:relative;">
+              <div>
+                <!-- Header row with Domain Chip and AI Match Badge -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                  <span class="${sectorClass}" style="margin:0; font-size:11.5px; font-weight:700;">
+                    ${escapeHTML(c.sector)}
+                  </span>
+                  ${matchBadge}
+                </div>
+
+                <!-- Title -->
+                <h3 style="font-size:17.5px; margin:0 0 8px; line-height:1.35; font-weight:700;">
+                  ${escapeHTML(c.title)}
+                </h3>
+
+                <!-- Authority -->
+                <p style="margin:0 0 14px; font-size:12.5px; color:var(--muted);">
+                  🏛️ ${escapeHTML(c.department)} · ${escapeHTML(c.location)}
+                </p>
+
+                <!-- Key Metrics: Budget & Deadline -->
+                <div style="background:var(--surface-2); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:6px; font-size:12.5px; margin-bottom:14px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:var(--muted);">Est. Budget:</span>
+                    <strong style="color:var(--text);">${escapeHTML(c.budget)}</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:var(--muted);">Response Deadline:</span>
+                    <span style="color:var(--orange); font-weight:600;">${escapeHTML(c.deadline)}</span>
+                  </div>
+                </div>
+
+                <!-- Tech chips -->
+                <div style="display:flex; flex-wrap:wrap; gap:4px; margin-bottom:16px;">
+                  ${(c.tech || []).map(t => `<span class="chip" style="font-size:11px; padding:3px 8px;">${escapeHTML(t)}</span>`).join("")}
+                </div>
+              </div>
+
+              <!-- Action Footer -->
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:14px; margin-top:8px;">
+                <button
+                  class="btn primary"
+                  style="padding:8px 14px; font-size:12.5px;"
+                  onclick="window.location.href='screen8.html'"
+                  title="Submit technical proposal for this challenge"
+                >
+                  Submit Proposal →
+                </button>
+                <button
+                  class="btn ghost"
+                  style="padding:8px 10px; font-size:12px;"
+                  onclick="window.location.href='screen7_detail.html'"
+                  title="View full challenge specifications"
+                >
+                  Details
+                </button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+    });
   </script>
 
 </body>
