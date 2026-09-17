@@ -112,4 +112,66 @@ app.post("/api/ai/decision-brief", async (req, res) => {
   }
 });
 
+// ============ PHASE 2 AI ROUTES ============
+
+// Budget Optimizer
+app.post('/api/ai/optimize-budget', async (req, res) => {
+  try {
+    const { optimizeBudget } = require('./src/ai/budget_optimizer');
+    const result = await optimizeBudget(req.body.projectData);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Risk Predictor
+app.post('/api/ai/predict-risks', async (req, res) => {
+  try {
+    const { predictRisks } = require('./src/ai/risk_predictor');
+    const result = await predictRisks(req.body.projectData);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Impact Forecaster
+app.post('/api/ai/forecast-impact', async (req, res) => {
+  try {
+    const { forecastImpact } = require('./src/ai/impact_forecaster');
+    const result = await forecastImpact(req.body.projectData);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Timeline Predictor
+app.post('/api/ai/predict-timeline', async (req, res) => {
+  try {
+    const { predictTimeline } = require('./src/ai/timeline_predictor');
+    const result = await predictTimeline(req.body.projectData);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Add more routes as needed for the other 6 modules...
+
+// PHASE 2 AI ROUTES
+app.post('/api/ai/optimize-budget', async (req, res) => {
+  try { const { optimizeBudget } = require('./src/ai/budget_optimizer'); res.json(await optimizeBudget(req.body.projectData)); } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/ai/predict-risks', async (req, res) => {
+  try { const { predictRisks } = require('./src/ai/risk_predictor'); res.json(await predictRisks(req.body.projectData)); } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/ai/predict-timeline', async (req, res) => {
+  try { const { predictTimeline } = require('./src/ai/timeline_predictor'); res.json(await predictTimeline(req.body.projectData)); } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/ai/forecast-impact', async (req, res) => {
+  try { const { forecastImpact } = require('./src/ai/impact_forecaster'); res.json(await forecastImpact(req.body.projectData)); } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
