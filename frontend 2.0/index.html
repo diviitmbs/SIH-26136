@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProcureX — Public Innovation Platform</title>
+    <meta name="description" content="Next-generation public problem discovery, startup matching, AI-assisted evaluation, and milestone-led pilot procurement for Indian public infrastructure." />
+    <meta property="og:title" content="ProcureX — Public Innovation Platform" />
+    <meta property="og:description" content="Next-generation public problem discovery, startup matching, AI-assisted evaluation, and milestone-led pilot procurement for Indian public infrastructure." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('procurex_theme');
+          var isDark = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var root = document.documentElement;
+          if (isDark) {
+            root.classList.add('dark');
+            root.setAttribute('data-theme', 'dark');
+            root.style.colorScheme = 'dark';
+          } else {
+            root.classList.remove('dark');
+            root.setAttribute('data-theme', 'light');
+            root.style.colorScheme = 'light';
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-[#F4F2EC] text-[#111416] dark:bg-[#111416] dark:text-[#F4F2EC] antialiased selection:bg-[#087C78] selection:text-white min-h-screen">
+    <div id="root">
+      <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; background-color: #F4F2EC; color: #111416;">
+        <div style="text-align: center; padding: 24px;">
+          <div style="width: 40px; height: 40px; border: 3px solid rgba(8, 124, 120, 0.2); border-top-color: #087C78; border-radius: 50%; animation: pXspin 0.8s linear infinite; margin: 0 auto 16px;"></div>
+          <h1 style="font-size: 16px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 6px 0;">ProcureX</h1>
+          <p style="font-size: 12px; font-family: monospace; color: #596166; margin: 0;">NATIONAL PUBLIC INNOVATION PLATFORM • INITIALIZING</p>
+        </div>
+      </div>
+    </div>
+    <style>
+      @keyframes pXspin { to { transform: rotate(360deg); } }
+      .dark #root > div { background-color: #111416 !important; color: #F4F2EC !important; }
+      .dark #root p { color: #949DA3 !important; }
+    </style>
+    <script>
+      window.addEventListener('error', function(e) {
+        console.error('ProcureX Global Window Error:', e);
+        var r = document.getElementById('root');
+        if (r && !r.hasChildNodes()) {
+          var box = document.createElement('div');
+          box.style.cssText = 'padding:20px;margin:20px;background:#fee2e2;color:#991b1b;border:1px solid #f87171;border-radius:8px;font-family:sans-serif;font-size:13px;';
+          box.innerHTML = '<strong>Application Load Error:</strong> ' + (e.message || 'Script error');
+          document.body.appendChild(box);
+        }
+      });
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

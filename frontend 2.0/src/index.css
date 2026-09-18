@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-editorial: "Newsreader", Georgia, serif;
+  --font-mono: "Space Grotesk", monospace;
+  
+  --color-arch-bg: #F4F2EC;
+  --color-arch-surface: #ECEAE4;
+  --color-arch-border: #E2DFD7;
+  --color-arch-text: #111416;
+  --color-arch-muted: #596166;
+  --color-arch-teal: #087C78;
+  --color-arch-steel: #23465A;
+  --color-arch-sand: #B58A55;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: -0.015em;
+    background-color: #F4F2EC;
+    color: #111416;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .dark body {
+    background-color: #111416;
+    color: #F4F2EC;
+  }
+}
+
+/* Architectural Brutalist Minimal UI Utilities */
+.arch-grid-bg {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.dark .arch-grid-bg {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.arch-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2DFD7;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dark .arch-card {
+  background-color: #16191D;
+  border: 1px solid #232B34;
+}
+.arch-card:hover {
+  border-color: #087C78;
+  box-shadow: 0 12px 32px -8px rgba(17, 20, 22, 0.08);
+}
+.dark .arch-card:hover {
+  border-color: #087C78;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Precision button styles */
+.btn-arch-primary {
+  background-color: #111416;
+  color: #F4F2EC;
+  border: 1px solid #111416;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-arch-primary:hover {
+  background-color: #087C78;
+  border-color: #087C78;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.dark .btn-arch-primary {
+  background-color: #087C78;
+  border-color: #087C78;
+  color: #FFFFFF;
+}
+.dark .btn-arch-primary:hover {
+  background-color: #0A9692;
+  border-color: #0A9692;
+}
+
+.btn-arch-secondary {
+  background-color: transparent;
+  color: #111416;
+  border: 1px solid #B7B4AB;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-arch-secondary:hover {
+  border-color: #111416;
+  background-color: rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+.dark .btn-arch-secondary {
+  color: #F4F2EC;
+  border-color: #37424F;
+}
+.dark .btn-arch-secondary:hover {
+  border-color: #087C78;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Architectural Framing & Construction lines */
+.arch-hairline-t {
+  border-top: 1px solid #E2DFD7;
+}
+.dark .arch-hairline-t {
+  border-top: 1px solid #232B34;
+}
+
+.arch-hairline-b {
+  border-bottom: 1px solid #E2DFD7;
+}
+.dark .arch-hairline-b {
+  border-bottom: 1px solid #232B34;
+}
+
+.arch-hairline-l {
+  border-left: 1px solid #E2DFD7;
+}
+.dark .arch-hairline-l {
+  border-left: 1px solid #232B34;
+}
+
+.arch-hairline-r {
+  border-right: 1px solid #E2DFD7;
+}
+.dark .arch-hairline-r {
+  border-right: 1px solid #232B34;
+}
+
+/* Measurement ticks */
+.arch-tick {
+  position: relative;
+}
+.arch-tick::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 1px;
+  height: 8px;
+  background-color: #B58A55;
+}
+
+/* Custom restrained scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(89, 97, 102, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #087C78;
+}
+
+/* Field utilities */
+@layer components {
+  .field { 
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    border: 1px solid #D6D2C7;
+    background-color: #FFFFFF;
+    color: #111416;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .dark .field {
+    background-color: #16191D;
+    border-color: #2E3844;
+    color: #F4F2EC;
+  }
+  .field:focus {
+    outline: none;
+    border-color: #087C78;
+    box-shadow: 0 0 0 2px rgba(8, 124, 120, 0.18);
+  }
+  
+  .field-label { 
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #596166;
+  }
+  .dark .field-label {
+    color: #949DA3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { 
+    scroll-behavior: auto !important; 
+    animation-duration: 0.01ms !important; 
+    animation-iteration-count: 1 !important; 
+    transition-duration: 0.01ms !important; 
+  }
+}

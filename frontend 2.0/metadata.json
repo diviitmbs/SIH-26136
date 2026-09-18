@@ -1,0 +1,8 @@
+{
+  "name": "ProcureX — Public Innovation Platform",
+  "description": "Next-generation public problem discovery, startup matching, AI-assisted evaluation, and milestone-led pilot procurement for Indian public infrastructure.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
