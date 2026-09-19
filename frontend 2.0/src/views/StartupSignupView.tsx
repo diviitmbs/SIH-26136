@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { AppView, AuthUser } from '../types';
+import { AppView, AuthUser, Startup } from '../types';
 import { storage } from '../utils/storage';
 import { CIVIC_SERVICE_DOMAINS } from '../data/procurexData';
-import { ArrowLeft, ArrowRight, Rocket, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Rocket, ShieldCheck, Info, CheckCircle2, Building2 } from 'lucide-react';
 
 interface StartupSignupViewProps {
+  startups?: Startup[];
   onNavigate: (view: AppView) => void;
   onLogin: (user: AuthUser) => void;
 }
 
-export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ onNavigate, onLogin }) => {
+export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ startups = [], onNavigate, onLogin }) => {
+  const [selectedStartupId, setSelectedStartupId] = useState('');
   const [startupName, setStartupName] = useState('');
   const [founderName, setFounderName] = useState('');
+  const [designation, setDesignation] = useState('Founder / Technical Lead');
   const [email, setEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [dpiitNumber, setDpiitNumber] = useState('');
@@ -24,6 +27,35 @@ export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ onNavigate
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Auto-fill company details when user picks a registered startup from catalog
+  const handleStartupNameChange = (val: string) => {
+    setStartupName(val);
+    const matched = startups.find(s => 
+      s.name.toLowerCase() === val.trim().toLowerCase() ||
+      s.id === val.trim()
+    );
+
+    if (matched) {
+      setSelectedStartupId(matched.id);
+      if (matched.dpiitNumber || matched.registrationNumber) {
+        setDpiitNumber(matched.dpiitNumber || matched.registrationNumber);
+      }
+      if (matched.state) setState(matched.state);
+      if (matched.city) setCity(matched.city);
+      if (matched.incorporationYear) setIncorporationYear(String(matched.incorporationYear));
+      if (matched.sectors && matched.sectors.length > 0 && CIVIC_SERVICE_DOMAINS.includes(matched.sectors[0])) {
+        setPrimaryDomain(matched.sectors[0]);
+      }
+      if (matched.technologies && matched.technologies.length > 0) {
+        setCapabilities(matched.technologies.join(', '));
+      } else if (matched.solutionSummary) {
+        setCapabilities(matched.solutionSummary);
+      }
+    } else {
+      setSelectedStartupId('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -33,7 +65,7 @@ export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ onNavigate
       return;
     }
     if (!founderName.trim()) {
-      setError('Please enter the primary Founder or Technical Lead name.');
+      setError('Please enter your personal name (Founder or Team Member).');
       return;
     }
     if (!email.trim() || !email.includes('@')) {
@@ -51,24 +83,36 @@ export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ onNavigate
 
     setIsSubmitting(true);
 
-    const generatedDpiit = dpiitNumber.trim() || `DPIIT-${state.trim().slice(0, 2).toUpperCase()}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const matched = startups.find(s => 
+      s.id === selectedStartupId ||
+      s.name.toLowerCase() === startupName.trim().toLowerCase()
+    );
+
+    const resolvedStartupId = matched?.id || selectedStartupId || `startup-custom-${Date.now()}`;
+    const generatedDpiit = dpiitNumber.trim() || matched?.dpiitNumber || `DPIIT-${state.trim().slice(0, 2).toUpperCase()}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const newStartupUser: AuthUser = {
-      id: `startup-${Date.now()}`,
+      id: `user-${Date.now()}`,
       role: 'startup',
       name: founderName.trim(),
       email: email.trim(),
       contactNumber: contactNumber.trim(),
-      startupName: startupName.trim(),
+      designation: designation.trim() || 'Founder / Technical Lead',
+      // Organization identity:
+      startupId: resolvedStartupId,
+      organizationId: resolvedStartupId,
+      startupName: matched?.name || startupName.trim(),
       dpiitNumber: generatedDpiit,
-      registrationNumber: `U72900${state.trim().slice(0, 2).toUpperCase()}${incorporationYear}PTC${Math.floor(100000 + Math.random() * 900000)}`,
+      registrationNumber: matched?.registrationNumber || `U72900${state.trim().slice(0, 2).toUpperCase()}${incorporationYear}PTC${Math.floor(100000 + Math.random() * 900000)}`,
       state: state.trim(),
       city: city.trim(),
       incorporationYear: parseInt(incorporationYear, 10) || 2022,
       domain: primaryDomain,
-      capabilities: capabilities.trim() || 'Edge AI, Computer Vision, IoT Telemetry, Sensor Systems'
+      capabilities: capabilities.trim() || matched?.technologies?.join(', ') || 'Edge AI, Computer Vision, IoT Telemetry, Sensor Systems'
     };
 
+    // Store in multi-account directory and set active session
+    storage.saveAccount(newStartupUser);
     storage.setUser(newStartupUser);
 
     setTimeout(() => {
@@ -128,31 +172,67 @@ export const StartupSignupView: React.FC<StartupSignupViewProps> = ({ onNavigate
             )}
 
             {/* Row 1: Startup Name & Founder */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-mono uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
-                  Startup / Company Legal Entity *
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
+                    Startup / Company Legal Entity *
+                  </label>
+                  {selectedStartupId && (
+                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>DATABASE LINKED</span>
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
+                  list="registered-startups-datalist"
                   value={startupName}
-                  onChange={(e) => setStartupName(e.target.value)}
-                  placeholder="e.g. UrbanAI Technologies Pvt Ltd"
+                  onChange={(e) => handleStartupNameChange(e.target.value)}
+                  placeholder="e.g. AquaSense Systems, BYJU'S, or your company name"
                   className="w-full px-3.5 py-2.5 bg-[#F4F2EC]/50 dark:bg-[#1C2127] border border-[#E2DFD7] dark:border-[#2E3844] rounded text-sm text-[#111416] dark:text-white focus:outline-none focus:border-[#087C78]"
                 />
+                <datalist id="registered-startups-datalist">
+                  {startups.slice(0, 100).map(s => (
+                    <option key={s.id} value={s.name}>
+                      {s.name} ({s.city}, {s.state})
+                    </option>
+                  ))}
+                </datalist>
+                <p className="text-[10px] font-mono text-[#596166] dark:text-[#949DA3]">
+                  {startups.length > 0
+                    ? `Search across ${startups.length} live DPIIT startups from Supabase or type an unlisted venture.`
+                    : 'Enter your registered corporate entity.'}
+                </p>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-mono uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
-                  Founder / Technical Lead Name *
-                </label>
-                <input
-                  type="text"
-                  value={founderName}
-                  onChange={(e) => setFounderName(e.target.value)}
-                  placeholder="e.g. Dr. Rajeshwari Rao"
-                  className="w-full px-3.5 py-2.5 bg-[#F4F2EC]/50 dark:bg-[#1C2127] border border-[#E2DFD7] dark:border-[#2E3844] rounded text-sm text-[#111416] dark:text-white focus:outline-none focus:border-[#087C78]"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
+                    Your Name (Person / Team Member) *
+                  </label>
+                  <input
+                    type="text"
+                    value={founderName}
+                    onChange={(e) => setFounderName(e.target.value)}
+                    placeholder="e.g. Dr. Rajeshwari Rao"
+                    className="w-full px-3.5 py-2.5 bg-[#F4F2EC]/50 dark:bg-[#1C2127] border border-[#E2DFD7] dark:border-[#2E3844] rounded text-sm text-[#111416] dark:text-white focus:outline-none focus:border-[#087C78]"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-mono uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
+                    Your Title / Role in Organization
+                  </label>
+                  <input
+                    type="text"
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                    placeholder="e.g. Founder & CEO, CTO, Bid Manager"
+                    className="w-full px-3.5 py-2.5 bg-[#F4F2EC]/50 dark:bg-[#1C2127] border border-[#E2DFD7] dark:border-[#2E3844] rounded text-sm text-[#111416] dark:text-white focus:outline-none focus:border-[#087C78]"
+                  />
+                </div>
               </div>
             </div>
 

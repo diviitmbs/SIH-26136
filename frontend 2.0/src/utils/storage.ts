@@ -17,7 +17,8 @@ export const STORAGE_KEYS = {
   THEME: 'procurex_theme',
   CHAT_MESSAGES: 'procurex_chat_messages',
   FIELD_UPDATES: 'procurex_field_updates',
-  PUBLIC_PROBLEMS: 'procurex_public_problems'
+  PUBLIC_PROBLEMS: 'procurex_public_problems',
+  ACCOUNTS: 'procurex_accounts'
 };
 
 const memoryStore = new Map<string, string>();
@@ -198,12 +199,62 @@ export const storage = {
     try {
       if (user) {
         safeStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+        // Keep persistent account directory in sync
+        this.saveAccount(user);
       } else {
         safeStorage.removeItem(STORAGE_KEYS.USER);
       }
     } catch {
       // ignore
     }
+  },
+
+  // Registered accounts directory (supports multiple members & organizations)
+  getAccounts(): AuthUser[] {
+    try {
+      const data = safeStorage.getItem(STORAGE_KEYS.ACCOUNTS);
+      if (data) {
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return [];
+  },
+
+  saveAccount(user: AuthUser): void {
+    if (!user || !user.email) return;
+    try {
+      const accounts = this.getAccounts();
+      const cleanEmail = user.email.trim().toLowerCase();
+      const existingIdx = accounts.findIndex(a => 
+        a.email.trim().toLowerCase() === cleanEmail && a.role === user.role
+      );
+      if (existingIdx >= 0) {
+        accounts[existingIdx] = { ...accounts[existingIdx], ...user };
+      } else {
+        accounts.push(user);
+      }
+      safeStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(accounts));
+    } catch {
+      // ignore
+    }
+  },
+
+  findAccountByEmail(email: string, role?: 'government' | 'startup'): AuthUser | null {
+    if (!email) return null;
+    const cleanEmail = email.trim().toLowerCase();
+    const accounts = this.getAccounts();
+    return accounts.find(a => 
+      a.email.trim().toLowerCase() === cleanEmail && (!role || a.role === role)
+    ) || null;
+  },
+
+  findAccountsByStartupId(startupId: string): AuthUser[] {
+    if (!startupId) return [];
+    const accounts = this.getAccounts();
+    return accounts.filter(a => a.role === 'startup' && a.startupId === startupId);
   },
 
   // Challenges

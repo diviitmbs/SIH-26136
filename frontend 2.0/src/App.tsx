@@ -160,6 +160,52 @@ export default function App() {
     }));
   };
 
+  // Resolve active startup for the logged-in startup user (primarily by startupId)
+  const resolveActiveStartup = (): Startup => {
+    // 1. Match primarily by stable database startupId (Supabase UUID or mock ID)
+    if (currentUser?.startupId) {
+      const matchById = startups.find(s => s.id === currentUser.startupId);
+      if (matchById) return matchById;
+    }
+
+    // 2. Fallback to startup name
+    if (currentUser?.startupName) {
+      const matchByName = startups.find(s => 
+        s.name.toLowerCase() === currentUser.startupName!.toLowerCase()
+      );
+      if (matchByName) return matchByName;
+
+      // 3. If user registered a custom/new startup not yet in catalog,
+      // create a clean Startup representation of THEIR company (never showing another company)
+      return {
+        id: currentUser.startupId || `startup-custom-${currentUser.id}`,
+        name: currentUser.startupName,
+        legalEntity: `${currentUser.startupName} Pvt Ltd`,
+        registrationNumber: currentUser.registrationNumber || `U72900${(currentUser.state || 'KA').slice(0, 2).toUpperCase()}2024PTC100100`,
+        dpiitNumber: currentUser.dpiitNumber,
+        incorporationYear: currentUser.incorporationYear || 2024,
+        city: currentUser.city || 'Bengaluru',
+        state: currentUser.state || 'Karnataka',
+        tagline: currentUser.capabilities || 'Civic Technology Systems',
+        sectors: [currentUser.domain || 'Civic Infrastructure'],
+        technologies: currentUser.capabilities ? currentUser.capabilities.split(',').map(s => s.trim()) : ['Edge AI', 'IoT Telemetry'],
+        matchScore: 90,
+        solutionName: `${currentUser.startupName} Innovation Platform`,
+        solutionSummary: currentUser.capabilities || `${currentUser.startupName} civic infrastructure solutions`,
+        totalDeployments: 4,
+        governmentDeployments: 2,
+        typicalPilotMonths: '3–6 Months',
+        teamSize: 10,
+        pilotReadiness: 'Production Ready (TRL 8)',
+        trlLevel: 'TRL-8 (System Validated)',
+        website: `https://${currentUser.startupName.toLowerCase().replace(/[^a-z0-9]/g, '')}.example.in`,
+        founderName: currentUser.name
+      };
+    }
+
+    return startups[0] || PROCUREX_STARTUPS[0];
+  };
+
   const handleClearAllFilters = () => {
     setFilters({
       sectors: [],
@@ -242,6 +288,7 @@ export default function App() {
 
         {currentView === 'startup_login' && (
           <StartupLoginView
+            startups={startups}
             onNavigate={handleNavigate}
             onLogin={handleLogin}
           />
@@ -249,6 +296,7 @@ export default function App() {
 
         {currentView === 'startup_signup' && (
           <StartupSignupView
+            startups={startups}
             onNavigate={handleNavigate}
             onLogin={handleLogin}
           />
@@ -322,12 +370,7 @@ export default function App() {
           ) : (
             <StartupPortalView
               challenges={challenges}
-              startup={
-                startups.find(s => 
-                  s.name.toLowerCase() === (currentUser?.startupName || '').toLowerCase() ||
-                  s.id === currentUser?.id
-                ) || startups[0]
-              }
+              startup={resolveActiveStartup()}
               currentUser={currentUser}
               onNavigate={handleNavigate}
               onSelectChallenge={(ch) => {
@@ -388,9 +431,19 @@ export default function App() {
         )}
 
         {currentView === 'ai_command_center' && (
-          <AICommandCenterView
-            onNavigate={handleNavigate}
-          />
+          currentUser?.role !== 'government' ? (
+            <RoleAccessGate
+              requiredRole="government"
+              currentUser={currentUser}
+              onOpenAuth={handleOpenAuth}
+              onNavigate={handleNavigate}
+              onLogin={handleLogin}
+            />
+          ) : (
+            <AICommandCenterView
+              onNavigate={handleNavigate}
+            />
+          )
         )}
 
         {currentView === 'about' && (

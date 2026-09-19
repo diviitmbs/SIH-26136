@@ -35,6 +35,8 @@ export interface AuthUser {
   orgDetails?: string;
   responsiblePerson?: string;
   // Startup specific fields:
+  startupId?: string;
+  organizationId?: string;
   startupName?: string;
   dpiitNumber?: string;
   registrationNumber?: string;

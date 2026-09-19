@@ -70,7 +70,8 @@ export const GovSignupView: React.FC<GovSignupViewProps> = ({ onNavigate, onLogi
       orgDetails: orgDetails.trim()
     };
 
-    // Save profile persistently
+    // Save profile persistently in account directory and active session
+    storage.saveAccount(newGovUser);
     storage.setUser(newGovUser);
 
     setTimeout(() => {

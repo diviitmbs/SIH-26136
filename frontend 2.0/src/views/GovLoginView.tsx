@@ -30,14 +30,17 @@ export const GovLoginView: React.FC<GovLoginViewProps> = ({ onNavigate, onLogin 
 
     setIsSubmitting(true);
 
-    // Retrieve existing stored government profile if present, or generate an authenticated official session
-    const existingUser = storage.getUser();
+    // 1. Retrieve existing registered government account if present
+    const existingAccount = storage.findAccountByEmail(cleanId, 'government');
     let authUser: AuthUser;
 
-    if (existingUser && existingUser.role === 'government' && existingUser.email.toLowerCase() === cleanId.toLowerCase()) {
-      authUser = existingUser;
+    if (existingAccount) {
+      authUser = existingAccount;
     } else {
-      // Create authenticated government official session
+      // 2. Create authenticated government official session
+      const existingGovAccounts = storage.getAccounts().filter(a => a.role === 'government');
+      const deptTemplate = existingGovAccounts[existingGovAccounts.length - 1] || storage.getUser();
+
       const nameParts = cleanId.split('@')[0].split('.');
       const derivedName = nameParts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
       authUser = {
@@ -45,15 +48,16 @@ export const GovLoginView: React.FC<GovLoginViewProps> = ({ onNavigate, onLogin 
         role: 'government',
         name: derivedName || 'Government Procurement Official',
         email: cleanId,
-        department: existingUser?.department || 'Department of Urban Development',
-        officerId: existingUser?.officerId || `OFF-${Math.floor(1000 + Math.random() * 9000)}`,
-        state: existingUser?.state || 'Karnataka',
-        city: existingUser?.city || 'Bengaluru',
-        designation: existingUser?.designation || 'Nodal Procurement Officer',
-        domain: existingUser?.domain || 'Urban Mobility & Traffic Optimization'
+        department: deptTemplate?.department || 'Department of Urban Development',
+        officerId: `OFF-${Math.floor(1000 + Math.random() * 9000)}`,
+        state: deptTemplate?.state || 'Karnataka',
+        city: deptTemplate?.city || 'Bengaluru',
+        designation: deptTemplate?.designation || 'Nodal Procurement Officer',
+        domain: deptTemplate?.domain || 'Urban Mobility & Traffic Optimization'
       };
-      storage.setUser(authUser);
+      storage.saveAccount(authUser);
     }
+    storage.setUser(authUser);
 
     setTimeout(() => {
       setIsSubmitting(false);

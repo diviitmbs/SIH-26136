@@ -181,13 +181,14 @@ export const ProposalStudioView: React.FC<ProposalStudioViewProps> = ({
   };
 
   const handleFinalSubmit = () => {
-    const startupName = activeUser?.startupName || (solutionName ? `${solutionName.split(' ')[0]} Labs` : "UrbanAI Technologies");
+    const startupName = activeUser?.startupName || (solutionName ? `${solutionName.split(' ')[0]} Labs` : "Innovator Tech");
+    const startupId = activeUser?.startupId || activeUser?.id || "s1";
     
     const newProposal: Proposal = {
       id: `prop-${Date.now()}`,
       challengeId: activeChallenge.id,
       challengeTitle: activeChallenge.title,
-      startupId: activeUser?.id || "s1",
+      startupId: startupId,
       startupName: startupName,
       proposedBudget: commercialTotal || "₹28,50,000",
       pilotCost: pilotCost || "₹12,80,000",

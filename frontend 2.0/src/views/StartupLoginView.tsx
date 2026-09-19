@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { AppView, AuthUser } from '../types';
+import { AppView, AuthUser, Startup } from '../types';
 import { storage } from '../utils/storage';
-import { ArrowLeft, ArrowRight, Rocket, Lock, Mail, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Rocket, Lock, Mail, ShieldCheck, CheckCircle2, Building2 } from 'lucide-react';
 
 interface StartupLoginViewProps {
+  startups?: Startup[];
   onNavigate: (view: AppView) => void;
   onLogin: (user: AuthUser) => void;
 }
 
-export const StartupLoginView: React.FC<StartupLoginViewProps> = ({ onNavigate, onLogin }) => {
+export const StartupLoginView: React.FC<StartupLoginViewProps> = ({ startups = [], onNavigate, onLogin }) => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +21,7 @@ export const StartupLoginView: React.FC<StartupLoginViewProps> = ({ onNavigate, 
 
     const cleanId = identifier.trim();
     if (!cleanId) {
-      setError('Please enter your startup registered email or DPIIT number.');
+      setError('Please enter your startup registered email, DPIIT number, or company name.');
       return;
     }
     if (!password) {
@@ -30,30 +31,76 @@ export const StartupLoginView: React.FC<StartupLoginViewProps> = ({ onNavigate, 
 
     setIsSubmitting(true);
 
-    const existingUser = storage.getUser();
+    // 1. Check if user already exists in the multi-account directory
+    const existingAccount = storage.findAccountByEmail(cleanId, 'startup');
     let authUser: AuthUser;
 
-    if (existingUser && existingUser.role === 'startup' && existingUser.email.toLowerCase() === cleanId.toLowerCase()) {
-      authUser = existingUser;
+    if (existingAccount) {
+      authUser = existingAccount;
     } else {
-      // Create authenticated startup session
-      const nameParts = cleanId.split('@')[0].split('.');
+      // 2. Derive person name from email or input
+      const nameParts = cleanId.includes('@') ? cleanId.split('@')[0].split('.') : cleanId.split(' ');
       const derivedName = nameParts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
-      authUser = {
-        id: `startup-${Date.now()}`,
-        role: 'startup',
-        name: derivedName || 'UrbanTech Founder',
-        email: cleanId,
-        startupName: existingUser?.startupName || 'UrbanAI Technologies Pvt Ltd',
-        dpiitNumber: existingUser?.dpiitNumber || `DPIIT-${Math.floor(10000 + Math.random() * 90000)}`,
-        registrationNumber: existingUser?.registrationNumber || `U72900KA2022PTC${Math.floor(100000 + Math.random() * 900000)}`,
-        state: existingUser?.state || 'Karnataka',
-        city: existingUser?.city || 'Bengaluru',
-        incorporationYear: existingUser?.incorporationYear || 2022,
-        capabilities: existingUser?.capabilities || 'Edge AI, Computer Vision, Smart Infrastructure IoT Telemetry'
-      };
-      storage.setUser(authUser);
+
+      // 3. Match against the 1,006 database-backed startups catalog
+      const cleanLower = cleanId.toLowerCase();
+      const matched = startups.find(s => 
+        s.name.toLowerCase() === cleanLower ||
+        s.id.toLowerCase() === cleanLower ||
+        (s.dpiitNumber && s.dpiitNumber.toLowerCase() === cleanLower) ||
+        (s.registrationNumber && s.registrationNumber.toLowerCase() === cleanLower) ||
+        (cleanLower.includes('@') && s.name.toLowerCase().includes(cleanLower.split('@')[0]))
+      );
+
+      if (matched) {
+        // Associated directly with Supabase database startup record
+        authUser = {
+          id: `user-${Date.now()}`,
+          role: 'startup',
+          name: derivedName || `${matched.name} Lead`,
+          email: cleanId.includes('@') ? cleanId : `contact@${matched.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.in`,
+          designation: 'Founder / Technical Lead',
+          // Organization identity from Supabase:
+          startupId: matched.id,
+          organizationId: matched.id,
+          startupName: matched.name,
+          dpiitNumber: matched.dpiitNumber || matched.registrationNumber,
+          registrationNumber: matched.registrationNumber,
+          state: matched.state,
+          city: matched.city,
+          incorporationYear: matched.incorporationYear || 2022,
+          domain: matched.sectors?.[0] || 'Civic Infrastructure',
+          capabilities: matched.technologies?.join(', ') || matched.solutionSummary || 'Civic Technology Systems'
+        };
+      } else {
+        // Unlisted startup: generate clean, isolated identity (NEVER defaulting to another company)
+        const companyName = cleanId.includes('@') ? `${derivedName} Technologies` : cleanId;
+        const newStartupId = `startup-custom-${Date.now()}`;
+        authUser = {
+          id: `user-${Date.now()}`,
+          role: 'startup',
+          name: derivedName || 'Startup Innovator',
+          email: cleanId.includes('@') ? cleanId : `${cleanId.toLowerCase().replace(/[^a-z0-9]/g, '')}@startup.in`,
+          designation: 'Founder / Lead',
+          startupId: newStartupId,
+          organizationId: newStartupId,
+          startupName: companyName,
+          dpiitNumber: `DPIIT-NEW-${Math.floor(10000 + Math.random() * 90000)}`,
+          registrationNumber: `U72900KA2024PTC${Math.floor(100000 + Math.random() * 900000)}`,
+          state: 'Karnataka',
+          city: 'Bengaluru',
+          incorporationYear: 2024,
+          domain: 'Civic Infrastructure',
+          capabilities: 'Edge AI, Computer Vision, Smart Infrastructure IoT Telemetry'
+        };
+      }
+
+      // Save to account directory
+      storage.saveAccount(authUser);
     }
+
+    // Set active session
+    storage.setUser(authUser);
 
     setTimeout(() => {
       setIsSubmitting(false);
@@ -122,12 +169,20 @@ export const StartupLoginView: React.FC<StartupLoginViewProps> = ({ onNavigate, 
                 <Mail className="w-4 h-4 text-[#596166] dark:text-[#949DA3] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
+                  list="login-startups-datalist"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="e.g. founder@urbanai.in or DPIIT-KA-2022-8419"
+                  placeholder="e.g. AquaSense Systems, BYJU'S, or founder email"
                   className="w-full pl-10 pr-3.5 py-3 rounded-lg border border-[#E2DFD7] dark:border-[#2E3844] bg-[#F4F2EC]/40 dark:bg-[#1C2127] text-sm text-[#111416] dark:text-white focus:outline-none focus:border-[#087C78] dark:focus:border-[#0AA39F] transition"
                   autoComplete="username"
                 />
+                <datalist id="login-startups-datalist">
+                  {startups.slice(0, 100).map(s => (
+                    <option key={s.id} value={s.name}>
+                      {s.name} ({s.city}, {s.state})
+                    </option>
+                  ))}
+                </datalist>
               </div>
             </div>
 

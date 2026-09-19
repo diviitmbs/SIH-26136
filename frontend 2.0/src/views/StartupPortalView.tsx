@@ -65,18 +65,20 @@ export const StartupPortalView: React.FC<StartupPortalViewProps> = ({
     setProposalsList(storage.getProposals());
   }, []);
 
-  // Startup details from user profile or fallback
-  const currentStartupName = currentUser?.startupName || startup.name;
-  const userDomain = currentUser?.domain || startup.sectors[0] || "Urban Mobility & Traffic Optimization";
-  const dpiitNumber = currentUser?.dpiitNumber || startup.registrationNumber || "DPIIT-2026-INNOV";
+  // Startup details from resolved startup entity or user profile
+  const currentStartupName = startup.name || currentUser?.startupName || "Startup Innovator";
+  const userDomain = startup.sectors?.[0] || currentUser?.domain || "Civic Infrastructure";
+  const dpiitNumber = startup.dpiitNumber || startup.registrationNumber || currentUser?.dpiitNumber || "DPIIT-2026-INNOV";
   const founderName = currentUser?.name || startup.founderName || "Innovator Team";
 
   // Challenges currently registered in the interested portal for this startup
   const expressedChallengeIds = interestsList.map(i => i.challengeId);
   const interestedChallenges = challenges.filter(c => expressedChallengeIds.includes(c.id));
 
-  // My proposals (matching startup name or created locally)
+  // My proposals (matching startupId or startup name)
   const myProposals = proposalsList.filter(p => 
+    (startup.id && p.startupId === startup.id) ||
+    (currentUser?.startupId && p.startupId === currentUser.startupId) ||
     p.startupName.toLowerCase().includes(currentStartupName.toLowerCase()) ||
     currentStartupName.toLowerCase().includes(p.startupName.toLowerCase())
   );

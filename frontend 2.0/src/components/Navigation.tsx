@@ -427,24 +427,6 @@ export const Navigation: React.FC<NavigationProps> = ({
                   <span className="text-[9px] font-mono opacity-40">04</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleNav('ai_command_center')}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold transition ${
-                    currentView === 'ai_command_center'
-                      ? 'bg-[#111416] text-[#F4F2EC] dark:bg-[#087C78] dark:text-white font-bold'
-                      : 'text-[#111416] dark:text-[#E5E3DD] hover:bg-[#ECEAE4] dark:hover:bg-[#1E2630]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Bot className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                    <span>AI Command Center</span>
-                  </div>
-                  <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 font-bold">
-                    3.0
-                  </span>
-                </button>
-
                 {/* DISTINCT DEDICATED PORTAL ENTRY DOORS */}
                 <div className="pt-4 space-y-2 border-t border-[#E2DFD7] dark:border-[#232B34] mt-3">
                   <div className="px-2 text-[9px] font-mono font-bold uppercase tracking-wider text-[#596166] dark:text-[#949DA3]">
@@ -656,7 +638,6 @@ export const Navigation: React.FC<NavigationProps> = ({
                       <button onClick={() => handleNav('home')} className="w-full text-left py-2 text-xs font-semibold">Home</button>
                       <button onClick={() => handleNav('innovation_hub')} className="w-full text-left py-2 text-xs font-semibold">Innovation Hub</button>
                       <button onClick={() => handleNav('public_problem_submit')} className="w-full text-left py-2 text-xs font-semibold">Submit Problem</button>
-                      <button onClick={() => handleNav('ai_command_center')} className="w-full text-left py-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 font-bold">⚡ AI Command Center (3.0)</button>
                       <button onClick={() => handleNav('about')} className="w-full text-left py-2 text-xs font-semibold">About / Help</button>
                       <div className="pt-3 border-t border-[#E2DFD7] dark:border-[#232B34] space-y-2">
                         <button onClick={() => handleNav('gov_login')} className="w-full py-2 px-3 border border-[#111416] dark:border-[#2E3844] rounded text-xs font-mono uppercase">Government Portal</button>
