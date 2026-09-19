@@ -177,7 +177,7 @@ async function evaluateStartups(challenge, candidates) {
       console.log("🤖 LIVE GEMINI MODE [evaluator]: chain-of-thought proposal evaluation...");
       const gemini = new _GoogleGenerativeAI(apiKey);
       const model  = gemini.getGenerativeModel({
-        model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+        model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
         generationConfig: { temperature: 0.3, responseMimeType: "application/json" }
       });
 

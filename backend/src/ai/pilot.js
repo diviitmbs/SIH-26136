@@ -137,7 +137,7 @@ async function analyzePilot(kpis) {
       console.log("🤖 LIVE GEMINI MODE [pilot analyst]: chain-of-thought KPI analysis...");
       const gemini = new _GoogleGenerativeAI(apiKey);
       const model  = gemini.getGenerativeModel({
-        model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+        model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
         generationConfig: { temperature: 0.25, responseMimeType: "application/json" }
       });
 

@@ -9,6 +9,7 @@
 // ──────────────────────────────────────────────────────────────
 let _GoogleGenerativeAI = null;
 try { _GoogleGenerativeAI = require("@google/generative-ai").GoogleGenerativeAI; } catch (e) { _GoogleGenerativeAI = null; }
+const GoogleGenerativeAI = _GoogleGenerativeAI;
 
 // ──────────────────────────────────────────────────────────────
 // HELPERS
@@ -123,7 +124,7 @@ async function generateDecisionBrief(challengeTitle, kpis, evidenceStrength) {
       console.log("🤖 LIVE GEMINI MODE [decision copilot]: chain-of-thought decision brief...");
       const gemini = new _GoogleGenerativeAI(apiKey);
       const model  = gemini.getGenerativeModel({
-        model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+        model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
         generationConfig: { temperature: 0.2, responseMimeType: "application/json" }
       });
 

@@ -131,7 +131,7 @@ async function summarizeEvidence(items, excerpt) {
       console.log("🤖 LIVE GEMINI MODE [evidence verifier]: chain-of-thought fraud risk analysis...");
       const gemini = new _GoogleGenerativeAI(apiKey);
       const model  = gemini.getGenerativeModel({
-        model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+        model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
         generationConfig: { temperature: 0.2, responseMimeType: "application/json" }
       });
 

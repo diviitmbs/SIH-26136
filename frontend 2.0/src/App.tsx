@@ -21,6 +21,7 @@ import { Footer } from './components/Footer';
 import { FilterDrawer } from './components/FilterDrawer';
 import { RoleAccessGate } from './components/RoleAccessGate';
 import { storage, safeStorage } from './utils/storage';
+import { getStartups } from './utils/api';
 
 // Views
 import { HomeView } from './views/HomeView';
@@ -50,11 +51,28 @@ export default function App() {
 
   // Data Collections backed by persistent storage
   const [challenges, setChallenges] = useState<Challenge[]>(() => storage.getChallenges());
-  const [startups] = useState<Startup[]>(PROCUREX_STARTUPS);
+  const [startups, setStartups] = useState<Startup[]>(PROCUREX_STARTUPS);
   const [proposals, setProposals] = useState<Proposal[]>(() => storage.getProposals());
   const [pilotData, setPilotData] = useState<PilotData>(() => storage.getPilotData());
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(challenges[0] || PROCUREX_CHALLENGES[0]);
   const [lastCreatedChallenge, setLastCreatedChallenge] = useState<Challenge | null>(null);
+
+  // Fetch dynamic startups from backend Supabase table with fallback to PROCUREX_STARTUPS
+  useEffect(() => {
+    let isMounted = true;
+    getStartups()
+      .then((data) => {
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setStartups(data);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not load startups from backend:', err);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Modals & Drawers
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -304,7 +322,12 @@ export default function App() {
           ) : (
             <StartupPortalView
               challenges={challenges}
-              startup={startups[0]}
+              startup={
+                startups.find(s => 
+                  s.name.toLowerCase() === (currentUser?.startupName || '').toLowerCase() ||
+                  s.id === currentUser?.id
+                ) || startups[0]
+              }
               currentUser={currentUser}
               onNavigate={handleNavigate}
               onSelectChallenge={(ch) => {

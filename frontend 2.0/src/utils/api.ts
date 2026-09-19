@@ -6,6 +6,9 @@
 
 export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:5000';
 
+import { Startup } from '../types';
+import { PROCUREX_STARTUPS } from '../data/procurexData';
+
 interface RequestOptions {
   timeoutMs?: number;
 }
@@ -341,6 +344,27 @@ export async function checkBackendHealth(): Promise<{ message: string }> {
     method: 'GET',
     timeoutMs: 4000,
   });
+}
+
+/**
+ * Fetch all registered startups from the backend Supabase database
+ * Returns safe fallback to PROCUREX_STARTUPS if database/API is unavailable
+ */
+export async function getStartups(limit?: number): Promise<Startup[]> {
+  const query = limit ? `?limit=${limit}` : '';
+  try {
+    const data = await apiRequest<Startup[]>(`/api/startups${query}`, {
+      method: 'GET',
+      timeoutMs: 8000,
+    });
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+    return PROCUREX_STARTUPS;
+  } catch (error) {
+    console.warn('Backend startups API unavailable, using local registry fallback:', error);
+    return PROCUREX_STARTUPS;
+  }
 }
 
 /**

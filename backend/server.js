@@ -27,6 +27,19 @@ app.use(express.static(path.join(__dirname, "..", "frontend")));
 
 app.get("/api/health", (req, res) => res.json({ message: "SIH-26136 Backend is running!" }));
 
+// Startups list from Supabase / PostgreSQL with fallback
+app.get("/api/startups", async (req, res) => {
+  try {
+    const { getStartupsList } = require("./src/startups");
+    const limit = req.query.limit ? parseInt(req.query.limit, 10) : undefined;
+    const startups = await getStartupsList(limit);
+    res.json(startups);
+  } catch (error) {
+    console.error("❌ Error in GET /api/startups:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post("/api/ai/structure-challenge", async (req, res) => {
   try {
     const { problem } = req.body;
