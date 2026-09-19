@@ -38,6 +38,7 @@ import { AIEvaluationView } from './views/AIEvaluationView';
 import { CompareView } from './views/CompareView';
 import { PilotTrackerView } from './views/PilotTrackerView';
 import { PublicProblemSubmitView } from './views/PublicProblemSubmitView';
+import { AICommandCenterView } from './views/AICommandCenterView';
 import { AboutView } from './views/AboutView';
 
 export default function App() {
@@ -359,6 +360,12 @@ export default function App() {
 
         {currentView === 'public_problem_submit' && (
           <PublicProblemSubmitView
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {currentView === 'ai_command_center' && (
+          <AICommandCenterView
             onNavigate={handleNavigate}
           />
         )}

@@ -15,7 +15,12 @@ import {
   FileText,
   ShieldCheck,
   RefreshCw,
-  Award
+  Award,
+  Sliders,
+  Scale,
+  Percent,
+  DollarSign,
+  Clock
 } from 'lucide-react';
 import { 
   analyzePilot, 
@@ -23,7 +28,11 @@ import {
   summarizeEvidence, 
   SummarizeEvidenceResponse, 
   generateDecisionBrief, 
-  DecisionBriefResponse 
+  DecisionBriefResponse,
+  simulateScenario,
+  SimulateScenarioResponse,
+  calculateSLA,
+  CalculateSLAResponse
 } from '../utils/api';
 
 interface PilotTrackerViewProps {
@@ -50,6 +59,66 @@ export const PilotTrackerView: React.FC<PilotTrackerViewProps> = ({
   const [isGeneratingBrief, setIsGeneratingBrief] = useState(false);
   const [decisionBrief, setDecisionBrief] = useState<DecisionBriefResponse | null>(null);
   const [briefError, setBriefError] = useState<string | null>(null);
+
+  // Scenario Simulator State (Phase 3 AI)
+  const [scenarioChangeType, setScenarioChangeType] = useState<'budget_cut' | 'budget_increase' | 'timeline_delay' | 'scope_reduction'>('budget_cut');
+  const [scenarioMagnitude, setScenarioMagnitude] = useState<number>(20);
+  const [isSimulatingScenario, setIsSimulatingScenario] = useState<boolean>(false);
+  const [scenarioResult, setScenarioResult] = useState<SimulateScenarioResponse | null>(null);
+  const [scenarioError, setScenarioError] = useState<string | null>(null);
+
+  // SLA Calculator State (Phase 3 AI)
+  const [isCalculatingSLA, setIsCalculatingSLA] = useState<boolean>(false);
+  const [slaResult, setSlaResult] = useState<CalculateSLAResponse | null>(null);
+  const [slaError, setSlaError] = useState<string | null>(null);
+
+  const handleRunScenarioSimulation = async () => {
+    setIsSimulatingScenario(true);
+    setScenarioError(null);
+    try {
+      const res = await simulateScenario(
+        {
+          contractId: pilot.contractId,
+          startup: pilot.startupName,
+          budget: pilot.totalCommittedBudget,
+          challenge: pilot.challengeTitle,
+          domain: 'infrastructure',
+          kpis: [
+            { name: 'Delay Reduction', target: pilot.targetDelayReduction, actual: pilot.actualDelayReduction },
+            { name: 'Optical Sensor Uptime', target: 98, actual: pilot.sensorUptime }
+          ]
+        },
+        scenarioChangeType,
+        scenarioMagnitude
+      );
+      setScenarioResult(res);
+    } catch (err: any) {
+      console.warn("Scenario simulation failed:", err);
+      setScenarioError(err.message || 'Simulation failed.');
+    } finally {
+      setIsSimulatingScenario(false);
+    }
+  };
+
+  const handleRunSLACalculator = async () => {
+    setIsCalculatingSLA(true);
+    setSlaError(null);
+    try {
+      const res = await calculateSLA({
+        contractId: pilot.contractId,
+        startup: pilot.startupName,
+        value: 4500000,
+        domain: 'infrastructure',
+        uptime: pilot.sensorUptime
+      });
+      setSlaResult(res);
+    } catch (err: any) {
+      console.warn("SLA calculation failed:", err);
+      setSlaError(err.message || 'SLA calculation failed.');
+    } finally {
+      setIsCalculatingSLA(false);
+    }
+  };
 
   const fetchPilotAnalysis = async () => {
     setIsAnalyzingPilot(true);
@@ -517,6 +586,314 @@ export const PilotTrackerView: React.FC<PilotTrackerViewProps> = ({
               );
             })}
           </div>
+        </div>
+
+        {/* ============================================================ */}
+        {/* PHASE 3 AI: WHAT-IF SCENARIO SIMULATOR */}
+        {/* ============================================================ */}
+        <div className="bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-950/80 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-indigo-950 pb-5">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Sliders className="w-3 h-3" />
+                  Phase 3 AI · Scenario Engine
+                </span>
+                <span className="text-xs text-neutral-400 font-mono">Dynamic Monte Carlo Stress-Test</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white">
+                What-If Scenario Simulator
+              </h3>
+              <p className="text-xs text-neutral-500 max-w-2xl">
+                Simulate budget fluctuations, procurement delays, monsoon hold-ups, and scope reductions to foresee the exact operational impact on pilot KPIs before committing changes.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+              <div className="flex items-center gap-2 bg-neutral-100 dark:bg-[#121634] p-1.5 rounded-xl border border-neutral-200 dark:border-indigo-900/50">
+                <label className="text-[10px] font-mono font-bold uppercase text-neutral-500 px-2">Scenario:</label>
+                <select
+                  value={scenarioChangeType}
+                  onChange={(e) => setScenarioChangeType(e.target.value as any)}
+                  className="bg-white dark:bg-[#0b0e24] text-xs font-semibold text-neutral-900 dark:text-white py-1 px-2.5 rounded-lg border border-neutral-300 dark:border-indigo-900 focus:outline-none"
+                >
+                  <option value="budget_cut">20% Budget Cut</option>
+                  <option value="budget_increase">20% Budget Expansion</option>
+                  <option value="timeline_delay">Timeline Delay (Weeks)</option>
+                  <option value="scope_reduction">De-Scope Non-Core</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-[#121634] p-1.5 rounded-xl border border-neutral-200 dark:border-indigo-900/50">
+                <label className="text-[10px] font-mono font-bold uppercase text-neutral-500 px-1">Magnitude:</label>
+                <input
+                  type="number"
+                  min="5"
+                  max="50"
+                  value={scenarioMagnitude}
+                  onChange={(e) => setScenarioMagnitude(Number(e.target.value))}
+                  className="w-16 bg-white dark:bg-[#0b0e24] text-xs font-mono font-bold text-neutral-900 dark:text-white py-1 px-2 rounded-lg border border-neutral-300 dark:border-indigo-900 text-center focus:outline-none"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleRunScenarioSimulation}
+                disabled={isSimulatingScenario}
+                className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition flex items-center gap-2 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isSimulatingScenario ? 'animate-spin' : ''}`} />
+                <span>{isSimulatingScenario ? 'Simulating...' : 'Simulate Scenario'}</span>
+              </button>
+            </div>
+          </div>
+
+          {scenarioError && (
+            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{scenarioError}</span>
+            </div>
+          )}
+
+          {!scenarioResult && !isSimulatingScenario && (
+            <div className="p-8 text-center border border-dashed border-neutral-200 dark:border-indigo-950 rounded-2xl bg-neutral-50/50 dark:bg-[#07091a]/40">
+              <Sliders className="w-8 h-8 text-indigo-400 mx-auto mb-2 opacity-60" />
+              <p className="text-xs text-neutral-500 max-w-md mx-auto">
+                Select a scenario type and magnitude above, then click <strong>Simulate Scenario</strong> to evaluate altered budget allocations, delivery timelines, and KPI impacts.
+              </p>
+            </div>
+          )}
+
+          {scenarioResult && (
+            <div className="space-y-5 animate-in fade-in">
+              {/* Baseline vs Modified Banner */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono font-bold uppercase text-neutral-400 block">Baseline Projection</span>
+                  <p className="text-xs text-neutral-700 dark:text-neutral-300">{scenarioResult.original_projection}</p>
+                </div>
+                <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400 block">Simulated Scenario Projection</span>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                      scenarioResult.feasibility_assessment === 'High'
+                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                        : scenarioResult.feasibility_assessment === 'Low'
+                        ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                        : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                    }`}>
+                      Feasibility: {scenarioResult.feasibility_assessment}
+                    </span>
+                  </div>
+                  <p className="text-xs text-indigo-950 dark:text-indigo-200 font-medium">{scenarioResult.modified_projection}</p>
+                </div>
+              </div>
+
+              {/* Impact Metric Chips */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Budget Impact</span>
+                  <div className={`text-lg font-mono font-black ${
+                    scenarioResult.impact_analysis.budget_impact_inr < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
+                  }`}>
+                    {scenarioResult.impact_analysis.budget_impact_inr >= 0 ? '+' : ''}
+                    ₹{Math.abs(scenarioResult.impact_analysis.budget_impact_inr).toLocaleString('en-IN')}
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Total fiscal variation</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Timeline Impact</span>
+                  <div className="text-lg font-mono font-black text-neutral-900 dark:text-white">
+                    {scenarioResult.impact_analysis.timeline_impact_months > 0 ? `+${scenarioResult.impact_analysis.timeline_impact_months}` : scenarioResult.impact_analysis.timeline_impact_months} Months
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Milestone schedule delta</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Risk Score Variance</span>
+                  <div className={`text-lg font-mono font-black ${
+                    scenarioResult.impact_analysis.risk_score_change > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
+                  }`}>
+                    {scenarioResult.impact_analysis.risk_score_change > 0 ? `+${scenarioResult.impact_analysis.risk_score_change}` : scenarioResult.impact_analysis.risk_score_change} pts
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Overall project risk index</span>
+                </div>
+              </div>
+
+              {/* KPI Impact Table */}
+              {scenarioResult.impact_analysis.kpi_impact && scenarioResult.impact_analysis.kpi_impact.length > 0 && (
+                <div className="border border-neutral-200 dark:border-indigo-950 rounded-xl overflow-hidden">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-neutral-100 dark:bg-[#101432] text-neutral-600 dark:text-neutral-400 font-mono text-[10px] uppercase">
+                      <tr>
+                        <th className="p-3">Impacted Milestone / KPI</th>
+                        <th className="p-3">Baseline Target</th>
+                        <th className="p-3">Revised Target</th>
+                        <th className="p-3 text-right">Variance</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-200 dark:divide-indigo-950 font-medium">
+                      {scenarioResult.impact_analysis.kpi_impact.map((kpi, idx) => (
+                        <tr key={idx} className="hover:bg-neutral-50 dark:hover:bg-[#131738]/50">
+                          <td className="p-3 font-semibold text-neutral-900 dark:text-white">{kpi.kpi_name}</td>
+                          <td className="p-3 text-neutral-500 font-mono">{kpi.original_value}</td>
+                          <td className="p-3 text-indigo-600 dark:text-indigo-400 font-mono font-bold">{kpi.new_value}</td>
+                          <td className={`p-3 text-right font-mono font-bold ${kpi.percentage_change < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                            {kpi.percentage_change > 0 ? `+${kpi.percentage_change}` : kpi.percentage_change}%
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Strategic Recommendation */}
+              <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 text-xs text-neutral-800 dark:text-neutral-200 space-y-1">
+                <span className="text-[10px] font-mono font-bold uppercase text-amber-700 dark:text-amber-400 block">
+                  Project Director Strategic Guidance
+                </span>
+                <p className="font-medium">"{scenarioResult.recommendation}"</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ============================================================ */}
+        {/* PHASE 3 AI: GFR RULE 175 SLA & PENALTY CALCULATOR */}
+        {/* ============================================================ */}
+        <div className="bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-950/80 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 dark:border-indigo-950 pb-5">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Scale className="w-3 h-3" />
+                  Phase 3 AI · Legal SLA Framework
+                </span>
+                <span className="text-xs text-neutral-400 font-mono">GFR Rule 175 · Liquidated Damages</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-white">
+                SLA Penalties & Liquidated Damages Engine
+              </h3>
+              <p className="text-xs text-neutral-500 max-w-2xl">
+                Statutory audit of performance breach penalties, sensor downtime deductions, false-positive fine schedules, and 4-tier dispute resolution workflows under Indian Arbitration Law.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleRunSLACalculator}
+              disabled={isCalculatingSLA}
+              className="px-4 py-2.5 rounded-xl bg-neutral-900 dark:bg-indigo-600 hover:bg-neutral-800 dark:hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition flex items-center gap-2 shrink-0 self-start sm:self-auto disabled:opacity-50"
+            >
+              <Scale className={`w-3.5 h-3.5 ${isCalculatingSLA ? 'animate-spin' : ''}`} />
+              <span>{isCalculatingSLA ? 'Auditing Contract SLAs...' : slaResult ? 'Re-Audit SLAs' : 'Calculate Contract SLAs'}</span>
+            </button>
+          </div>
+
+          {slaError && (
+            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
+              <span>{slaError}</span>
+            </div>
+          )}
+
+          {!slaResult && !isCalculatingSLA && (
+            <div className="p-8 text-center border border-dashed border-neutral-200 dark:border-indigo-950 rounded-2xl bg-neutral-50/50 dark:bg-[#07091a]/40">
+              <Scale className="w-8 h-8 text-rose-400 mx-auto mb-2 opacity-60" />
+              <p className="text-xs text-neutral-500 max-w-md mx-auto">
+                Click <strong>Calculate Contract SLAs</strong> to analyze sensor uptime degradation fines, delayed batch dispatch clauses, and statutory liquidated damages per day.
+              </p>
+            </div>
+          )}
+
+          {slaResult && (
+            <div className="space-y-6 animate-in fade-in">
+              {/* Statutory Thresholds Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Liquidated Damages</span>
+                  <div className="text-base font-mono font-black text-rose-600 dark:text-rose-400">
+                    ₹{slaResult.liquidated_damages_per_day.toLocaleString('en-IN')} <span className="text-[10px] font-normal text-neutral-400">/ day</span>
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">For milestone delay</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Liability Ceiling</span>
+                  <div className="text-base font-mono font-black text-neutral-900 dark:text-white">
+                    {slaResult.maximum_liability_percentage}%
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Max contract cap</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Performance Security</span>
+                  <div className="text-base font-mono font-black text-emerald-600 dark:text-emerald-400">
+                    {slaResult.performance_security_percentage}%
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Bank Guarantee</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-neutral-500">Retention Hold</span>
+                  <div className="text-base font-mono font-black text-indigo-600 dark:text-indigo-400">
+                    {slaResult.payment_hold_percentage}%
+                  </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">Until final acceptance</span>
+                </div>
+              </div>
+
+              {/* Penalty Clauses Table */}
+              <div className="space-y-2">
+                <span className="text-xs font-mono font-bold uppercase text-neutral-600 dark:text-neutral-400 block">
+                  Contractual Penalty Clauses & Breach Schedules
+                </span>
+                <div className="border border-neutral-200 dark:border-indigo-950 rounded-xl overflow-hidden">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-neutral-100 dark:bg-[#101432] text-neutral-600 dark:text-neutral-400 font-mono text-[10px] uppercase">
+                      <tr>
+                        <th className="p-3">SLA Violation Description</th>
+                        <th className="p-3">Deduction Rate</th>
+                        <th className="p-3">Grace Period</th>
+                        <th className="p-3">Calculation Formula</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-200 dark:divide-indigo-950">
+                      {slaResult.penalty_clauses.map((clause, idx) => (
+                        <tr key={idx} className="hover:bg-neutral-50 dark:hover:bg-[#131738]/50">
+                          <td className="p-3 font-semibold text-neutral-900 dark:text-white max-w-xs">{clause.violation_type}</td>
+                          <td className="p-3 text-rose-600 dark:text-rose-400 font-mono font-bold">
+                            {clause.penalty_percentage}% <span className="text-[10px] text-neutral-400 font-normal">(Cap: {clause.cap_percentage}%)</span>
+                          </td>
+                          <td className="p-3 text-neutral-500 font-mono">{clause.grace_period_days} Days</td>
+                          <td className="p-3 text-neutral-600 dark:text-neutral-400 text-[11px]">{clause.calculation_method}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Dispute Resolution Procedure */}
+              {slaResult.dispute_resolution_process && slaResult.dispute_resolution_process.length > 0 && (
+                <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-2">
+                  <span className="text-[10px] font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400 block">
+                    Dispute Escalation Workflow (Indian Arbitration and Conciliation Act, 1996)
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                    {slaResult.dispute_resolution_process.map((stage, idx) => (
+                      <div key={idx} className="p-3 rounded-lg bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-900/50 space-y-1">
+                        <span className="text-[9px] font-mono font-bold text-indigo-500 uppercase">Stage 0{idx + 1}</span>
+                        <p className="text-[11px] text-neutral-700 dark:text-neutral-300 font-medium leading-tight">{stage}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Transition to Full Procurement Framework & Statutory Decision Brief (Engine 6) */}

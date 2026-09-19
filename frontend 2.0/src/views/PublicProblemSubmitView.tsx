@@ -21,7 +21,7 @@ import {
   TrendingUp,
   FileText
 } from 'lucide-react';
-import { structureChallenge } from '../utils/api';
+import { structureChallenge, analyzeSentiment, AnalyzeSentimentResponse } from '../utils/api';
 
 interface PublicProblemSubmitViewProps {
   onNavigate: (view: AppView) => void;
@@ -132,6 +132,31 @@ export const PublicProblemSubmitView: React.FC<PublicProblemSubmitViewProps> = (
   // Submission feedback
   const [submittedId, setSubmittedId] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  // Phase 3 AI: Public Sentiment & Urgency Analyzer State
+  const [isAnalyzingSentiment, setIsAnalyzingSentiment] = useState(false);
+  const [sentimentResult, setSentimentResult] = useState<AnalyzeSentimentResponse | null>(null);
+  const [sentimentError, setSentimentError] = useState<string | null>(null);
+
+  const handleAnalyzeSentiment = async (targetText?: string) => {
+    const textToAnalyze = targetText || `${title ? title + ': ' : ''}${description || ''} ${category}`;
+    if (!textToAnalyze.trim()) {
+      setValidationError('Please enter problem details first to run the sentiment & urgency analysis.');
+      return;
+    }
+    setValidationError(null);
+    setIsAnalyzingSentiment(true);
+    setSentimentError(null);
+    try {
+      const res = await analyzeSentiment(textToAnalyze);
+      setSentimentResult(res);
+    } catch (err: any) {
+      console.warn("Sentiment analysis failed:", err);
+      setSentimentError(err.message || 'Sentiment analysis failed.');
+    } finally {
+      setIsAnalyzingSentiment(false);
+    }
+  };
 
   const handleGenerateAiSummary = async () => {
     if (!title.trim() && !description.trim()) {
@@ -520,24 +545,123 @@ export const PublicProblemSubmitView: React.FC<PublicProblemSubmitViewProps> = (
               </div>
 
               {/* AI Assistance Section */}
-              <div className="p-4 bg-[#F4F2EC] dark:bg-[#111416] border border-[#E2DFD7] dark:border-[#232B34] rounded-lg space-y-3">
+              <div className="p-4 bg-[#F4F2EC] dark:bg-[#111416] border border-[#E2DFD7] dark:border-[#232B34] rounded-lg space-y-4">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[#087C78] dark:text-[#0AA39F]" />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#111416] dark:text-white">
-                      AI Problem Synthesis & Tender Framing Engine
+                      AI Problem Synthesis & Public Sentiment Analytics
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleGenerateAiSummary}
-                    disabled={isSynthesizing}
-                    className="px-3 py-1.5 bg-[#087C78]/10 hover:bg-[#087C78]/20 text-[#087C78] dark:text-[#0AA39F] text-xs font-mono font-bold uppercase rounded flex items-center gap-1.5 transition"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>{isSynthesizing ? 'Synthesizing...' : 'Generate AI Root-Cause Diagnostic'}</span>
-                  </button>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => handleAnalyzeSentiment()}
+                      disabled={isAnalyzingSentiment}
+                      className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 text-xs font-mono font-bold uppercase rounded flex items-center gap-1.5 transition border border-rose-500/30"
+                    >
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      <span>{isAnalyzingSentiment ? 'Analyzing Sentiment...' : 'Analyze Public Sentiment & Urgency'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleGenerateAiSummary}
+                      disabled={isSynthesizing}
+                      className="px-3 py-1.5 bg-[#087C78]/10 hover:bg-[#087C78]/20 text-[#087C78] dark:text-[#0AA39F] text-xs font-mono font-bold uppercase rounded flex items-center gap-1.5 transition"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>{isSynthesizing ? 'Synthesizing...' : 'Generate AI Root-Cause Diagnostic'}</span>
+                    </button>
+                  </div>
                 </div>
+
+                {sentimentError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs rounded">
+                    {sentimentError}
+                  </div>
+                )}
+
+                {/* Sentiment & Urgency Analysis Result Card */}
+                {sentimentResult && (
+                  <div className="p-4 bg-white dark:bg-[#16191D] border border-rose-500/30 rounded-xl space-y-4 animate-in fade-in">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E2DFD7] dark:border-[#232B34] pb-3">
+                      <div>
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 block">
+                          Phase 3 AI · Citizen Impact & Sentiment Audit
+                        </span>
+                        <h5 className="text-sm font-bold text-[#111416] dark:text-white">
+                          Public Grievance Escalation Profile
+                        </h5>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                          sentimentResult.citizen_impact_level === 'Critical'
+                            ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
+                            : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                        }`}>
+                          Impact: {sentimentResult.citizen_impact_level}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900">
+                          Priority: {sentimentResult.recommended_priority_level}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                      <div className="p-3 bg-[#F4F2EC] dark:bg-[#111416] rounded-lg">
+                        <span className="text-[10px] font-mono uppercase text-[#596166] block">Urgency Index</span>
+                        <span className="text-base font-black font-mono text-rose-600 dark:text-rose-400">
+                          {sentimentResult.urgency_index} <span className="text-[10px] text-[#596166] font-normal">/ 10</span>
+                        </span>
+                      </div>
+                      <div className="p-3 bg-[#F4F2EC] dark:bg-[#111416] rounded-lg">
+                        <span className="text-[10px] font-mono uppercase text-[#596166] block">Social Mentions</span>
+                        <span className="text-base font-black font-mono text-[#111416] dark:text-white">
+                          ~{sentimentResult.social_media_indicators.twitter_mentions_estimate.toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                      <div className="p-3 bg-[#F4F2EC] dark:bg-[#111416] rounded-lg">
+                        <span className="text-[10px] font-mono uppercase text-[#596166] block">News Articles</span>
+                        <span className="text-base font-black font-mono text-[#111416] dark:text-white">
+                          {sentimentResult.news_coverage_estimate} Reports
+                        </span>
+                      </div>
+                      <div className="p-3 bg-[#F4F2EC] dark:bg-[#111416] rounded-lg">
+                        <span className="text-[10px] font-mono uppercase text-[#596166] block">Negative Sentiment</span>
+                        <span className="text-base font-black font-mono text-rose-600 dark:text-rose-400">
+                          {sentimentResult.social_media_indicators.sentiment_breakdown.negative_percentage}%
+                        </span>
+                      </div>
+                    </div>
+
+                    {sentimentResult.social_media_indicators.trending_hashtags?.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        <span className="text-[10px] font-mono font-bold uppercase text-[#596166]">Trending:</span>
+                        {sentimentResult.social_media_indicators.trending_hashtags.map((tag, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {sentimentResult.stakeholder_concerns?.length > 0 && (
+                      <div className="space-y-1 pt-1 border-t border-[#E2DFD7] dark:border-[#232B34]">
+                        <span className="text-[10px] font-mono font-bold uppercase text-[#596166] block">
+                          Verified Stakeholder Grievances:
+                        </span>
+                        <ul className="space-y-1 text-xs text-[#111416] dark:text-[#F4F2EC]">
+                          {sentimentResult.stakeholder_concerns.map((concern, idx) => (
+                            <li key={idx} className="flex items-start gap-1.5">
+                              <span className="text-rose-500 font-mono mt-0.5">•</span>
+                              <span>{concern}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {aiDraftSummary && (
                   <div className="p-3 bg-white dark:bg-[#16191D] border border-[#087C78]/30 rounded text-xs text-[#111416] dark:text-[#F4F2EC] font-sans leading-relaxed">

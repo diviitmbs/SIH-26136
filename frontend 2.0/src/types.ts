@@ -14,6 +14,7 @@ export type AppView =
   | 'ai_evaluation'
   | 'pilot_dashboard'
   | 'public_problem_submit'
+  | 'ai_command_center'
   | 'about';
 
 export type ThemeMode = 'light' | 'dark' | 'midnight';
@@ -199,6 +200,8 @@ export interface PilotData {
   targetDelayReduction: number;
   sensorUptime: number;
   milestones: Milestone[];
+  challengeTitle?: string;
+  totalCommittedBudget?: string;
 }
 
 export interface CivicChatMessage {

@@ -223,6 +223,112 @@ export interface PredictTimelineResponse {
   delay_probability_percentage: number;
 }
 
+export interface GenerateRFPResponse {
+  rfp_title: string;
+  rfp_id: string;
+  executive_summary: string;
+  technical_specifications: string[];
+  eligibility_criteria: Array<{
+    criterion: string;
+    mandatory: boolean;
+    weight_percentage: number;
+  }>;
+  evaluation_weightage: {
+    technical: number;
+    financial: number;
+    experience: number;
+  };
+  submission_deadline: string;
+  mandatory_documents: string[];
+  general_terms_conditions: string[];
+}
+
+export interface MatchSchemesResponse {
+  matched_schemes: Array<{
+    scheme_name: string;
+    ministry: string;
+    funding_percentage: number;
+    eligibility: string;
+    application_link: string;
+    deadline: string;
+  }>;
+  total_available_funding_inr: number;
+  recommended_scheme: string;
+  justification: string;
+  state_specific_schemes: string[];
+}
+
+export interface SimulateScenarioResponse {
+  original_projection: string;
+  modified_projection: string;
+  impact_analysis: {
+    budget_impact_inr: number;
+    timeline_impact_months: number;
+    risk_score_change: number;
+    kpi_impact: Array<{
+      kpi_name: string;
+      original_value: string;
+      new_value: string;
+      percentage_change: number;
+    }>;
+  };
+  recommendation: string;
+  feasibility_assessment: 'High' | 'Medium' | 'Low' | string;
+}
+
+export interface CalculateSLAResponse {
+  penalty_clauses: Array<{
+    violation_type: string;
+    penalty_percentage: number;
+    cap_percentage: number;
+    grace_period_days: number;
+    calculation_method: string;
+  }>;
+  liquidated_damages_per_day: number;
+  maximum_liability_percentage: number;
+  performance_security_percentage: number;
+  payment_hold_percentage: number;
+  dispute_resolution_process: string[];
+}
+
+export interface AnalyzeSentimentResponse {
+  overall_sentiment_score: number;
+  urgency_index: number;
+  citizen_impact_level: 'Critical' | 'High' | 'Medium' | 'Low' | string;
+  social_media_indicators: {
+    twitter_mentions_estimate: number;
+    sentiment_breakdown: {
+      positive_percentage: number;
+      negative_percentage: number;
+      neutral_percentage: number;
+    };
+    trending_hashtags: string[];
+  };
+  news_coverage_estimate: number;
+  stakeholder_concerns: string[];
+  recommended_priority_level: 'Immediate' | 'High' | 'Medium' | 'Low' | string;
+}
+
+export interface DevilAdvocateResponse {
+  optimist_view: {
+    strengths: string[];
+    approval_recommendation: string;
+    confidence_score: number;
+  };
+  skeptic_view: {
+    concerns: string[];
+    rejection_recommendation: string;
+    risk_flags: string[];
+  };
+  final_judgment: {
+    verdict: 'Approve' | 'Reject' | 'Request_Revision' | string;
+    confidence_percentage: number;
+    key_decision_factors: string[];
+    conditions_for_approval: string[];
+    mitigation_requirements: string[];
+  };
+}
+
 // ============================================================
 // API METHODS
 // ============================================================
@@ -360,5 +466,79 @@ export async function predictTimeline(projectData: any): Promise<PredictTimeline
     method: 'POST',
     body: JSON.stringify({ projectData }),
     timeoutMs: 12000,
+  });
+}
+
+// ============================================================
+// PHASE 3 AI METHODS (UNFAIR ADVANTAGE)
+// ============================================================
+
+/**
+ * Phase 3 AI: Generate official GFR 2017 compliant RFP tender specification document
+ */
+export async function generateRFP(challengeData: any): Promise<GenerateRFPResponse> {
+  return apiRequest<GenerateRFPResponse>('/api/ai/generate-rfp', {
+    method: 'POST',
+    body: JSON.stringify({ challengeData }),
+    timeoutMs: 15000,
+  });
+}
+
+/**
+ * Phase 3 AI: Match challenges with Central and State Government Grant Schemes
+ */
+export async function matchSchemes(challengeData: any): Promise<MatchSchemesResponse> {
+  return apiRequest<MatchSchemesResponse>('/api/ai/match-schemes', {
+    method: 'POST',
+    body: JSON.stringify({ challengeData }),
+    timeoutMs: 15000,
+  });
+}
+
+/**
+ * Phase 3 AI: Simulate What-If Scenarios (budget cut/increase, timeline delay, scope reduction)
+ */
+export async function simulateScenario(
+  projectData: any,
+  changeType: 'budget_cut' | 'budget_increase' | 'timeline_delay' | 'scope_reduction' | string = 'budget_cut',
+  changeValue: number | string = 20
+): Promise<SimulateScenarioResponse> {
+  return apiRequest<SimulateScenarioResponse>('/api/ai/simulate-scenario', {
+    method: 'POST',
+    body: JSON.stringify({ projectData, changeType, changeValue }),
+    timeoutMs: 15000,
+  });
+}
+
+/**
+ * Phase 3 AI: Calculate SLA Penalties, Liquidated Damages (GFR Rule 175) & Dispute Tiers
+ */
+export async function calculateSLA(contractData: any): Promise<CalculateSLAResponse> {
+  return apiRequest<CalculateSLAResponse>('/api/ai/calculate-sla', {
+    method: 'POST',
+    body: JSON.stringify({ contractData }),
+    timeoutMs: 15000,
+  });
+}
+
+/**
+ * Phase 3 AI: Ingest citizen problem reports to compute public sentiment and urgency index
+ */
+export async function analyzeSentiment(problemStatement: any): Promise<AnalyzeSentimentResponse> {
+  return apiRequest<AnalyzeSentimentResponse>('/api/ai/analyze-sentiment', {
+    method: 'POST',
+    body: JSON.stringify({ problemStatement }),
+    timeoutMs: 15000,
+  });
+}
+
+/**
+ * Phase 3 AI: Adversarial Multi-Agent Devil's Advocate (Optimist vs Skeptic vs Final Judgment)
+ */
+export async function runDevilAdvocate(proposalData: any): Promise<DevilAdvocateResponse> {
+  return apiRequest<DevilAdvocateResponse>('/api/ai/devil-advocate', {
+    method: 'POST',
+    body: JSON.stringify({ proposalData }),
+    timeoutMs: 15000,
   });
 }

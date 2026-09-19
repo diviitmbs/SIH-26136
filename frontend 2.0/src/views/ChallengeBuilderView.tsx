@@ -9,7 +9,11 @@ import {
   forecastImpact, 
   OptimizeBudgetResponse,
   PredictRisksResponse,
-  PredictTimelineResponse
+  PredictTimelineResponse,
+  generateRFP,
+  GenerateRFPResponse,
+  matchSchemes,
+  MatchSchemesResponse
 } from "../utils/api";
 import { 
   ArrowLeft, 
@@ -27,7 +31,13 @@ import {
   TrendingUp,
   Info,
   Layers,
-  HelpCircle
+  HelpCircle,
+  FileText,
+  Download,
+  Check,
+  ExternalLink,
+  RefreshCw,
+  X
 } from 'lucide-react';
 
 interface ChallengeBuilderViewProps {
@@ -91,6 +101,95 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
   const [aiBudgetInfo, setAiBudgetInfo] = useState<OptimizeBudgetResponse | null>(null);
   const [isAiBudgeting, setIsAiBudgeting] = useState<boolean>(false);
   const [aiErrorNotice, setAiErrorNotice] = useState<string | null>(null);
+
+  // Phase 3 AI: RFP Generator State
+  const [isGeneratingRfp, setIsGeneratingRfp] = useState<boolean>(false);
+  const [rfpResult, setRfpResult] = useState<GenerateRFPResponse | null>(null);
+  const [rfpError, setRfpError] = useState<string | null>(null);
+  const [showRfpModal, setShowRfpModal] = useState<boolean>(false);
+  const [copiedRfp, setCopiedRfp] = useState<boolean>(false);
+
+  // Phase 3 AI: Scheme Matcher State
+  const [isMatchingSchemes, setIsMatchingSchemes] = useState<boolean>(false);
+  const [schemesResult, setSchemesResult] = useState<MatchSchemesResponse | null>(null);
+  const [schemesError, setSchemesError] = useState<string | null>(null);
+  const [showSchemesModal, setShowSchemesModal] = useState<boolean>(false);
+
+  const handleGenerateRFP = async () => {
+    setIsGeneratingRfp(true);
+    setRfpError(null);
+    try {
+      const res = await generateRFP({
+        title: title || 'Municipal AI Procurement Challenge',
+        department: department || 'Urban Infrastructure Department',
+        sector: sector || 'Urban Mobility & Traffic Optimization',
+        problemDescription: problemDescription || 'Public procurement tender for computer vision and civic technology deployment',
+        budget: computedBudget,
+        timeline: computedPilotDuration
+      });
+      setRfpResult(res);
+      setShowRfpModal(true);
+    } catch (err: any) {
+      console.warn("RFP generation failed:", err);
+      setRfpError(err.message || 'RFP generation failed.');
+    } finally {
+      setIsGeneratingRfp(false);
+    }
+  };
+
+  const handleMatchSchemes = async () => {
+    setIsMatchingSchemes(true);
+    setSchemesError(null);
+    try {
+      const res = await matchSchemes({
+        title: title || 'Civic Infrastructure Initiative',
+        domain: sector || 'infrastructure',
+        state: state || 'Maharashtra',
+        city: city || 'Mumbai',
+        budget: computedBudget
+      });
+      setSchemesResult(res);
+      setShowSchemesModal(true);
+    } catch (err: any) {
+      console.warn("Scheme matching failed:", err);
+      setSchemesError(err.message || 'Scheme matching failed.');
+    } finally {
+      setIsMatchingSchemes(false);
+    }
+  };
+
+  const handleCopyRfp = () => {
+    if (!rfpResult) return;
+    const text = `=====================================================
+${rfpResult.rfp_title}
+RFP ID: ${rfpResult.rfp_id}
+Submission Deadline: ${rfpResult.submission_deadline}
+=====================================================
+
+EXECUTIVE SUMMARY:
+${rfpResult.executive_summary}
+
+TECHNICAL SPECIFICATIONS:
+${rfpResult.technical_specifications.map((s, i) => `${i + 1}. ${s}`).join('\n')}
+
+ELIGIBILITY CRITERIA:
+${rfpResult.eligibility_criteria.map(c => `• [${c.mandatory ? 'MANDATORY' : 'OPTIONAL'}] ${c.criterion} (Weight: ${c.weight_percentage}%)`).join('\n')}
+
+EVALUATION WEIGHTAGE:
+• Technical: ${rfpResult.evaluation_weightage.technical}%
+• Financial: ${rfpResult.evaluation_weightage.financial}%
+• Experience: ${rfpResult.evaluation_weightage.experience}%
+
+MANDATORY DOCUMENTS REQUIRED:
+${rfpResult.mandatory_documents.map(d => `• ${d}`).join('\n')}
+
+GENERAL TERMS & CONDITIONS (GFR 2017):
+${rfpResult.general_terms_conditions.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+`;
+    navigator.clipboard.writeText(text);
+    setCopiedRfp(true);
+    setTimeout(() => setCopiedRfp(false), 3000);
+  };
 
   // Derived Values
   const computedBudget = budgetUnit === 'Custom' 
@@ -1000,6 +1099,318 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
                   <div>
                     <strong className="block font-semibold">Configurable evaluation workflow</strong>
                     Upon registration, this challenge is placed on the public innovation observatory. Matched startups can register interest and submit structured technical dossiers.
+                  </div>
+                </div>
+                {/* Phase 3 AI Procurement Accelerators */}
+                <div className="p-5 rounded-xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-emerald-500/10 border border-indigo-200 dark:border-indigo-900/60 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
+                        Phase 3 AI Procurement Tools
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-indigo-500 font-bold uppercase">GFR Compliant</span>
+                  </div>
+
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    Accelerate your public procurement with automated tender specification generation and matching government funding schemes before publishing.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={handleGenerateRFP}
+                      disabled={isGeneratingRfp}
+                      className="p-3 bg-white dark:bg-[#0b0e24] hover:bg-neutral-50 dark:hover:bg-[#121634] border border-neutral-200 dark:border-indigo-900/60 rounded-xl text-left transition flex items-center justify-between group shadow-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <div className="text-xs font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                          <span>Generate GFR 2017 RFP</span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500">Official tender doc with eligibility weightage</p>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform">
+                        {isGeneratingRfp ? 'Generating...' : '→'}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleMatchSchemes}
+                      disabled={isMatchingSchemes}
+                      className="p-3 bg-white dark:bg-[#0b0e24] hover:bg-neutral-50 dark:hover:bg-[#121634] border border-neutral-200 dark:border-indigo-900/60 rounded-xl text-left transition flex items-center justify-between group shadow-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <div className="text-xs font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
+                          <Building2 className="w-3.5 h-3.5 text-emerald-500" />
+                          <span>Match Govt Schemes</span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500">Smart Cities, Digital India, AMRUT 2.0</p>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform">
+                        {isMatchingSchemes ? 'Matching...' : '→'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                {rfpError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 text-rose-700 dark:text-rose-300 text-xs rounded-xl">
+                    {rfpError}
+                  </div>
+                )}
+                {schemesError && (
+                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 text-rose-700 dark:text-rose-300 text-xs rounded-xl">
+                    {schemesError}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* RFP GENERATOR MODAL */}
+            {showRfpModal && rfpResult && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
+                <div className="w-full max-w-4xl bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-950 rounded-2xl shadow-2xl overflow-hidden max-h-[88vh] flex flex-col">
+                  {/* Modal Header */}
+                  <div className="p-5 bg-neutral-900 dark:bg-[#060814] text-white flex items-center justify-between border-b border-neutral-800">
+                    <div className="flex items-center gap-2.5">
+                      <FileText className="w-5 h-5 text-indigo-400" />
+                      <div>
+                        <span className="text-[10px] font-mono text-indigo-300 uppercase tracking-widest block">GFR 2017 Tender Specification</span>
+                        <h4 className="text-base font-bold text-white">{rfpResult.rfp_title}</h4>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowRfpModal(false)}
+                      className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Modal Body */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-neutral-800 dark:text-neutral-200">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono p-3 bg-neutral-50 dark:bg-[#101432] rounded-xl border border-neutral-200 dark:border-indigo-950">
+                      <div>
+                        <span className="text-neutral-400 block text-[10px]">TENDER ID:</span>
+                        <span className="font-bold text-indigo-600 dark:text-indigo-400">{rfpResult.rfp_id}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-400 block text-[10px]">SUBMISSION DEADLINE:</span>
+                        <span className="font-bold text-neutral-900 dark:text-white">{rfpResult.submission_deadline}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-400 block text-[10px]">EVALUATION WEIGHT:</span>
+                        <span className="font-bold text-emerald-600">Tech {rfpResult.evaluation_weightage.technical}% / Fin {rfpResult.evaluation_weightage.financial}%</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">Executive Summary</span>
+                      <p className="p-3 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+                        {rfpResult.executive_summary}
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">Technical Specifications</span>
+                      <ul className="space-y-1 p-3 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950">
+                        {rfpResult.technical_specifications.map((spec, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <span className="font-mono text-indigo-500 font-bold">{i + 1}.</span>
+                            <span>{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">Startup Eligibility Criteria</span>
+                      <div className="border border-neutral-200 dark:border-indigo-950 rounded-xl overflow-hidden">
+                        <table className="w-full text-left text-xs">
+                          <thead className="bg-neutral-100 dark:bg-[#101432] font-mono text-[10px] text-neutral-500 uppercase">
+                            <tr>
+                              <th className="p-2.5">Criterion</th>
+                              <th className="p-2.5">Mandatory</th>
+                              <th className="p-2.5 text-right">Weight</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-neutral-200 dark:divide-indigo-950">
+                            {rfpResult.eligibility_criteria.map((ec, i) => (
+                              <tr key={i}>
+                                <td className="p-2.5 font-medium">{ec.criterion}</td>
+                                <td className="p-2.5">
+                                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                                    ec.mandatory ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300' : 'bg-neutral-200 text-neutral-700'
+                                  }`}>
+                                    {ec.mandatory ? 'Mandatory' : 'Optional'}
+                                  </span>
+                                </td>
+                                <td className="p-2.5 text-right font-mono font-bold">{ec.weight_percentage}%</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">Mandatory Tender Attachments</span>
+                        <ul className="space-y-1 p-3 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950">
+                          {rfpResult.mandatory_documents.map((doc, i) => (
+                            <li key={i} className="flex items-center gap-1.5">
+                              <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              <span>{doc}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">GFR 2017 Terms & Conditions</span>
+                        <ul className="space-y-1 p-3 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 text-[11px]">
+                          {rfpResult.general_terms_conditions.map((term, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-neutral-400 font-mono">•</span>
+                              <span>{term}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="p-4 bg-neutral-100 dark:bg-[#060814] border-t border-neutral-200 dark:border-indigo-950 flex items-center justify-between">
+                    <span className="font-mono text-[11px] text-neutral-500">Format: Standard GFR 2017 Rule 149</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleCopyRfp}
+                        className="px-4 py-2 rounded-xl border border-neutral-300 dark:border-indigo-900 font-bold text-xs hover:bg-white dark:hover:bg-[#101435] transition flex items-center gap-1.5"
+                      >
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>{copiedRfp ? 'Copied to Clipboard!' : 'Copy RFP Text'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowRfpModal(false)}
+                        className="px-4 py-2 bg-neutral-900 dark:bg-indigo-600 text-white font-bold text-xs rounded-xl hover:bg-neutral-800 transition"
+                      >
+                        Done
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* SCHEME MATCHER MODAL */}
+            {showSchemesModal && schemesResult && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
+                <div className="w-full max-w-3xl bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-950 rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
+                  {/* Modal Header */}
+                  <div className="p-5 bg-gradient-to-r from-emerald-900 to-[#060814] text-white flex items-center justify-between border-b border-emerald-800/60">
+                    <div className="flex items-center gap-2.5">
+                      <Building2 className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <span className="text-[10px] font-mono text-emerald-300 uppercase tracking-widest block">Central & State Public Grants</span>
+                        <h4 className="text-base font-bold text-white">Matched Government Funding Schemes</h4>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowSchemesModal(false)}
+                      className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Modal Body */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6 text-xs text-neutral-800 dark:text-neutral-200">
+                    {/* Primary Highlight */}
+                    <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono font-bold uppercase text-emerald-700 dark:text-emerald-300">
+                          Recommended Primary Scheme
+                        </span>
+                        <span className="text-xs font-mono font-black text-emerald-700 dark:text-emerald-300">
+                          Total Grant Pool: ₹{(schemesResult.total_available_funding_inr / 10000000).toFixed(1)} Crore
+                        </span>
+                      </div>
+                      <h5 className="text-sm font-bold text-neutral-900 dark:text-white">
+                        {schemesResult.recommended_scheme}
+                      </h5>
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
+                        {schemesResult.justification}
+                      </p>
+                    </div>
+
+                    {/* Matched National Schemes */}
+                    <div className="space-y-3">
+                      <span className="text-[11px] font-mono font-bold uppercase text-neutral-500 block">
+                        Eligible Central Ministry Schemes
+                      </span>
+                      <div className="grid grid-cols-1 gap-3">
+                        {schemesResult.matched_schemes.map((scheme, i) => (
+                          <div key={i} className="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-1.5">
+                            <div className="flex items-baseline justify-between gap-2">
+                              <strong className="text-xs font-bold text-neutral-900 dark:text-white">{scheme.scheme_name}</strong>
+                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 shrink-0">
+                                {scheme.funding_percentage}% Grant
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-neutral-500">{scheme.ministry}</div>
+                            <p className="text-[11px] text-neutral-700 dark:text-neutral-300">{scheme.eligibility}</p>
+                            <div className="flex items-center justify-between pt-1 border-t border-neutral-200 dark:border-indigo-950/60 text-[10px] font-mono text-neutral-400">
+                              <span>Deadline: {scheme.deadline}</span>
+                              <a
+                                href={scheme.application_link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-1 hover:underline"
+                              >
+                                <span>Portal Link</span>
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* State Specific Schemes */}
+                    {schemesResult.state_specific_schemes?.length > 0 && (
+                      <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200 dark:border-indigo-950 space-y-2">
+                        <span className="text-[11px] font-mono font-bold uppercase text-indigo-600 dark:text-indigo-400 block">
+                          State Innovation & Hackathon Incentives
+                        </span>
+                        <ul className="space-y-1 text-xs text-neutral-700 dark:text-neutral-300">
+                          {schemesResult.state_specific_schemes.map((st, i) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <span className="text-emerald-500 font-bold font-mono">✓</span>
+                              <span>{st}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="p-4 bg-neutral-100 dark:bg-[#060814] border-t border-neutral-200 dark:border-indigo-950 flex items-center justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setShowSchemesModal(false)}
+                      className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition"
+                    >
+                      Close Scheme Matcher
+                    </button>
                   </div>
                 </div>
               </div>

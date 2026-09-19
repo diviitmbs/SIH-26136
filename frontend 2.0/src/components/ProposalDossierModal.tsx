@@ -18,10 +18,11 @@ import {
   ExternalLink,
   Award,
   Layers,
-  Check
+  Check,
+  RefreshCw
 } from 'lucide-react';
 import { ProcureXLogo } from './ProcureXLogo';
-import { analyzeDocument, AnalyzeDocumentResponse } from '../utils/api';
+import { analyzeDocument, AnalyzeDocumentResponse, runDevilAdvocate, DevilAdvocateResponse } from '../utils/api';
 
 interface ProposalDossierModalProps {
   proposal: Proposal | null;
@@ -42,13 +43,40 @@ export const ProposalDossierModal: React.FC<ProposalDossierModalProps> = ({
   onOpenSanctionOrder,
   onOpenCompare
 }) => {
-  const [activeTab, setActiveTab] = useState<'architecture' | 'commercial' | 'compliance' | 'decision'>('architecture');
+  const [activeTab, setActiveTab] = useState<'architecture' | 'commercial' | 'compliance' | 'decision' | 'devil_advocate'>('architecture');
   const [officerNotes, setOfficerNotes] = useState('');
   const [notesSaved, setNotesSaved] = useState(false);
 
   // AI Forensics Analysis State
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalyzeDocumentResponse | null>(null);
+
+  // Devil's Advocate State (Phase 3 AI)
+  const [isRunningDevilAdvocate, setIsRunningDevilAdvocate] = useState(false);
+  const [devilAdvocateResult, setDevilAdvocateResult] = useState<DevilAdvocateResponse | null>(null);
+  const [devilAdvocateError, setDevilAdvocateError] = useState<string | null>(null);
+
+  const handleRunDevilAdvocate = async () => {
+    if (!proposal) return;
+    setIsRunningDevilAdvocate(true);
+    setDevilAdvocateError(null);
+    try {
+      const res = await runDevilAdvocate({
+        summary: `${proposal.startupName} proposing ${proposal.solutionName || 'Solution'}: ${proposal.proposedBudget} over ${proposal.timelineMonths}. ${proposal.solutionSummary || ''}`,
+        startup: proposal.startupName,
+        budget: proposal.proposedBudget,
+        timeline: proposal.timelineMonths,
+        technicalFit: proposal.technicalFitScore,
+        commercialScore: proposal.commercialScore
+      });
+      setDevilAdvocateResult(res);
+    } catch (err: any) {
+      console.warn("Devil's advocate analysis failed:", err);
+      setDevilAdvocateError(err.message || 'Adversarial analysis failed.');
+    } finally {
+      setIsRunningDevilAdvocate(false);
+    }
+  };
 
   const handleRunForensics = async () => {
     if (!proposal) return;
@@ -212,6 +240,7 @@ export const ProposalDossierModal: React.FC<ProposalDossierModalProps> = ({
             { id: 'commercial', label: '2. BOM & Commercials', icon: DollarSign },
             { id: 'compliance', label: '3. Compliance & Risks', icon: ShieldCheck },
             { id: 'decision', label: '4. Evaluator Audit & Notes', icon: Sparkles },
+            { id: 'devil_advocate', label: "5. Adversarial Audit (Devil's Advocate)", icon: Scale },
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -745,6 +774,239 @@ export const ProposalDossierModal: React.FC<ProposalDossierModalProps> = ({
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* TAB 5: ADVERSARIAL AUDIT (DEVIL'S ADVOCATE - PHASE 3 AI) */}
+          {activeTab === 'devil_advocate' && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              {/* Header Box */}
+              <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-rose-500/10 border border-amber-500/30 dark:border-amber-400/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 font-mono text-[9px] font-bold uppercase tracking-wider">
+                      Phase 3 AI · Adversarial Reasoning
+                    </span>
+                    <span className="text-xs text-neutral-400 font-mono">
+                      Optimist vs. Skeptic Multi-Agent Audit
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-black text-neutral-900 dark:text-white">
+                    Devil's Advocate Proposal Stress-Test
+                  </h3>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400 max-w-xl">
+                    Dual-agent adversarial analysis that pits an advocate finding maximum public value against a rigorous skeptic exposing hidden implementation risks before final procurement sanction.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleRunDevilAdvocate}
+                  disabled={isRunningDevilAdvocate}
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2 transition disabled:opacity-50 self-start md:self-auto"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isRunningDevilAdvocate ? 'animate-spin' : ''}`} />
+                  <span>{isRunningDevilAdvocate ? 'Simulating Debate...' : devilAdvocateResult ? 'Re-Run Adversarial Audit' : 'Run Live Adversarial Audit'}</span>
+                </button>
+              </div>
+
+              {devilAdvocateError && (
+                <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{devilAdvocateError}</span>
+                </div>
+              )}
+
+              {!devilAdvocateResult && !isRunningDevilAdvocate && (
+                <div className="p-12 text-center border-2 border-dashed border-neutral-300 dark:border-indigo-950 rounded-2xl bg-neutral-50/50 dark:bg-[#07091b]/50">
+                  <Scale className="w-12 h-12 mx-auto text-amber-500/60 mb-3" />
+                  <h4 className="text-base font-bold text-neutral-900 dark:text-white">
+                    No Adversarial Simulation Generated Yet
+                  </h4>
+                  <p className="text-xs text-neutral-500 max-w-md mx-auto mt-1 mb-5">
+                    Click the button above to pit the Optimist Advocate against the Skeptic Auditor to test whether {proposal.startupName}'s proposal holds up to intense GFR scrutiny.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleRunDevilAdvocate}
+                    className="px-4 py-2 bg-neutral-900 dark:bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-neutral-800 transition"
+                  >
+                    Run Live Stress-Test Now
+                  </button>
+                </div>
+              )}
+
+              {isRunningDevilAdvocate && (
+                <div className="p-12 text-center border border-indigo-200 dark:border-indigo-900 rounded-2xl bg-indigo-50/30 dark:bg-indigo-950/20">
+                  <RefreshCw className="w-10 h-10 mx-auto text-indigo-500 animate-spin mb-4" />
+                  <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
+                    Synthesizing Adversarial Perspectives...
+                  </h4>
+                  <p className="text-xs text-neutral-500 max-w-sm mx-auto mt-1">
+                    AI Optimist is evaluating technical upside while AI Skeptic reviews vendor capacity, cost escalation, and regulatory risks.
+                  </p>
+                </div>
+              )}
+
+              {devilAdvocateResult && (
+                <div className="space-y-6">
+                  {/* Two Column Grid: Optimist vs Skeptic */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    {/* OPTIMIST VIEW */}
+                    <div className="p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/60 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 font-mono flex items-center gap-1.5">
+                            <Sparkles className="w-4 h-4" />
+                            The Optimist Case (Advocate)
+                          </h4>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-200/70 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 text-xs font-mono font-bold">
+                          Confidence: {Math.round(devilAdvocateResult.optimist_view?.confidence_score * 100 || 88)}%
+                        </span>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-white/80 dark:bg-[#0b0e24]/70 border border-emerald-100 dark:border-emerald-950 text-xs text-neutral-800 dark:text-neutral-200 font-medium">
+                        "{devilAdvocateResult.optimist_view?.approval_recommendation}"
+                      </div>
+
+                      <div className="space-y-2">
+                        <span className="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block font-mono">
+                          Key Strengths & Merits Identified
+                        </span>
+                        <ul className="space-y-1.5">
+                          {devilAdvocateResult.optimist_view?.strengths?.map((str, idx) => (
+                            <li key={idx} className="text-xs text-neutral-700 dark:text-neutral-300 flex items-start gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                              <span>{str}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* SKEPTIC VIEW */}
+                    <div className="p-5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/60 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                          <h4 className="text-sm font-bold uppercase tracking-wider text-rose-800 dark:text-rose-300 font-mono flex items-center gap-1.5">
+                            <AlertTriangle className="w-4 h-4" />
+                            The Skeptic Case (Devil's Advocate)
+                          </h4>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full bg-rose-200/70 dark:bg-rose-900/60 text-rose-800 dark:text-rose-200 text-xs font-mono font-bold">
+                          {devilAdvocateResult.skeptic_view?.risk_flags?.length || 0} Vulnerabilities
+                        </span>
+                      </div>
+
+                      <div className="p-3.5 rounded-xl bg-white/80 dark:bg-[#0b0e24]/70 border border-rose-100 dark:border-rose-950 text-xs text-neutral-800 dark:text-neutral-200 font-medium">
+                        "{devilAdvocateResult.skeptic_view?.rejection_recommendation}"
+                      </div>
+
+                      <div className="space-y-2">
+                        <span className="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-400 block font-mono">
+                          Crucial Risks & Reservations
+                        </span>
+                        <ul className="space-y-1.5">
+                          {devilAdvocateResult.skeptic_view?.concerns?.map((concern, idx) => (
+                            <li key={idx} className="text-xs text-neutral-700 dark:text-neutral-300 flex items-start gap-2">
+                              <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                              <span>{concern}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {devilAdvocateResult.skeptic_view?.risk_flags?.length > 0 && (
+                        <div className="pt-2 flex flex-wrap gap-1.5">
+                          {devilAdvocateResult.skeptic_view.risk_flags.map((flag, idx) => (
+                            <span key={idx} className="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
+                              🚩 {flag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+
+                  {/* FINAL ARBITRATED JUDGMENT */}
+                  <div className="p-6 rounded-2xl bg-neutral-900 dark:bg-[#0d112b] text-white border border-neutral-800 dark:border-indigo-900/80 shadow-xl space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-800 dark:border-indigo-950 pb-4">
+                      <div>
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+                          AI Judicial Synthesis · Final Decision
+                        </span>
+                        <h4 className="text-base font-bold text-white mt-0.5">
+                          Arbitrated Procurement Recommendation
+                        </h4>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider font-mono ${
+                          devilAdvocateResult.final_judgment?.verdict === 'Approve'
+                            ? 'bg-emerald-500 text-neutral-950'
+                            : devilAdvocateResult.final_judgment?.verdict === 'Reject'
+                            ? 'bg-rose-500 text-white'
+                            : 'bg-amber-500 text-neutral-950'
+                        }`}>
+                          Verdict: {devilAdvocateResult.final_judgment?.verdict || 'Request_Revision'}
+                        </span>
+                        <span className="text-xs font-mono text-neutral-300">
+                          Confidence: {devilAdvocateResult.final_judgment?.confidence_percentage || 85}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                      <div className="space-y-2 p-3.5 rounded-xl bg-neutral-800/60 dark:bg-[#070918]/60 border border-neutral-700/60 dark:border-indigo-950">
+                        <span className="text-[10px] font-mono font-bold uppercase text-indigo-300 block">
+                          Key Decision Factors
+                        </span>
+                        <ul className="space-y-1 text-neutral-300">
+                          {devilAdvocateResult.final_judgment?.key_decision_factors?.map((f, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-indigo-400 font-mono">•</span>
+                              <span>{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-2 p-3.5 rounded-xl bg-neutral-800/60 dark:bg-[#070918]/60 border border-neutral-700/60 dark:border-indigo-950">
+                        <span className="text-[10px] font-mono font-bold uppercase text-emerald-300 block">
+                          Conditions for Approval
+                        </span>
+                        <ul className="space-y-1 text-neutral-300">
+                          {devilAdvocateResult.final_judgment?.conditions_for_approval?.map((c, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-emerald-400 font-mono">✓</span>
+                              <span>{c}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-2 p-3.5 rounded-xl bg-neutral-800/60 dark:bg-[#070918]/60 border border-neutral-700/60 dark:border-indigo-950">
+                        <span className="text-[10px] font-mono font-bold uppercase text-amber-300 block">
+                          Mandatory Mitigations
+                        </span>
+                        <ul className="space-y-1 text-neutral-300">
+                          {devilAdvocateResult.final_judgment?.mitigation_requirements?.map((m, i) => (
+                            <li key={i} className="flex items-start gap-1.5">
+                              <span className="text-amber-400 font-mono">!</span>
+                              <span>{m}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

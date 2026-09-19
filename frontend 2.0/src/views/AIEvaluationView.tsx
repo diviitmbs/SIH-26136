@@ -484,6 +484,16 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
 
                   <button
                     type="button"
+                    onClick={() => setShowDossier(true)}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50 transition flex items-center justify-center gap-2"
+                    title="Run Phase 3 Adversarial Audit"
+                  >
+                    <Scale className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                    <span>Devil's Advocate Adversarial Audit</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => setShowSanction(true)}
                     className={`w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm ${
                       approvedProposalId === activeProposal.id
