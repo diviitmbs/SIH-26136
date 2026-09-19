@@ -3,12 +3,16 @@ import { Challenge, Startup, Proposal, AuthUser, AppView } from '../types';
 import { 
   Scale, 
   RotateCcw, 
-  ArrowRight,
-  ArrowLeft,
-  Printer,
-  Lock
+  ArrowRight, 
+  ArrowLeft, 
+  Printer, 
+  Lock,
+  Sparkles,
+  AlertTriangle,
+  CheckCircle2
 } from 'lucide-react';
 import { CIVIC_SERVICE_DOMAINS } from '../data/procurexData';
+import { evaluateStartups, EvaluateStartupsResponse } from '../utils/api';
 
 interface CompareViewProps {
   challenges: Challenge[];
@@ -29,6 +33,11 @@ export const CompareView: React.FC<CompareViewProps> = ({
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [isGenerated, setIsGenerated] = useState<boolean>(true);
 
+  // AI Evaluation State
+  const [isEvaluating, setIsEvaluating] = useState<boolean>(false);
+  const [evaluationData, setEvaluationData] = useState<EvaluateStartupsResponse | null>(null);
+  const [evaluationError, setEvaluationError] = useState<string | null>(null);
+
   const eligibleStartups = startups;
 
   const startupA = startups.find(s => s.id === selectedStartupIdA) || null;
@@ -36,7 +45,10 @@ export const CompareView: React.FC<CompareViewProps> = ({
   const proposalA = proposals.find(p => p.startupId === selectedStartupIdA) || null;
   const proposalB = proposals.find(p => p.startupId === selectedStartupIdB) || null;
 
-  const handleGenerate = () => {
+  const compA = evaluationData?.comparisons?.find(c => c.startup?.toLowerCase() === startupA?.name?.toLowerCase()) || evaluationData?.comparisons?.[0];
+  const compB = evaluationData?.comparisons?.find(c => c.startup?.toLowerCase() === startupB?.name?.toLowerCase()) || evaluationData?.comparisons?.[1];
+
+  const handleGenerate = async () => {
     if (!selectedStartupIdA || !selectedStartupIdB) {
       alert('Please select both Startup 1 and Startup 2 to generate the comparison.');
       return;
@@ -46,6 +58,35 @@ export const CompareView: React.FC<CompareViewProps> = ({
       return;
     }
     setIsGenerated(true);
+    setIsEvaluating(true);
+    setEvaluationError(null);
+
+    try {
+      const candidates = [
+        {
+          startup: startupA?.name || 'Startup A',
+          domain: startupA?.sectors?.[0] || 'CivicTech',
+          score: startupA?.totalDeployments ? Math.min(95, 70 + startupA.totalDeployments * 2) : 78,
+          stats: `Projects: ${startupA?.totalDeployments || 2}, Efficiency: 88, Readiness: ${startupA?.pilotReadiness || 'High'}`
+        },
+        {
+          startup: startupB?.name || 'Startup B',
+          domain: startupB?.sectors?.[0] || 'CivicTech',
+          score: startupB?.totalDeployments ? Math.min(95, 70 + startupB.totalDeployments * 2) : 74,
+          stats: `Projects: ${startupB?.totalDeployments || 2}, Efficiency: 82, Readiness: ${startupB?.pilotReadiness || 'High'}`
+        }
+      ];
+
+      const res = await evaluateStartups(selectedTopic || "Municipal Civic Innovation", candidates);
+      if (res?.comparisons?.length) {
+        setEvaluationData(res);
+      }
+    } catch (err: any) {
+      console.error("AI Comparative evaluation failed:", err);
+      setEvaluationError(`AI Evaluator offline (${err.message || 'connection failed'}). Displaying local registry specs.`);
+    } finally {
+      setIsEvaluating(false);
+    }
   };
 
   const handleReset = () => {
@@ -53,6 +94,8 @@ export const CompareView: React.FC<CompareViewProps> = ({
     setSelectedStartupIdB('');
     setSelectedTopic('');
     setIsGenerated(false);
+    setEvaluationData(null);
+    setEvaluationError(null);
   };
 
   return (
@@ -248,11 +291,44 @@ export const CompareView: React.FC<CompareViewProps> = ({
               </div>
             </div>
           ) : startupA && startupB ? (
-            /* Populated Side-by-Side Postcard Layout */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x-2 md:divide-dashed divide-neutral-300 dark:divide-indigo-950 font-sans">
-              
-              {/* LEFT CARD: STARTUP A */}
-              <div className="space-y-5 pt-4 md:pt-0 md:pr-4">
+            <div className="space-y-6">
+              {/* AI Evaluation Status & Synthesis */}
+              {isEvaluating && (
+                <div className="p-3.5 rounded-xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 flex items-center gap-3 text-xs text-indigo-700 dark:text-indigo-300 font-medium">
+                  <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin shrink-0" />
+                  <span>Consulting Backend AI Evaluator engine (POST /api/ai/evaluate-startups)...</span>
+                </div>
+              )}
+              {evaluationError && (
+                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 flex items-center gap-2 text-xs text-amber-700 dark:text-amber-300">
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>{evaluationError}</span>
+                </div>
+              )}
+              {evaluationData && (
+                <div className="p-4 rounded-xl bg-white dark:bg-[#121634] border border-indigo-200 dark:border-indigo-900/50 shadow-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                        AI Comparative Synthesis ({evaluationData.mode === 'live' ? 'Live AI' : 'Deterministic Engine'})
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 font-semibold">
+                      Backend Active
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+                    {evaluationData.overall_notes}
+                  </p>
+                </div>
+              )}
+
+              {/* Populated Side-by-Side Postcard Layout */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x-2 md:divide-dashed divide-neutral-300 dark:divide-indigo-950 font-sans">
+                
+                {/* LEFT CARD: STARTUP A */}
+                <div className="space-y-5 pt-4 md:pt-0 md:pr-4">
                 <div className="space-y-1">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-bold">
                     Entity [A] Candidate
@@ -319,6 +395,54 @@ export const CompareView: React.FC<CompareViewProps> = ({
                     <div className="font-bold text-neutral-900 dark:text-white font-mono">
                       {proposalA.proposedBudget} (Pilot: {proposalA.pilotCost})
                     </div>
+                  </div>
+                )}
+
+                {compA && (
+                  <div className="p-3.5 rounded-xl bg-indigo-50/50 dark:bg-[#121638] border border-indigo-100 dark:border-indigo-950 space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-400 font-mono">
+                        AI Evaluation Assessment
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                        Match: {compA.match_score}%
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="p-2 rounded-lg bg-white dark:bg-[#0c0f26] border border-neutral-200 dark:border-indigo-900/40">
+                        <span className="text-[9px] text-neutral-500 uppercase block font-mono">Tech Feasibility</span>
+                        <span className="font-bold text-neutral-800 dark:text-neutral-200">{compA.technical_feasibility}%</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-white dark:bg-[#0c0f26] border border-neutral-200 dark:border-indigo-900/40">
+                        <span className="text-[9px] text-neutral-500 uppercase block font-mono">Cost Reasonableness</span>
+                        <span className="font-bold text-neutral-800 dark:text-neutral-200">{compA.cost_reasonableness}%</span>
+                      </div>
+                    </div>
+                    {compA.strengths && compA.strengths.length > 0 && (
+                      <div className="pt-1">
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono block mb-0.5">Strengths</span>
+                        <ul className="list-disc list-inside text-[11px] text-neutral-600 dark:text-neutral-300 space-y-0.5">
+                          {compA.strengths.slice(0, 2).map((s, idx) => (
+                            <li key={idx}>{s}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {compA.concerns && compA.concerns.length > 0 && (
+                      <div className="pt-1">
+                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase font-mono block mb-0.5">Concerns</span>
+                        <ul className="list-disc list-inside text-[11px] text-neutral-600 dark:text-neutral-300 space-y-0.5">
+                          {compA.concerns.slice(0, 2).map((c, idx) => (
+                            <li key={idx}>{c}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {compA.final_recommendation && (
+                      <div className="text-[11px] italic text-neutral-700 dark:text-neutral-300 pt-1 border-t border-indigo-100 dark:border-indigo-900/40">
+                        &ldquo;{compA.final_recommendation}&rdquo;
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -393,7 +517,56 @@ export const CompareView: React.FC<CompareViewProps> = ({
                     </div>
                   </div>
                 )}
+
+                {compB && (
+                  <div className="p-3.5 rounded-xl bg-indigo-50/50 dark:bg-[#121638] border border-indigo-100 dark:border-indigo-950 space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-400 font-mono">
+                        AI Evaluation Assessment
+                      </span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                        Match: {compB.match_score}%
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="p-2 rounded-lg bg-white dark:bg-[#0c0f26] border border-neutral-200 dark:border-indigo-900/40">
+                        <span className="text-[9px] text-neutral-500 uppercase block font-mono">Tech Feasibility</span>
+                        <span className="font-bold text-neutral-800 dark:text-neutral-200">{compB.technical_feasibility}%</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-white dark:bg-[#0c0f26] border border-neutral-200 dark:border-indigo-900/40">
+                        <span className="text-[9px] text-neutral-500 uppercase block font-mono">Cost Reasonableness</span>
+                        <span className="font-bold text-neutral-800 dark:text-neutral-200">{compB.cost_reasonableness}%</span>
+                      </div>
+                    </div>
+                    {compB.strengths && compB.strengths.length > 0 && (
+                      <div className="pt-1">
+                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono block mb-0.5">Strengths</span>
+                        <ul className="list-disc list-inside text-[11px] text-neutral-600 dark:text-neutral-300 space-y-0.5">
+                          {compB.strengths.slice(0, 2).map((s, idx) => (
+                            <li key={idx}>{s}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {compB.concerns && compB.concerns.length > 0 && (
+                      <div className="pt-1">
+                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase font-mono block mb-0.5">Concerns</span>
+                        <ul className="list-disc list-inside text-[11px] text-neutral-600 dark:text-neutral-300 space-y-0.5">
+                          {compB.concerns.slice(0, 2).map((c, idx) => (
+                            <li key={idx}>{c}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {compB.final_recommendation && (
+                      <div className="text-[11px] italic text-neutral-700 dark:text-neutral-300 pt-1 border-t border-indigo-100 dark:border-indigo-900/40">
+                        &ldquo;{compB.final_recommendation}&rdquo;
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
+            </div>
             </div>
           ) : null}
 

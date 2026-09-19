@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Proposal, Challenge, AppView, AuthUser } from '../types';
 import { 
   Sparkles, 
@@ -10,11 +10,14 @@ import {
   Building2,
   Check,
   Eye,
-  Award
+  Award,
+  RefreshCw,
+  ShieldCheck
 } from 'lucide-react';
 import { ProposalDossierModal } from '../components/ProposalDossierModal';
 import { PilotSanctionModal } from '../components/PilotSanctionModal';
 import { storage } from '../utils/storage';
+import { evaluateStartups, EvaluateStartupsResponse } from '../utils/api';
 
 interface AIEvaluationViewProps {
   proposals: Proposal[];
@@ -38,7 +41,46 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
   const [showDossier, setShowDossier] = useState(false);
   const [showSanction, setShowSanction] = useState(false);
 
+  // Live Backend AI Evaluation State
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiEvaluation, setAiEvaluation] = useState<EvaluateStartupsResponse | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
+
   const activeProposal = proposals.find(p => p.id === selectedProposalId) || proposals[0];
+
+  const fetchAiEvaluation = async () => {
+    if (!proposals.length) return;
+    setIsAiLoading(true);
+    setAiError(null);
+    try {
+      const candidates = proposals.map(p => ({
+        startup: p.startupName,
+        domain: selectedChallenge?.sector || 'Civic Infrastructure',
+        score: p.overallScore,
+        stats: `TechFit: ${p.technicalFitScore}%, Commercial: ${p.commercialScore}%, Deliverables: ${p.pilotDeliverables?.slice(0, 40) || 'N/A'}`
+      }));
+      const res = await evaluateStartups(
+        selectedChallenge || { title: "Civic Infrastructure Pilot", requirements: ["Computer vision", "Traffic optimization"] },
+        candidates
+      );
+      if (res && res.comparisons) {
+        setAiEvaluation(res);
+      }
+    } catch (err: any) {
+      console.warn("AI Evaluation failed, using cached proposal dossier:", err);
+      setAiError(err.message || 'AI evaluator offline. Showing local audited records.');
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAiEvaluation();
+  }, [selectedChallenge?.id]);
+
+  const activeAiComp = aiEvaluation?.comparisons?.find(
+    c => c.startup?.toLowerCase() === activeProposal?.startupName?.toLowerCase()
+  ) || aiEvaluation?.comparisons?.[0];
 
   const handleApproveForPilot = (p: Proposal) => {
     setApprovedProposalId(p.id);
@@ -81,6 +123,17 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
             <div className="flex items-center gap-3">
               <button
                 type="button"
+                onClick={fetchAiEvaluation}
+                disabled={isAiLoading}
+                className="px-3.5 py-2.5 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-xs"
+                title="Re-run AI Evaluation via backend"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin' : ''}`} />
+                <span>{isAiLoading ? 'Auditing...' : 'Run Live AI Audit'}</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => onNavigate('compare_proposals')}
                 className="px-4 py-2.5 bg-neutral-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-neutral-800 dark:hover:bg-indigo-500 transition flex items-center gap-1.5 shadow-xs"
               >
@@ -111,6 +164,38 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
             </div>
           )}
         </div>
+
+        {/* Live AI Engine Synthesis / Status Banner */}
+        {isAiLoading && (
+          <div className="p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 flex items-center gap-3 text-xs text-indigo-700 dark:text-indigo-300">
+            <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin shrink-0" />
+            <span>Consulting AI Multi-Factor Evaluator (POST /api/ai/evaluate-startups)...</span>
+          </div>
+        )}
+        {aiError && (
+          <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{aiError}</span>
+          </div>
+        )}
+        {aiEvaluation && (
+          <div className="p-5 rounded-2xl bg-white dark:bg-[#0b0e24] border border-indigo-200 dark:border-indigo-950 shadow-xs space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                  AI Evaluator Synthesis ({aiEvaluation.mode === 'live' ? 'Live AI Model' : 'Deterministic Engine'})
+                </span>
+              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
+                Backend Integrated
+              </span>
+            </div>
+            <p className="text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+              {aiEvaluation.overall_notes}
+            </p>
+          </div>
+        )}
 
         {/* Proposals Selection Rail */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -175,9 +260,11 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className="text-xs text-neutral-400">Composite AI Score</div>
+                      <div className="text-xs text-neutral-400">
+                        Composite AI Score {activeAiComp ? '(Live Evaluated)' : ''}
+                      </div>
                       <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
-                        {activeProposal.overallScore}/100
+                        {activeAiComp ? (activeAiComp.overall_score || activeAiComp.match_score) : activeProposal.overallScore}/100
                       </div>
                     </div>
                   </div>
@@ -188,12 +275,14 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
                   <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] space-y-2 border border-neutral-200/60 dark:border-indigo-950/60">
                     <div className="flex justify-between text-xs font-semibold">
                       <span className="text-neutral-700 dark:text-neutral-300">Technical Architecture Fit</span>
-                      <span className="font-mono text-indigo-600 dark:text-indigo-400">{activeProposal.technicalFitScore}%</span>
+                      <span className="font-mono text-indigo-600 dark:text-indigo-400">
+                        {activeAiComp?.technical_feasibility ?? activeProposal.technicalFitScore}%
+                      </span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-neutral-200 dark:bg-[#1a204d] overflow-hidden">
                       <div 
                         className="h-full bg-indigo-600 rounded-full transition-all duration-500" 
-                        style={{ width: `${activeProposal.technicalFitScore}%` }}
+                        style={{ width: `${activeAiComp?.technical_feasibility ?? activeProposal.technicalFitScore}%` }}
                       />
                     </div>
                     <span className="text-[11px] text-neutral-500 block">
@@ -236,12 +325,14 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
                   <div className="p-4 rounded-xl bg-neutral-50 dark:bg-[#101432] space-y-2 border border-neutral-200/60 dark:border-indigo-950/60">
                     <div className="flex justify-between text-xs font-semibold">
                       <span className="text-neutral-700 dark:text-neutral-300">Commercial Reasonableness</span>
-                      <span className="font-mono text-indigo-600 dark:text-indigo-400">{activeProposal.commercialScore}%</span>
+                      <span className="font-mono text-indigo-600 dark:text-indigo-400">
+                        {activeAiComp?.cost_reasonableness ?? activeProposal.commercialScore}%
+                      </span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-neutral-200 dark:bg-[#1a204d] overflow-hidden">
                       <div 
                         className="h-full bg-indigo-600 rounded-full transition-all duration-500" 
-                        style={{ width: `${activeProposal.commercialScore}%` }}
+                        style={{ width: `${activeAiComp?.cost_reasonableness ?? activeProposal.commercialScore}%` }}
                       />
                     </div>
                     <span className="text-[11px] text-neutral-500 block">
@@ -289,24 +380,59 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
 
               {/* Red Flags & Risk Mitigation Protocol */}
               <div className="bg-white dark:bg-[#0b0e24] border border-neutral-200 dark:border-indigo-950/80 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xs">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-500" />
-                  <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
-                    Risk Identification & Evaluator Audit Notes
-                  </h4>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <h4 className="text-sm font-bold text-neutral-900 dark:text-white">
+                      Risk Identification & Evaluator Audit Notes
+                    </h4>
+                  </div>
+                  {activeAiComp?.plagiarism_risk && (
+                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold uppercase bg-neutral-100 dark:bg-[#161a3c] text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-indigo-900/40">
+                      Plagiarism Risk: <span className="text-emerald-600 dark:text-emerald-400 font-black">{activeAiComp.plagiarism_risk}</span>
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
+                  {activeAiComp?.concerns && activeAiComp.concerns.length > 0 && (
+                    activeAiComp.concerns.map((concern, idx) => (
+                      <div 
+                        key={`ai-concern-${idx}`} 
+                        className="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5"
+                      >
+                        <span className="font-mono font-bold text-amber-600">AI-FLAG 0{idx + 1}:</span>
+                        <div>{concern}</div>
+                      </div>
+                    ))
+                  )}
+
                   {activeProposal.keyRisks.map((risk, idx) => (
                     <div 
                       key={idx} 
-                      className="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5"
+                      className="p-3.5 rounded-xl bg-neutral-50 dark:bg-[#101432] border border-neutral-200/60 dark:border-indigo-950/60 text-xs text-neutral-800 dark:text-neutral-300 flex items-start gap-2.5"
                     >
-                      <span className="font-mono font-bold text-amber-600">0{idx + 1}.</span>
+                      <span className="font-mono font-bold text-neutral-500">REF 0{idx + 1}:</span>
                       <div>{risk}</div>
                     </div>
                   ))}
                 </div>
+
+                {activeAiComp?.strengths && activeAiComp.strengths.length > 0 && (
+                  <div className="pt-3 border-t border-neutral-100 dark:border-indigo-950/60">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-mono block mb-2">
+                      Verified Technical Strengths (AI Audit Engine)
+                    </span>
+                    <div className="space-y-1.5">
+                      {activeAiComp.strengths.map((str, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-xs text-neutral-700 dark:text-neutral-300">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span>{str}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -319,11 +445,11 @@ export const AIEvaluationView: React.FC<AIEvaluationViewProps> = ({
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">
-                      RECOMMENDED FOR PILOT
+                      {activeAiComp?.final_recommendation ? activeAiComp.final_recommendation.toUpperCase() : 'RECOMMENDED FOR PILOT'}
                     </span>
                   </div>
                   <p className="text-xs text-neutral-500 mt-1">
-                    This dossier leads the evaluation pool on technical compliance and price efficiency.
+                    {activeAiComp ? 'Evaluated against municipal compliance criteria by backend AI engine.' : 'This dossier leads the evaluation pool on technical compliance and price efficiency.'}
                   </p>
                 </div>
 

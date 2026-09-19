@@ -19,11 +19,13 @@ import {
   AlertCircle,
   TrendingUp,
   FolderKanban,
-  CheckSquare
+  CheckSquare,
+  X
 } from 'lucide-react';
 import { ProposalDossierModal } from '../components/ProposalDossierModal';
 import { PilotSanctionModal } from '../components/PilotSanctionModal';
 import { storage } from '../utils/storage';
+import { matchStartups, MatchStartupsResponse } from '../utils/api';
 
 interface GovPortalViewProps {
   challenges: Challenge[];
@@ -59,6 +61,28 @@ export const GovPortalView: React.FC<GovPortalViewProps> = ({
   const [inspectProposal, setInspectProposal] = useState<Proposal | null>(null);
   const [sanctionProposal, setSanctionProposal] = useState<Proposal | null>(null);
   const [sanctionToast, setSanctionToast] = useState<string | null>(null);
+
+  // AI Match Startups Modal State
+  const [matchingChallenge, setMatchingChallenge] = useState<Challenge | null>(null);
+  const [isMatching, setIsMatching] = useState(false);
+  const [matchResults, setMatchResults] = useState<MatchStartupsResponse | null>(null);
+  const [matchError, setMatchError] = useState<string | null>(null);
+
+  const handleMatchStartups = async (c: Challenge) => {
+    setMatchingChallenge(c);
+    setIsMatching(true);
+    setMatchError(null);
+    setMatchResults(null);
+    try {
+      const res = await matchStartups(c);
+      setMatchResults(res);
+    } catch (err: any) {
+      console.warn("AI match failed:", err);
+      setMatchError(err.message || 'AI matching service offline.');
+    } finally {
+      setIsMatching(false);
+    }
+  };
 
   useEffect(() => {
     if (initialTab && ['overview', 'challenges', 'proposals', 'startups', 'outcomes'].includes(initialTab)) {
@@ -422,16 +446,26 @@ export const GovPortalView: React.FC<GovPortalViewProps> = ({
                     <span className="text-[10px] font-mono text-[#087C78]">
                       {c.proposalsCount} Proposals Received
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onSelectChallenge(c);
-                        setActiveTab('proposals');
-                      }}
-                      className="text-xs font-mono font-bold uppercase text-[#111416] dark:text-white hover:text-[#087C78] transition"
-                    >
-                      View Queue →
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleMatchStartups(c)}
+                        className="px-2.5 py-1 rounded border border-[#E2DFD7] dark:border-[#2E3844] hover:border-[#087C78] text-[10px] font-mono font-bold uppercase text-[#087C78] dark:text-[#0AA39F] flex items-center gap-1 transition"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        <span>AI Match Startups</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectChallenge(c);
+                          setActiveTab('proposals');
+                        }}
+                        className="text-xs font-mono font-bold uppercase text-[#111416] dark:text-white hover:text-[#087C78] transition"
+                      >
+                        View Queue →
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -764,6 +798,134 @@ export const GovPortalView: React.FC<GovPortalViewProps> = ({
             onNavigate('pilot_dashboard');
           }}
         />
+
+        {/* AI STARTUP MATCHING MODAL */}
+        {matchingChallenge && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+            <div className="w-full max-w-2xl bg-white dark:bg-[#16191D] border border-[#E2DFD7] dark:border-[#232B34] rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+              
+              {/* Modal Header */}
+              <div className="p-5 border-b border-[#E2DFD7] dark:border-[#232B34] flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
+                      {matchResults?.mode === 'live' ? 'Live AI Matching' : 'Deterministic Civic Matcher'}
+                    </span>
+                    <span className="text-xs text-[#596166] dark:text-[#949DA3] font-mono">POST /api/ai/match-startups</span>
+                  </div>
+                  <h3 className="text-base font-bold text-[#111416] dark:text-white mt-1">
+                    AI Matched Innovators for Challenge
+                  </h3>
+                  <p className="text-xs text-[#596166] dark:text-[#949DA3] line-clamp-1">
+                    {matchingChallenge.title}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMatchingChallenge(null);
+                    setMatchResults(null);
+                  }}
+                  className="p-2 rounded-lg hover:bg-[#ECEAE4] dark:hover:bg-[#1E2630] text-[#596166] transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-5 overflow-y-auto space-y-4">
+                {isMatching && (
+                  <div className="py-12 text-center space-y-3">
+                    <div className="w-8 h-8 border-3 border-[#087C78] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <p className="text-xs font-mono text-[#596166] dark:text-[#949DA3]">
+                      Querying DPIIT registry & deep-tech database for optimal municipal fit...
+                    </p>
+                  </div>
+                )}
+
+                {matchError && (
+                  <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300">
+                    {matchError}
+                  </div>
+                )}
+
+                {matchResults && matchResults.matches && (
+                  <div className="space-y-3">
+                    <div className="text-xs text-[#596166] dark:text-[#949DA3]">
+                      Found <strong className="text-[#111416] dark:text-white">{matchResults.matches.length}</strong> qualified innovators matching domain constraints and technology readiness criteria:
+                    </div>
+
+                    {matchResults.matches.map((m, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 rounded-xl border border-[#E2DFD7] dark:border-[#2E3844] bg-[#F4F2EC]/40 dark:bg-[#1C2127] space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-[#111416] dark:text-white">
+                              {m.startup}
+                            </span>
+                            <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-[#ECEAE4] dark:bg-[#1E2630] text-[#087C78]">
+                              {m.domain}
+                            </span>
+                          </div>
+                          <span className="text-sm font-mono font-bold text-[#087C78] dark:text-[#0AA39F]">
+                            {m.score}% Match
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-[#596166] dark:text-[#949DA3] leading-relaxed">
+                          {m.reason}
+                        </p>
+
+                        {m.stats && (
+                          <div className="text-[11px] font-mono text-[#596166] dark:text-[#949DA3]">
+                            Track Record: {m.stats}
+                          </div>
+                        )}
+
+                        {m.note && (
+                          <div className="text-[11px] text-[#111416] dark:text-[#A7AFB5] italic">
+                            &ldquo;{m.note}&rdquo;
+                          </div>
+                        )}
+
+                        <div className="pt-2 flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMatchingChallenge(null);
+                              onNavigate('compare_proposals');
+                            }}
+                            className="px-3 py-1.5 rounded-lg border border-[#E2DFD7] dark:border-[#2E3844] text-xs font-mono uppercase hover:bg-[#ECEAE4] dark:hover:bg-[#1E2630] flex items-center gap-1"
+                          >
+                            <Scale className="w-3.5 h-3.5 text-[#087C78]" />
+                            <span>Compare in Dossier</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-[#E2DFD7] dark:border-[#232B34] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMatchingChallenge(null);
+                    setMatchResults(null);
+                  }}
+                  className="px-4 py-2 bg-[#111416] dark:bg-[#087C78] text-white rounded-lg text-xs font-mono uppercase font-bold"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

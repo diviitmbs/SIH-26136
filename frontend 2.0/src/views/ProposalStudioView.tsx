@@ -8,11 +8,17 @@ import {
   Eye, 
   Check, 
   ShieldCheck, 
-  Lock,
-  FileCheck2,
-  Sparkles,
-  ChevronDown
+  Lock, 
+  FileCheck2, 
+  Sparkles, 
+  ChevronDown 
 } from 'lucide-react';
+import { 
+  analyzeDocument, 
+  AnalyzeDocumentResponse, 
+  optimizeBudget, 
+  OptimizeBudgetResponse 
+} from '../utils/api';
 
 interface ProposalStudioViewProps {
   selectedChallenge?: Challenge | null;
@@ -76,6 +82,51 @@ export const ProposalStudioView: React.FC<ProposalStudioViewProps> = ({
     "ISO 27001 Data Privacy & Zero-PII Video Architecture Affidavit"
   ]);
   const [dependencies, setDependencies] = useState(savedDraft?.dependencies || "");
+
+  // AI Pre-Audit State
+  const [isAnalyzingDoc, setIsAnalyzingDoc] = useState(false);
+  const [docAnalysis, setDocAnalysis] = useState<AnalyzeDocumentResponse | null>(null);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  const handleAnalyzeProposal = async () => {
+    const textToAnalyze = `${solutionName ? 'Solution: ' + solutionName + '\n' : ''}${solutionSummary ? 'Summary: ' + solutionSummary + '\n' : ''}${technicalArchitecture ? 'Architecture: ' + technicalArchitecture : ''}`;
+    if (!textToAnalyze.trim()) {
+      alert('Please enter a solution summary or technical architecture before running the pre-audit.');
+      return;
+    }
+    setIsAnalyzingDoc(true);
+    setAnalysisError(null);
+    try {
+      const res = await analyzeDocument(textToAnalyze);
+      setDocAnalysis(res);
+    } catch (err: any) {
+      console.warn('AI document analysis failed:', err);
+      setAnalysisError(err.message || 'AI document analysis offline.');
+    } finally {
+      setIsAnalyzingDoc(false);
+    }
+  };
+
+  // AI Spend Optimization State
+  const [isOptimizingBudget, setIsOptimizingBudget] = useState(false);
+  const [budgetAdvice, setBudgetAdvice] = useState<OptimizeBudgetResponse | null>(null);
+
+  const handleOptimizeSpend = async () => {
+    setIsOptimizingBudget(true);
+    try {
+      const res = await optimizeBudget({
+        budget: commercialTotal || activeChallenge.pilotBudget || '₹30,00,000',
+        pilotCost: pilotCost || '₹10,00,000',
+        hardwareCost: hardwareCost || '₹12,00,000',
+        domain: activeChallenge.sector || 'Civic Infrastructure'
+      });
+      setBudgetAdvice(res);
+    } catch (err: any) {
+      console.warn('Budget optimization failed:', err);
+    } finally {
+      setIsOptimizingBudget(false);
+    }
+  };
 
   // Autosave to browser storage on change
   useEffect(() => {
@@ -355,6 +406,77 @@ export const ProposalStudioView: React.FC<ProposalStudioViewProps> = ({
                   </strong>
                   All optical streams remain strictly processed on the edge gantry with zero facial or license plate PII storage.
                 </div>
+
+                {/* AI Document Pre-Audit Action */}
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-[#E2DFD7] dark:border-[#232B34]">
+                  <span className="text-[10px] text-[#596166] dark:text-[#949DA3] font-mono">
+                    AI Pre-Audit ensures technical specs meet GFR Gantry & Telemetry standards.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleAnalyzeProposal}
+                    disabled={isAnalyzingDoc || (!technicalArchitecture && !solutionSummary)}
+                    className="px-3 py-1.5 rounded-lg border border-[#E2DFD7] dark:border-[#2E3844] hover:border-[#087C78] text-xs font-mono font-bold uppercase text-[#087C78] dark:text-[#0AA39F] flex items-center gap-1.5 transition disabled:opacity-50"
+                  >
+                    <Sparkles className={`w-3.5 h-3.5 ${isAnalyzingDoc ? 'animate-spin' : ''}`} />
+                    <span>{isAnalyzingDoc ? 'Running Audit...' : 'Run AI Pre-Audit'}</span>
+                  </button>
+                </div>
+
+                {analysisError && (
+                  <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300">
+                    {analysisError}
+                  </div>
+                )}
+
+                {/* AI Document Analysis Results */}
+                {docAnalysis && docAnalysis.analysis && (
+                  <div className="p-4 rounded-xl bg-white dark:bg-[#16191D] border border-indigo-200 dark:border-indigo-900/60 shadow-xs space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
+                          AI Document Extraction ({docAnalysis.mode === 'live' ? 'Live AI Model' : 'Deterministic Engine'})
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
+                        {docAnalysis.analysis.document_type || 'Audited'}
+                      </span>
+                    </div>
+
+                    {docAnalysis.analysis.technology_stack && docAnalysis.analysis.technology_stack.length > 0 && (
+                      <div>
+                        <span className="text-[10px] font-mono uppercase text-[#596166] dark:text-[#949DA3] block mb-1">
+                          Detected Tech Stack:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {docAnalysis.analysis.technology_stack.map((t, idx) => (
+                            <span key={idx} className="px-2 py-0.5 rounded bg-[#ECEAE4] dark:bg-[#1E2630] text-[11px] font-mono text-[#111416] dark:text-white">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {docAnalysis.analysis.potential_gaps && docAnalysis.analysis.potential_gaps.length > 0 && (
+                      <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+                        <span className="font-bold font-mono text-[10px] uppercase block">Areas for Elaboration Before Submission:</span>
+                        <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+                          {docAnalysis.analysis.potential_gaps.map((gap, idx) => (
+                            <li key={idx}>{gap}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {docAnalysis.analysis.verification_note && (
+                      <p className="text-[11px] text-[#596166] dark:text-[#949DA3] italic">
+                        {docAnalysis.analysis.verification_note}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
@@ -423,6 +545,46 @@ export const ProposalStudioView: React.FC<ProposalStudioViewProps> = ({
                     />
                   </div>
                 </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <span className="text-[10px] text-[#596166] dark:text-[#949DA3] font-mono">
+                    Target Envelope: {activeChallenge.pilotBudget || activeChallenge.estimatedBudget}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleOptimizeSpend}
+                    disabled={isOptimizingBudget}
+                    className="px-3 py-1.5 rounded-lg border border-[#E2DFD7] dark:border-[#2E3844] hover:border-[#087C78] text-xs font-mono font-bold uppercase text-[#087C78] dark:text-[#0AA39F] flex items-center gap-1.5 transition self-start sm:self-auto"
+                  >
+                    <Sparkles className={`w-3.5 h-3.5 ${isOptimizingBudget ? 'animate-spin' : ''}`} />
+                    <span>{isOptimizingBudget ? 'Benchmarking...' : 'AI Spend Benchmarking'}</span>
+                  </button>
+                </div>
+
+                {budgetAdvice && (
+                  <div className="p-4 rounded-xl bg-white dark:bg-[#16191D] border border-indigo-200 dark:border-indigo-900/60 shadow-xs space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono font-bold text-indigo-700 dark:text-indigo-300 uppercase text-[10px]">
+                        AI Commercial Benchmarking ({budgetAdvice.mode === 'live' ? 'Live AI' : 'Rule Engine'})
+                      </span>
+                      {budgetAdvice.cost_overrun_risk && (
+                        <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
+                          Overrun Risk: {budgetAdvice.cost_overrun_risk}
+                        </span>
+                      )}
+                    </div>
+                    {budgetAdvice.suggested_budget_range && (
+                      <div className="text-[11px] text-[#111416] dark:text-white font-mono">
+                        Optimal Market Range: {budgetAdvice.suggested_budget_range.min_inr} – {budgetAdvice.suggested_budget_range.max_inr} (Median: {budgetAdvice.suggested_budget_range.optimal_inr})
+                      </div>
+                    )}
+                    {budgetAdvice.potential_savings_percentage > 0 && (
+                      <div className="text-[11px] text-emerald-600 font-semibold">
+                        Potential Efficiency Optimization: {budgetAdvice.potential_savings_percentage}%
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/40 text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
                   <Lock className="w-3.5 h-3.5 shrink-0" />

@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Challenge, AppView } from '../types';
 import { storage, safeStorage } from '../utils/storage';
 import { 
+  structureChallenge, 
+  optimizeBudget, 
+  predictRisks, 
+  predictTimeline, 
+  forecastImpact, 
+  OptimizeBudgetResponse,
+  PredictRisksResponse,
+  PredictTimelineResponse
+} from "../utils/api";
+import { 
   ArrowLeft, 
   ArrowRight, 
   Save, 
@@ -12,7 +22,12 @@ import {
   Clock,
   Building2,
   MapPin,
-  CheckCircle2
+  CheckCircle2,
+  AlertTriangle,
+  TrendingUp,
+  Info,
+  Layers,
+  HelpCircle
 } from 'lucide-react';
 
 interface ChallengeBuilderViewProps {
@@ -67,6 +82,15 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
 
   const [technologies, setTechnologies] = useState<string[]>(savedDraft?.technologies || []);
   const [successCriteria, setSuccessCriteria] = useState(savedDraft?.successCriteria || "");
+
+  // Real Backend AI Integration States
+  const [isAiStructuring, setIsAiStructuring] = useState<boolean>(false);
+  const [aiStructureMode, setAiStructureMode] = useState<'live' | 'demo' | null>(null);
+  const [aiRefinementQuestions, setAiRefinementQuestions] = useState<string[]>([]);
+  const [aiRisks, setAiRisks] = useState<Array<{ risk: string; mitigation: string }>>([]);
+  const [aiBudgetInfo, setAiBudgetInfo] = useState<OptimizeBudgetResponse | null>(null);
+  const [isAiBudgeting, setIsAiBudgeting] = useState<boolean>(false);
+  const [aiErrorNotice, setAiErrorNotice] = useState<string | null>(null);
 
   // Derived Values
   const computedBudget = budgetUnit === 'Custom' 
@@ -157,17 +181,102 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
     setTimeout(() => setDraftNotice(null), 2500);
   };
 
+  const handleAiStructure = async () => {
+    if (!problemDescription.trim()) {
+      setDraftNotice("Please enter a Problem Description first so the AI can analyze and structure it.");
+      setTimeout(() => setDraftNotice(null), 3500);
+      return;
+    }
+    setIsAiStructuring(true);
+    setAiErrorNotice(null);
+    try {
+      const res = await structureChallenge(problemDescription);
+      if (res?.challenge) {
+        if (res.challenge.title) setTitle(res.challenge.title);
+        if (res.challenge.problem_statement) setProblemDescription(res.challenge.problem_statement);
+        if (res.challenge.objective) setDesiredOutcome(res.challenge.objective);
+        if (res.challenge.smart_kpis?.length) setSuccessCriteria(res.challenge.smart_kpis.join('\n• '));
+        if (res.challenge.estimated_budget_inr) {
+          const inLakhs = Math.round(res.challenge.estimated_budget_inr / 100000);
+          setBudgetAmount(inLakhs > 0 ? String(inLakhs) : "40");
+          setBudgetUnit("Lakhs");
+        }
+        if (res.challenge.estimated_timeline_months) {
+          setPilotDurationMode(`${res.challenge.estimated_timeline_months} Months`);
+        }
+        if (res.challenge.requirements?.length) {
+          const newTechs = [...technologies];
+          res.challenge.requirements.forEach(req => {
+            if (/vision|camera|image/i.test(req) && !newTechs.includes('Computer Vision')) newTechs.push('Computer Vision');
+            if (/iot|sensor/i.test(req) && !newTechs.includes('IoT Telemetry')) newTechs.push('IoT Telemetry');
+            if (/edge|embedded/i.test(req) && !newTechs.includes('Edge AI')) newTechs.push('Edge AI');
+            if (/acoustic|sound/i.test(req) && !newTechs.includes('Acoustic Sensors')) newTechs.push('Acoustic Sensors');
+          });
+          if (newTechs.length > 0) setTechnologies(newTechs);
+        }
+        if (res.challenge.risks?.length) {
+          setAiRisks(res.challenge.risks);
+        }
+        if (res.refinement_questions?.length) {
+          setAiRefinementQuestions(res.refinement_questions);
+        }
+        setAiStructureMode(res.mode);
+        setDraftNotice(`AI Challenge Structurer (${res.mode === 'live' ? 'Live AI' : 'Deterministic Model'}): Parameters suggested and populated for manual editing.`);
+        setTimeout(() => setDraftNotice(null), 5000);
+      }
+    } catch (err: any) {
+      console.error("AI challenge structuring failed:", err);
+      setAiErrorNotice(`AI service unavailable (${err.message || 'offline'}). You can continue structuring manually.`);
+      setTimeout(() => setAiErrorNotice(null), 5000);
+    } finally {
+      setIsAiStructuring(false);
+    }
+  };
+
+  const handleAiOptimizeBudget = async () => {
+    setIsAiBudgeting(true);
+    setAiErrorNotice(null);
+    try {
+      const res = await optimizeBudget({
+        title: title || "Civic Challenge",
+        problem_statement: problemDescription,
+        sector,
+        budget: computedBudget
+      });
+      if (res?.suggested_budget_range) {
+        setAiBudgetInfo(res);
+        if (res.suggested_budget_range.optimal_inr) {
+          const inLakhs = Math.round(res.suggested_budget_range.optimal_inr / 100000);
+          if (inLakhs > 0) {
+            setBudgetAmount(String(inLakhs));
+            setBudgetUnit("Lakhs");
+          }
+        }
+        setDraftNotice(`AI Spend Optimization: Suggested optimal ₹${Math.round(res.suggested_budget_range.optimal_inr / 100000)} Lakhs (${res.potential_savings_percentage}% savings vs historical tenders).`);
+        setTimeout(() => setDraftNotice(null), 5000);
+      }
+    } catch (err: any) {
+      console.error("Budget optimization failed:", err);
+      setAiErrorNotice(`Spend optimizer unavailable (${err.message || 'offline'}).`);
+      setTimeout(() => setAiErrorNotice(null), 5000);
+    } finally {
+      setIsAiBudgeting(false);
+    }
+  };
+
   const handlePublish = (e: React.FormEvent) => {
     e.preventDefault();
+
     const newId = `PX-GOV-2026-${Math.floor(10000 + Math.random() * 90000)}`;
+
     const created: Challenge = {
       id: newId,
-      title: title.trim() || 'Civic Infrastructure Optimization Challenge',
-      department: department.trim() || 'Department of Public Works',
-      state: state.trim() || 'National',
-      district: district.trim() || 'General District',
-      city: city.trim() || 'Municipal Area',
-      jurisdiction: jurisdiction.trim() || 'Urban Jurisdiction',
+      title: title.trim() || "Civic Infrastructure Optimization Challenge",
+      department: department.trim() || activeUser?.department || "Department of Public Works",
+      state: state.trim() || activeUser?.state || "National",
+      district: district.trim() || "General District",
+      city: city.trim() || activeUser?.city || "Municipal Area",
+      jurisdiction: jurisdiction.trim() || "Urban Jurisdiction",
       sector,
       technologies: technologies.length > 0 ? technologies : ["Edge AI", "Computer Vision"],
       priority,
@@ -188,17 +297,16 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
       isDepartmentDefined: true
     };
 
-    // Save to persistent localStorage storage
     storage.addChallenge(created);
     onChallengeCreated(created);
 
     try {
-      safeStorage.removeItem('procurex_challenge_draft');
+      safeStorage.removeItem("procurex_challenge_draft");
     } catch {
-      // ignore
+      // Ignore storage errors
     }
 
-    onNavigate('gov_challenge_success');
+    onNavigate("gov_challenge_success");
   };
 
   const toggleTech = (techName: string) => {
@@ -372,10 +480,21 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                    Problem Description (Scale & Nature) *
-                  </label>
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                      Problem Description (Scale & Nature) *
+                    </label>
+                    <button
+                      type="button"
+                      disabled={isAiStructuring || !problemDescription.trim()}
+                      onClick={handleAiStructure}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>{isAiStructuring ? "Structuring via Real AI Backend..." : "AI Auto-Structure Challenge"}</span>
+                    </button>
+                  </div>
                   <textarea
                     rows={4}
                     required
@@ -384,6 +503,39 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
                     className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-neutral-300 dark:border-indigo-950/80 bg-neutral-50/50 dark:bg-[#121636] leading-relaxed"
                     placeholder="Describe the current bottleneck, scale of civic friction, and why traditional methods fail..."
                   />
+
+                  {aiErrorNotice && (
+                    <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+                      <span>{aiErrorNotice}</span>
+                    </div>
+                  )}
+
+                  {aiStructureMode && (
+                    <div className="p-3.5 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5 font-mono text-[11px] uppercase">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                          Backend AI Structurer ({aiStructureMode === 'live' ? 'Live AI' : 'Deterministic Mode'})
+                        </span>
+                        <span className="text-[10px] text-amber-700 dark:text-amber-400 font-mono">
+                          Editable Suggestions Loaded
+                        </span>
+                      </div>
+                      {aiRefinementQuestions.length > 0 && (
+                        <div className="space-y-1 pt-1">
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200 text-[11px]">
+                            Recommended Procurement Questions:
+                          </span>
+                          <ul className="list-disc list-inside text-[11px] text-neutral-600 dark:text-neutral-400 space-y-0.5">
+                            {aiRefinementQuestions.map((q, idx) => (
+                              <li key={idx}>{q}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -601,9 +753,53 @@ export const ChallengeBuilderView: React.FC<ChallengeBuilderViewProps> = ({
                     )}
                   </div>
 
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 font-mono pt-1">
-                    Calculated Envelope: <strong className="text-indigo-600 dark:text-indigo-400">{computedBudget}</strong>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-neutral-200/60 dark:border-indigo-950/60">
+                    <div className="text-xs text-neutral-600 dark:text-neutral-400 font-mono">
+                      Calculated Envelope: <strong className="text-indigo-600 dark:text-indigo-400">{computedBudget}</strong>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isAiBudgeting}
+                      onClick={handleAiOptimizeBudget}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/50 rounded-lg text-xs font-semibold transition cursor-pointer disabled:opacity-50"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                      <span>{isAiBudgeting ? "Analyzing Historical Spends..." : "AI Spend Optimizer"}</span>
+                    </button>
                   </div>
+
+                  {aiBudgetInfo && (
+                    <div className="p-3.5 rounded-xl bg-indigo-50/50 dark:bg-[#0c102a] border border-indigo-200/80 dark:border-indigo-900/50 space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-indigo-900 dark:text-indigo-200 font-mono text-[11px] uppercase">
+                          AI Cost Benchmarking
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                          ~{aiBudgetInfo.potential_savings_percentage}% Projected Savings
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-[11px] text-neutral-700 dark:text-neutral-300">
+                        <div>Min: ₹{(aiBudgetInfo.suggested_budget_range.min_inr / 100000).toFixed(1)}L</div>
+                        <div>Optimal: ₹{(aiBudgetInfo.suggested_budget_range.optimal_inr / 100000).toFixed(1)}L</div>
+                        <div>Overrun Risk: <span className="font-bold">{aiBudgetInfo.cost_overrun_risk}</span></div>
+                      </div>
+                      {aiBudgetInfo.cost_breakdown?.length > 0 && (
+                        <div className="space-y-1 pt-1">
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200 text-[10px] uppercase font-mono">
+                            Cost Categories Breakdown:
+                          </span>
+                          <div className="space-y-1 text-[11px] text-neutral-600 dark:text-neutral-400">
+                            {aiBudgetInfo.cost_breakdown.map((item, idx) => (
+                              <div key={idx} className="flex justify-between">
+                                <span>• {item.category} ({item.percentage}%)</span>
+                                <span className="font-mono font-semibold">₹{(item.amount_inr / 100000).toFixed(1)}L</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Pilot Duration with Multiple Options + Custom Option */}

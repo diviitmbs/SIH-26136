@@ -21,6 +21,7 @@ import {
   Check
 } from 'lucide-react';
 import { ProcureXLogo } from './ProcureXLogo';
+import { analyzeDocument, AnalyzeDocumentResponse } from '../utils/api';
 
 interface ProposalDossierModalProps {
   proposal: Proposal | null;
@@ -44,6 +45,24 @@ export const ProposalDossierModal: React.FC<ProposalDossierModalProps> = ({
   const [activeTab, setActiveTab] = useState<'architecture' | 'commercial' | 'compliance' | 'decision'>('architecture');
   const [officerNotes, setOfficerNotes] = useState('');
   const [notesSaved, setNotesSaved] = useState(false);
+
+  // AI Forensics Analysis State
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AnalyzeDocumentResponse | null>(null);
+
+  const handleRunForensics = async () => {
+    if (!proposal) return;
+    setIsAnalyzing(true);
+    try {
+      const text = `${proposal.solutionName || ''}\n${proposal.solutionSummary || ''}\n${proposal.solutionArchitecture || ''}`;
+      const res = await analyzeDocument(text);
+      setAnalysisResult(res);
+    } catch (err) {
+      console.warn("Dossier forensics failed:", err);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   if (!isOpen || !proposal) return null;
 
@@ -327,6 +346,77 @@ export const ProposalDossierModal: React.FC<ProposalDossierModalProps> = ({
                     Verified through automated sensor telemetry before milestone payout.
                   </span>
                 </div>
+              </div>
+
+              {/* AI Architecture & Document Forensics */}
+              <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-[#0e1230] border border-neutral-200/80 dark:border-indigo-950/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-800 dark:text-neutral-200">
+                      Automated AI Technical Forensics (POST /api/ai/analyze-document)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRunForensics}
+                    disabled={isAnalyzing}
+                    className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    <Sparkles className={`w-3.5 h-3.5 ${isAnalyzing ? 'animate-spin' : ''}`} />
+                    <span>{isAnalyzing ? 'Auditing Blueprint...' : 'Run Forensics'}</span>
+                  </button>
+                </div>
+
+                {analysisResult && analysisResult.analysis && (
+                  <div className="space-y-3 pt-2 text-xs">
+                    <div className="flex items-center justify-between text-[11px] font-mono">
+                      <span className="text-neutral-500">Document Classification:</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">{analysisResult.analysis.document_type}</span>
+                    </div>
+
+                    {analysisResult.analysis.technology_stack && analysisResult.analysis.technology_stack.length > 0 && (
+                      <div>
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase block mb-1">Extracted Technologies:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {analysisResult.analysis.technology_stack.map((t, idx) => (
+                            <span key={idx} className="px-2 py-0.5 rounded bg-white dark:bg-[#161a3c] border border-neutral-200 dark:border-indigo-900/60 font-mono text-[10px] text-neutral-800 dark:text-neutral-200">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysisResult.analysis.claimed_metrics && analysisResult.analysis.claimed_metrics.length > 0 && (
+                      <div>
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase block mb-1">Self-Claimed Performance Metrics:</span>
+                        <ul className="list-disc list-inside space-y-0.5 text-neutral-700 dark:text-neutral-300">
+                          {analysisResult.analysis.claimed_metrics.map((m, idx) => (
+                            <li key={idx}>{m}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {analysisResult.analysis.potential_gaps && analysisResult.analysis.potential_gaps.length > 0 && (
+                      <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 space-y-1">
+                        <span className="font-bold font-mono text-[10px] uppercase block">Dossier Information Gaps for Committee:</span>
+                        <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+                          {analysisResult.analysis.potential_gaps.map((gap, idx) => (
+                            <li key={idx}>{gap}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {analysisResult.analysis.verification_note && (
+                      <p className="text-[11px] text-neutral-500 italic pt-1 border-t border-neutral-200 dark:border-indigo-950">
+                        Evaluator Note: {analysisResult.analysis.verification_note}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}

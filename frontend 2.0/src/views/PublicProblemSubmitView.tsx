@@ -21,6 +21,7 @@ import {
   TrendingUp,
   FileText
 } from 'lucide-react';
+import { structureChallenge } from '../utils/api';
 
 interface PublicProblemSubmitViewProps {
   onNavigate: (view: AppView) => void;
@@ -132,7 +133,7 @@ export const PublicProblemSubmitView: React.FC<PublicProblemSubmitViewProps> = (
   const [submittedId, setSubmittedId] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const handleGenerateAiSummary = () => {
+  const handleGenerateAiSummary = async () => {
     if (!title.trim() && !description.trim()) {
       setValidationError('Please enter a Problem Title or Description first so the AI can analyze it.');
       return;
@@ -140,11 +141,23 @@ export const PublicProblemSubmitView: React.FC<PublicProblemSubmitViewProps> = (
     setValidationError(null);
     setIsSynthesizing(true);
 
-    setTimeout(() => {
+    try {
+      const problemText = `${title ? title + ': ' : ''}${description || ''} (Located in ${city || 'ward'}, ${state || ''}; impact category: ${category})`;
+      const res = await structureChallenge(problemText);
+      if (res && res.challenge) {
+        const generated = `[AI Root-Cause Diagnosis (${res.mode === 'live' ? 'Live AI Model' : 'Deterministic Engine'})]: ${res.challenge.objective || res.challenge.title}. ${res.challenge.problem_statement || ''} Estimated timeline: ~${res.challenge.estimated_timeline_months || 3} months.`;
+        setAiDraftSummary(generated);
+      } else {
+        const generated = `[AI Root-Cause Diagnosis]: ${category} bottleneck identified in ${city || 'target municipal zone'}${state ? `, ${state}` : ''}. Core impact targets ${affectedGroup || 'local citizens'} with ${severity.toLowerCase()} civic operational urgency. Recommended intervention entails deploying lightweight sensor telemetry or field automation pilots under sandbox procurement guidelines.`;
+        setAiDraftSummary(generated);
+      }
+    } catch (err: any) {
+      console.warn("AI Structure Challenge error, fallback to rule-based:", err);
       const generated = `[AI Root-Cause Diagnosis]: ${category} bottleneck identified in ${city || 'target municipal zone'}${state ? `, ${state}` : ''}. Core impact targets ${affectedGroup || 'local citizens'} with ${severity.toLowerCase()} civic operational urgency. Recommended intervention entails deploying lightweight sensor telemetry or field automation pilots under sandbox procurement guidelines.`;
       setAiDraftSummary(generated);
+    } finally {
       setIsSynthesizing(false);
-    }, 600);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
